@@ -10,38 +10,54 @@ void	print_args(char **args)
 	}
 }
 
-char	verify_char(char c, int flag)
+void	print_cmd(t_cmd *cmd)
 {
-	if (c == ' ' && !flag)
+	t_cmd	*node;
+
+	node = cmd;
+	while (node)
+	{
+		printf("NODE :\n");
+		print_args(node->args);
+		node = node->next;
+	}
+}
+
+char	verify_char(char c, int in_quotes)
+{
+	if (c == ' ' && !in_quotes)
 		return ('\2');
-	if (c == '|' && !flag)
+	if (c == '|' && !in_quotes)
 		return ('\3');
 	return (c);
 }
 
-void	transformate_line(char *line)
+char	*transformate_line(char *line)
 {
 	int	i;
-	int	flag;
+	int	in_quotes;
 
 	i = 0;
-	flag = 0;
+	in_quotes = 0;
 	while (line[i])
 	{
-		printf("char antes %c ", line[i]);
 		if (line[i] == '"' || line[i] == '\'')
-			flag = (flag == 0);
-		line[i] = verify_char(line[i], flag);
-		printf("char depois %c\n", line[i]);
+			in_quotes = (in_quotes == 0);
+		line[i] = verify_char(line[i], in_quotes);
 		i++;
 	}
+	return (line);
 }
 
 t_cmd	*parsing(char *line)
 {
-	char	**args;
+	t_cmd	*cmd;
+	t_redir	*redir;
 
-	transformate_line(line);
-	// print_args(args);
-	return (NULL);
+	cmd = parsing_cmd(transformate_line(line));
+	if (!cmd)
+		return (NULL);
+	redir = parsing_redir(cmd);
+	print_cmd(cmd);
+	return (cmd);
 }
