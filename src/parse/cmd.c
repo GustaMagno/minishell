@@ -8,6 +8,7 @@ t_cmd	*new_cmd(char **args)
 	if (!cmd)
 		return (NULL);
 	cmd->args = args;
+	cmd->redir = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -34,5 +35,6 @@ t_cmd	*parsing_cmd(char *line)
 			return (NULL);
 		node = node->next;
 	}
+	free_split(args);
 	return (cmd_head);
 }

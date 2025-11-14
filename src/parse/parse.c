@@ -1,11 +1,15 @@
 #include "minishell.h"
 
-void	print_args(char **args)
+void	print_args(char **args, int flag)
 {
 	int i = 0;
 
 	while (args[i])
 	{
+		if (flag)
+			printf("CMD ");
+		else
+			printf("REDIR ");
 		printf("%s\n", args[i++]);
 	}
 }
@@ -13,12 +17,19 @@ void	print_args(char **args)
 void	print_cmd(t_cmd *cmd)
 {
 	t_cmd	*node;
+	t_redir	*rnode;
 
 	node = cmd;
 	while (node)
 	{
-		printf("NODE :\n");
-		print_args(node->args);
+		rnode = node->redir;
+		printf("NODE :\n\n");
+		print_args(node->args, 1);
+		while (rnode)
+		{
+			print_args(rnode->args, 0);
+			rnode = rnode->next;
+		}
 		node = node->next;
 	}
 }
@@ -49,15 +60,13 @@ char	*transformate_line(char *line)
 	return (line);
 }
 
-t_cmd	*parsing(char *line)
+int	parsing(char *line)
 {
 	t_cmd	*cmd;
-	t_redir	*redir;
 
 	cmd = parsing_cmd(transformate_line(line));
-	if (!cmd)
-		return (NULL);
-	redir = parsing_redir(cmd);
-	print_cmd(cmd);
-	return (cmd);
+	if (!cmd || !parsing_redir(cmd))
+		return (0);
+	free_structs(cmd);
+	return (1);
 }
