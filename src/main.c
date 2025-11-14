@@ -2,7 +2,6 @@
 
 static void run()
 {
-
 	char *line;
 
 	while (1)
@@ -29,6 +28,6 @@ int main(int argv, char **argc, char **env)
 	(void) argc;
 	(void) argv;
 	(void) env;
-	// run();
-	test_exec();
+	run();
+	//test_exec();
 }
