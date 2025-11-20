@@ -66,7 +66,7 @@ void	_remove(struct s_map_private *this, char *key)
 	}
 }
 
-void	*_get(struct s_map_private *this, char *key)
+char	*_get(struct s_map_private *this, char *key)
 {
 	t_node	*node;
 
@@ -76,7 +76,7 @@ void	*_get(struct s_map_private *this, char *key)
 	return (node->value);
 }
 
-void	__put(struct s_map_private *this, char *key, void	*value)
+void	__put(struct s_map_private *this, char *key, char *value)
 {
 	t_node *node;
 

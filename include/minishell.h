@@ -6,7 +6,7 @@
 # include <unistd.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-
+# include "map.h"
 
 typedef struct s_redir
 {

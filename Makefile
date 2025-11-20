@@ -13,17 +13,19 @@ OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+	@$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+	@echo "Makefile sucessfully compiled"
 
 obj/%.o: src/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf obj
+	@rm -rf obj
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo "All files was deleted."
 
 re: fclean all
 

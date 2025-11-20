@@ -67,6 +67,7 @@ int	parsing(char *line)
 	cmd = parsing_cmd(transformate_line(line));
 	if (!cmd || !parsing_redir(cmd))
 		return (0);
+	print_cmd(cmd);
 	free_structs(cmd);
 	return (1);
 }

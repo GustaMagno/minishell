@@ -5,7 +5,7 @@ char		**to_str(t_map_private *map);
 void 		destroy(t_map_private *map);
 void		_remove(t_map_private *map, char *key);
 void		*_get(t_map_private *map, char *key);
-void		__put(t_map_private *map, char *key, void	*value);
+void		__put(t_map_private *map, char *key, char	*value);
 
 t_map *new_map()
 {
