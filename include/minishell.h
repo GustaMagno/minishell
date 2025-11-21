@@ -22,6 +22,8 @@ typedef struct s_cmd
 	t_redir			*redir;
 }	t_cmd;
 
+typedef struct s_path
+
 
 char		**ft_split(char const *s, char c);
 void		exec(t_cmd	*cmd);

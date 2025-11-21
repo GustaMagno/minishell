@@ -83,17 +83,18 @@ int	main (int ac, char **av, char **envp)
 {
 	int		i;
 	t_map	*env;
+	t_map	*path;
 	char	**result;
 
 	env = new_map();
+	path = new_map();
 	i = 0;
 	create_env(env, envp);
-	result = env->to_str(env);
+	result = path->to_str(path);
 	while (result[i])
 	{
 		printf("%s\n", result[i]);
 		i++;
 	}
-	printf("\n\n PATH: %s\n", env->get(env, "PATH"));
 	return (0);
 }
