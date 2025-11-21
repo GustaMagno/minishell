@@ -22,6 +22,8 @@ t_cmd	*parsing_cmd(char *line)
 
 	i = 0;
 	args = ft_split(line, '\3');
+	printf("args : %s\n", args[i]);
+	exit(1);
 	if (!*line || !args)
 		return (NULL);
 	cmd_head = new_cmd(ft_split(args[i++], '\2'));

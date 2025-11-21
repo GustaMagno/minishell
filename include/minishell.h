@@ -30,6 +30,7 @@ t_cmd		*new_cmd(char **args);
 size_t		ft_strlen(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size);
 int			ft_strcmp(const char *s1, const char *s2);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t		ft_strlen(const char *str);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strdup(const char *s);
@@ -39,5 +40,7 @@ int			parsing_redir(t_cmd *cmd);
 int			ft_argslen(char **args);
 void		free_structs(t_cmd *cmd);
 void		free_split(char **args);
+int			redir_in_cmd(char *cmd_arg);
+int			len_line(char *line);
 
 #endif
