@@ -8,7 +8,10 @@ t_redir	*new_redir(char *arg1, char *arg2)
 	if (!redir)
 		return (NULL);
 	redir->args[0] = ft_strdup(arg1);
-	redir->args[1] = ft_strdup(arg2);
+	if (!arg2)
+		redir->args[1] = NULL;
+	else
+		redir->args[1] = ft_strdup(arg2);
 	redir->args[2] = NULL;
 	redir->next = NULL;
 	return (redir);
@@ -30,6 +33,7 @@ char	**clean_cmd(char **args)
 
 	i = 0;
 	j = 0;
+	
 	new_args = ft_calloc(ft_argslen(args) + 1, sizeof(char *));
 	if (!new_args)
 		return (0);
@@ -48,7 +52,7 @@ char	**clean_cmd(char **args)
 	return (new_args);
 }
 
-int	create_rednode(t_cmd *node, t_redir **node_red, t_redir **bnode, int i)
+int	create_redir_node(t_cmd *node, t_redir **node_red, t_redir **bnode, int i)
 {
 	if (!node->redir)
 	{
@@ -86,7 +90,7 @@ int	parsing_redir(t_cmd *cmd)
 		{
 			if (redir_in_cmd(node->args[i]))
 			{
-				if (!create_rednode(node, &node_red, &bnode, i))
+				if (!create_redir_node(node, &node_red, &bnode, i))
 					return (0);
 			}
 		}

@@ -37,6 +37,7 @@ t_cmd		*new_cmd(char **args);
 size_t		ft_strlen(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size);
 int			ft_strcmp(const char *s1, const char *s2);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t		ft_strlen(const char *str);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strdup(const char *s);
@@ -54,5 +55,7 @@ void		create_env(t_map *env, char **envp);
 char		*find_value(char *envp);
 char		*find_key(char *envp);
 void		fill_path(t_map *env, t_path **path);
+int			redir_in_cmd(char *cmd_arg);
+int			len_line(char *line);
 
 #endif

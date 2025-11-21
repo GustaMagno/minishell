@@ -43,6 +43,33 @@ char	verify_char(char c, int in_quotes)
 	return (c);
 }
 
+char	*new_line(char *line)
+{
+	char	*new_line;
+	int 	i;
+	int 	j;
+	
+	i = 0;
+	j = 0;
+	new_line = calloc(len_line(line) + 1, 1);
+	if (!new_line)
+		return (NULL);
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], "<", 1) || !ft_strncmp(&line[i], ">", 1))
+		{
+			new_line[j++] = ' ';
+			new_line[j++] = line[i++];
+			if (!ft_strncmp(&line[i], "<", 1) || !ft_strncmp(&line[i], ">", 1))
+				new_line[j++] = line[i++];
+			new_line[j++] = ' ';
+		}
+		else
+			new_line[j++] = line[i++];
+	}
+	return (free(line), new_line);
+}
+
 char	*transformate_line(char *line)
 {
 	int	i;
@@ -50,6 +77,7 @@ char	*transformate_line(char *line)
 
 	i = 0;
 	in_quotes = 0;
+	line = new_line(line);
 	while (line[i])
 	{
 		if (line[i] == '"' || line[i] == '\'')
@@ -67,6 +95,7 @@ int	parsing(char *line, t_map *env)
 	cmd = parsing_cmd(transformate_line(line));
 	if (!cmd || !parsing_redir(cmd))
 		return (0);
+	// print_cmd(cmd);
 	// print_cmd(cmd);
 	exec(cmd, env);
 	free_structs(cmd);
