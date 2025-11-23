@@ -14,7 +14,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
-	@echo "Makefile sucessfully compiled"
+	@echo "Makefile successfully compiled"
 
 obj/%.o: src/%.c
 	@mkdir -p $(dir $@)
@@ -25,7 +25,7 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "All files was deleted."
+	@echo "All files have been deleted."
 
 re: fclean all
 

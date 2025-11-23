@@ -60,14 +60,15 @@ char	*transformate_line(char *line)
 	return (line);
 }
 
-int	parsing(char *line)
+int	parsing(char *line, t_map *env)
 {
 	t_cmd	*cmd;
 
 	cmd = parsing_cmd(transformate_line(line));
 	if (!cmd || !parsing_redir(cmd))
 		return (0);
-	print_cmd(cmd);
+	// print_cmd(cmd);
+	exec(cmd, env);
 	free_structs(cmd);
 	return (1);
 }

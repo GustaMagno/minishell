@@ -6,6 +6,7 @@
 # include <unistd.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <sys/wait.h>
 # include "map.h"
 
 typedef struct s_redir
@@ -30,8 +31,8 @@ typedef struct s_path
 
 
 char		**ft_split(char const *s, char c);
-void		exec(t_cmd	*cmd);
-int			parsing(char *line);
+void		exec(t_cmd *cmd, t_map *env);
+int			parsing(char *line, t_map *env);
 t_cmd		*new_cmd(char **args);
 size_t		ft_strlen(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size);
@@ -48,5 +49,10 @@ void		free_split(char **args);
 t_path		*ft_lstnew(char *path);
 void		ft_lstadd_back(t_path **lst, t_path *new);
 t_path		*ft_lstlast(t_path *lst);
+char		*ft_pathjoin(char *s1, char *s2);
+void		create_env(t_map *env, char **envp);
+char		*find_value(char *envp);
+char		*find_key(char *envp);
+void		fill_path(t_map *env, t_path **path);
 
 #endif
