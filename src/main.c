@@ -6,9 +6,11 @@ static void run(t_map *env)
 
 	while (1)
 	{
-		line = readline("minishell: ");
+		line = readline("minishel: ");
 		if (!line)
 			return ;
+		if (!syntax_error(line))
+			continue ;
 		parsing(line, env);
 	}
 }
