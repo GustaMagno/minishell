@@ -96,8 +96,8 @@ int	parsing(char *line, t_map *env)
 	if (!cmd || !parsing_redir(cmd))
 		return (0);
 	// print_cmd(cmd);
-	// print_cmd(cmd);
 	exec(cmd, env);
+	print_cmd(cmd);
 	free_structs(cmd);
 	return (1);
 }

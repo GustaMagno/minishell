@@ -13,7 +13,6 @@ static void run(t_map *env)
 	}
 }
 
-
 int main(int argv, char **argc, char **envp)
 {
 	t_map	*env;
@@ -22,6 +21,8 @@ int main(int argv, char **argc, char **envp)
 	(void) argv;
 	env = new_map();
 	create_env(env, envp);
+	run(env);
+	(void) env;
 	run(env);
 }
 

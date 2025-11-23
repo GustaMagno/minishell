@@ -57,5 +57,6 @@ char		*find_key(char *envp);
 void		fill_path(t_map *env, t_path **path);
 int			redir_in_cmd(char *cmd_arg);
 int			len_line(char *line);
+int			syntax_error(char *line);
 
 #endif
