@@ -42,5 +42,6 @@ void		free_structs(t_cmd *cmd);
 void		free_split(char **args);
 int			redir_in_cmd(char *cmd_arg);
 int			len_line(char *line);
+int			syntax_error(char *line);
 
 #endif
