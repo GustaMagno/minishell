@@ -79,22 +79,35 @@ void	create_env(t_map *env, char **envp)
 	}
 }
 
+void	fill_path(t_map *env, t_path **path)
+{
+	char	**abs_path;
+	t_path	*node;
+	int		i;
+
+	i = 0;
+	node = NULL;
+	abs_path = ft_split(env->get(env, "PATH"), ':');
+	while (abs_path[i])
+	{
+		node = ft_lstnew(abs_path[i]);
+		if (!node)
+			exit (0);
+		ft_lstadd_back(path, node);
+		i++;
+	}
+}
+
 int	main (int ac, char **av, char **envp)
 {
 	int		i;
 	t_map	*env;
-	t_map	*path;
-	char	**result;
+	t_path	*path;
 
 	env = new_map();
-	path = new_map();
+	path = NULL;
 	i = 0;
 	create_env(env, envp);
-	result = path->to_str(path);
-	while (result[i])
-	{
-		printf("%s\n", result[i]);
-		i++;
-	}
+	fill_path(env, &path);
 	return (0);
 }

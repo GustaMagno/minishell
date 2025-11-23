@@ -23,6 +23,10 @@ typedef struct s_cmd
 }	t_cmd;
 
 typedef struct s_path
+{
+	char			*path;
+	struct s_path	*next;
+}	t_path;
 
 
 char		**ft_split(char const *s, char c);
@@ -41,5 +45,8 @@ int			parsing_redir(t_cmd *cmd);
 int			ft_argslen(char **args);
 void		free_structs(t_cmd *cmd);
 void		free_split(char **args);
+t_path		*ft_lstnew(char *path);
+void		ft_lstadd_back(t_path **lst, t_path *new);
+t_path		*ft_lstlast(t_path *lst);
 
 #endif
