@@ -58,5 +58,8 @@ void		fill_path(t_map *env, t_path **path);
 int			redir_in_cmd(char *cmd_arg);
 int			len_line(char *line);
 int			syntax_error(char *line);
+void		ft_echo(t_cmd *cmd);
+void		ft_ls(t_cmd *cmd, t_map *env);
+void		exec_ls(t_map *env, char *exec_path, t_cmd *cmd);
 
 #endif

@@ -19,43 +19,12 @@ void	fill_path(t_map *env, t_path **path)
 		i++;
 	}
 }
+
 void	exec(t_cmd	*cmd, t_map *env)
 {
-	char	*exec_path;
-	char	**my_env;
-	t_path	*path;
-	t_path	*tmp;
-	__pid_t	pid;
-
-	pid = fork();
-	path = NULL;
-	fill_path(env, &path);
-	tmp = path;
-	my_env = env->to_str(env);
-	while (tmp)
-	{
-		exec_path = ft_pathjoin(tmp->path, cmd->args[0]);
-		if (access(exec_path, X_OK) == 0)
-			break ;
-		free(exec_path);
-		tmp = tmp->next;
-	}
-	if (!exec_path)
-	{
-		printf("%s: command not found\n", cmd->args[0]);
-		return ;
-	}
-	cmd->args[0] = exec_path;
-	if (pid == 0)
-	{
-		//function can be return -1, or -l
-		execve(exec_path, cmd->args, my_env);
-		perror("execve");
-		exit(1);
-	}
-	else
-	{
-		wait(NULL);
-	}
+	if (ft_strcmp(cmd->args[0], "ls") == 0)
+		ft_ls(cmd, env);
+	else if (ft_strcmp(cmd->args[0], "echo") == 0)
+		ft_echo(cmd);
 }
 
