@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2025/11/23 21:58:18 by matmagal         ###   ########.fr       */
+/*   Updated: 2025/11/27 21:56:43 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,18 @@ void	create_env(t_map *env, char **envp)
 		env->put(env, find_key(envp[i]) ,find_value(envp[i]));
 		i++;
 	}
+}
+
+void	print_env(t_all *all)
+{
+	char	**my_env;
+	int		i;
+
+	my_env = all->env->to_str(all->env);
+	while (my_env[i])
+	{
+		printf("%s\n", my_env[i]);
+		i++;
+	}
+	free_split(my_env);
 }

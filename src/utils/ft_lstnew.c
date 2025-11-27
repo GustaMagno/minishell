@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 16:24:19 by matmagal          #+#    #+#             */
-/*   Updated: 2025/11/23 16:28:12 by matmagal         ###   ########.fr       */
+/*   Updated: 2025/11/27 20:45:33 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_path	*ft_lstnew(char *path)
 	new_node = (t_path *) malloc(sizeof(t_path));
 	if (!new_node)
 		return (NULL);
-	new_node->path = path;
+	new_node->path = ft_strdup(path);
 	new_node->next = NULL;
 	return (new_node);
 }

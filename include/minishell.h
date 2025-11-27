@@ -29,6 +29,14 @@ typedef struct s_path
 	struct s_path	*next;
 }	t_path;
 
+typedef struct s_all
+{
+	t_path	*path;
+	t_cmd	*cmd;
+	t_map	*env;
+	char	*pwd;
+	char	*old_pwd;
+}	t_all;
 
 char		**ft_split(char const *s, char c);
 void		exec(t_cmd *cmd, t_map *env);
@@ -58,8 +66,15 @@ void		fill_path(t_map *env, t_path **path);
 int			redir_in_cmd(char *cmd_arg);
 int			len_line(char *line);
 int			syntax_error(char *line);
-void		ft_echo(t_cmd *cmd);
-void		ft_ls(t_cmd *cmd, t_map *env);
-void		exec_ls(t_map *env, char *exec_path, t_cmd *cmd);
+void		ft_echo(t_all *all);
+void		ft_ls(t_all *all);
+void		exec_ls(t_all *all, char *exec_path);
+void		free_all(char **str, t_path **path, t_path *node);
+void		free_path(t_path **path);
+void		ft_pwd(t_all *all);
+void		init_all(t_all *all, t_cmd *cmd, t_map *env);
+void		print_env(t_all *all);
+char		*cd_list(t_all *all);
+void		exec_cd(t_all *all);
 
 #endif

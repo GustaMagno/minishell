@@ -2,13 +2,16 @@
 
 static void run(t_map *env)
 {
-	char *line;
+	char	*line;
 
 	while (1)
 	{
 		line = readline("minishel: ");
-		if (!line)
-			return ;
+		if (!line || !ft_strncmp(line, "exit", 5))
+		{
+			env->destroy(env);
+			exit (1);
+		}
 		if (!syntax_error(line))
 			continue ;
 		parsing(line, env);
@@ -23,8 +26,6 @@ int main(int argv, char **argc, char **envp)
 	(void) argv;
 	env = new_map();
 	create_env(env, envp);
-	run(env);
-	(void) env;
 	run(env);
 }
 
