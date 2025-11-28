@@ -1,11 +1,11 @@
 
 #include "minishell.h"
 
-void	ft_pwd(t_all *all)
+void	ft_pwd(t_map *env)
 {
 	char	*pwd;
 
-	pwd = all->env->get(all->env, "PWD");
+	pwd = env->get(env, "PWD");
 	if (pwd)
 		printf("%s\n", pwd);
 	else

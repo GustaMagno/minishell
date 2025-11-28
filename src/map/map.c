@@ -14,7 +14,7 @@ char	**to_str(struct s_map_private *this)
 
 	i = 0;
 	node = this->head;
-	str = malloc(count_nodes(this->head) * sizeof(char *) + 1);
+	str = malloc((count_nodes(this->head) + 1) * sizeof(char *));
 	if (!str)
 		return (NULL);
 	while (node)

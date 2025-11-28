@@ -1,14 +1,14 @@
 
 #include "minishell.h"
 
-void	ft_echo(t_all *all)
+void	ft_echo(t_cmd *cmd)
 {
 	int	i;
 
 	i = 1;
-	while (all->cmd->args[i])
+	while (cmd->args[i])
 	{
-		printf("%s ", all->cmd->args[i]);
+		printf("%s ", cmd->args[i]);
 		i++;
 	}
 	printf("\n");

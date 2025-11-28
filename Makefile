@@ -2,7 +2,7 @@
 NAME = minishell
 CC = cc
 
-CFLAGS = -g -Iinclude #-Wall -Wextra -Werror
+CFLAGS = -g -Iinclude -fsanitize=address -fno-omit-frame-pointer #-Wall -Wextra -Werror
 
 LDFLAGS = -lreadline
 
@@ -26,6 +26,12 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 	@echo "All files have been deleted."
+
+asan:
+	@echo "Compiling minishell with ASan (x86_64 via Rosetta)..."
+	@$(MAKE) fclean
+	@$(CC) $(CFLAGS) $(SRC) -o $(NAME) $(LDFLAGS)
+	@echo "Done! Run ./$(NAME) to test with AddressSanitizer."
 
 re: fclean all
 

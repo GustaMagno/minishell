@@ -1,33 +1,33 @@
 
 #include "minishell.h"
 
-void	exec_cd(t_all *all)
+void	exec_cd(t_map *env, t_cmd *cmd)
 {
 	char	*cd;
 	char	*tmp;
 
-	tmp = ft_strdup(all->env->get(all->env, "PWD"));
-	cd = cd_list(all);
-	all->env->put(all->env, "OLDPWD", tmp);
+	tmp = ft_strdup(env->get(env, "PWD"));
+	cd = cd_list(env, cmd);
+	env->put(env, "OLDPWD", tmp);
 	if (chdir(cd) != 0)
 		perror("cd");
-	all->env->put(all->env, "PWD", getcwd(NULL, 0));
+	env->put(env, "PWD", getcwd(NULL, 0));
 	free (cd);
 	
 }
 
-char	*cd_list(t_all *all)
+char	*cd_list(t_map *env, t_cmd *cmd)
 {
 	char	*cd;
 	char	*home;
 
-	home = all->env->get(all->env, "HOME");
-	if (ft_argslen(all->cmd->args) == 1)
+	home = env->get(env, "HOME");
+	if (ft_argslen(cmd->args) == 1)
 		cd = ft_strdup(home);
-	else if (ft_strcmp(all->cmd->args[1], "--") == 0)
-		cd = ft_strdup(all->env->get(all->env, "OLDPWD"));
+	else if (ft_strcmp(cmd->args[1], "--") == 0)
+		cd = ft_strdup(env->get(env, "OLDPWD"));
 	else
-		cd = ft_strdup(all->cmd->args[1]);
+		cd = ft_strdup(cmd->args[1]);
 	return (cd);
 	
 }
