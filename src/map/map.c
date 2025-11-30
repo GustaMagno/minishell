@@ -14,19 +14,18 @@ char	**to_str(struct s_map_private *this)
 
 	i = 0;
 	node = this->head;
-	str = malloc(count_nodes(this->head) * sizeof(char *) + 1);
+	str = calloc(count_nodes(this->head), sizeof(char *));
 	if (!str)
 		return (NULL);
 	while (node)
-	{
-		str[i++] = ft_strjoin(ft_strjoin(node->key, "="), node->value);
+	{	
+		str[i++] = ft_mapstrjoin(ft_mapstrjoin(node->key, "="), node->value);
 		node = node->next;
 	}
-	str[i] = NULL;
 	return (str);
 }
 
-void destroy(struct s_map_private *this)
+void	destroy(struct s_map_private *this)
 {
 	t_node	*node;
 
@@ -100,17 +99,3 @@ void	__put(struct s_map_private *this, char *key, char *value)
 		this->end->next = node;
 	this->end = node;
 }
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	t_map	*map;
-// 	char	*s;
-
-// 	map = new_map();
-// 	map->put(map, ft_strdup("Nome"), ft_strdup("Gustavo"));
-// 	map->put(map, ft_strdup("Idade"), ft_strdup("20"));
-// 	map->put(map, ft_strdup("cidade"), ft_strdup("Bahia"));
-// 	map->put(map, ft_strdup("Nome"), ft_strdup("Guilherme"));
-// 	map->to_str(map);
-// 	map->destroy(map);
-// }

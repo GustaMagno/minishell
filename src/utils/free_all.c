@@ -5,6 +5,8 @@ void	free_split(char **args)
 	int i;
 
 	i = 0;
+	if (!args)
+		return ;
 	while (args[i])
 	{
 		free(args[i]);
@@ -20,6 +22,8 @@ void	free_structs(t_cmd *cmd)
 	t_redir	*temp_r;
 	t_cmd	*temp_c;
 
+	if (!cmd)
+		return;
 	node = cmd;
 	while (node)
 	{

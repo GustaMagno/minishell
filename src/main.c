@@ -3,16 +3,21 @@
 static void run(t_map *env)
 {
 	char *line;
+	t_cmd	*cmd;
 
 	while (1)
 	{
 		line = readline("minishel: ");
 		if (!line)
-			return ;
-		if (!syntax_error(line))
-			continue ;
-		parsing(line, env);
+			break;
+		cmd = parsing(line, env);
+		if (!cmd) 
+			continue;
+		print_cmd(cmd);
+		// exec(cmd, env);
+		free_structs(cmd);
 	}
+	env->destroy(env);
 }
 
 
@@ -26,4 +31,3 @@ int main(int argv, char **argc, char **envp)
 	create_env(env, envp);
 	run(env);
 }
-

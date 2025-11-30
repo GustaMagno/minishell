@@ -16,7 +16,7 @@ t_cmd	*new_cmd(char **args)
 t_cmd	*parsing_cmd(char *line)
 {
 	char	**args;
-	t_cmd	*cmd_head;
+	t_cmd	*cmd_head = NULL;
 	t_cmd	*node;
 	int		i;
 

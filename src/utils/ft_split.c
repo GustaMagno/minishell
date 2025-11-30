@@ -17,7 +17,7 @@ static char	*new_word(char const *s, char c)
 	return (str);
 }
 
-static size_t	count_words(char const *s, char c)
+size_t	count_words(char const *s, char c)
 {
 	size_t	count;
 

@@ -38,7 +38,6 @@ struct s_map_private
 	size_t	size;
 	t_node	*head;
 	t_node	*end;
-	void	(*destriy_node)(t_node *node);
 };
 
 #endif
