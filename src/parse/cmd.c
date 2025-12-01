@@ -21,8 +21,10 @@ t_cmd	*parsing_cmd(char *line)
 	int		i;
 
 	i = 0;
+	if (!line)
+		return (NULL);
 	args = ft_split(line, '\3');
-	if (!*line || !args)
+	if (!args)
 		return (NULL);
 	cmd_head = new_cmd(ft_split(args[i++], '\2'));
 	if (!cmd_head)

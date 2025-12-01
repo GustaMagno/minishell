@@ -49,13 +49,18 @@ t_cmd	*parsing(char *line, t_map *env)
 {
 	t_cmd	*cmd;
 
+	if (is_space(line))
+		return (free(line), NULL);
 	cmd = NULL;
 	add_history(line);
-	line = transformate_line(line, ft_calloc(ft_strlen(line) * 3, 1));
+	line = transformate_line(line, ft_calloc((ft_strlen(line) * 3) + 1, 1));
 	cmd = parsing_cmd(line);
+	if (!cmd)
+		return (free(line), NULL);
 	if (syntax_error(cmd, line))
 		return (write(1, "bash: syntax error near unexpected token\n", 41), NULL);
 	if (!parsing_redir(cmd))
-		return (NULL);
+		return (free(line), NULL);
 	return (cmd);
 }
+//cat <<< ls

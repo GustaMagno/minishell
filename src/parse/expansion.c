@@ -1,60 +1,70 @@
 #include "minishell.h"
 #include "map.h"
 
-int	find_var(char *args)
+int finding_arg(char **cmd_args, t_map *env)
 {
-	if (args[0] == '$')
-		return (1);
-	return (0);
-}
-
-int	count_args(char **cmd_args, t_map *env, int i_var)
-{
-	int i;
-	int count;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (cmd_args[i])
 	{
-		if (i == i_var)
-			count += count_words(env->get(env, cmd_args[i++] + 1), ' ');
-		else
-			i++;
+		j = 0;
+		while (cmd_args[i][j])
+		{
+			if (cmd_args[i][j] == '$' && cmd_args[i][j + 1]);
+				return (1);
+			j++;
+		}
+		i++;
 	}
-	count += i;
-	return (count);
+	return (0);
 }
 
-int set_var_in_args(char **cmd_args, char **new_args, t_map *env, int i_var)
+
+int set_args(char **expand, char **new_args, int *j)
+{
+	int j_cpy;
+	int i;
+
+	j_cpy = *j;
+	i = 0;
+	while (expand[i])
+	{
+		new_args[j_cpy++] = ft_strdup(expand[i++]);
+		if (!new_args[j_cpy - 1])
+			return (0);
+	}
+	*j = j_cpy;
+	return (1);
+}
+
+char	**expanded_args(char **cmd_args, t_map *env)
 {
 	char	**expand;
+	char	**new_args;
 	int		i;
+	int		j;
 
-	expand = ft_split(env->get(env, cmd_args[i_var++] + 1), ' ');
-	if (!expand)
+	new_args = calloc(count_args(cmd_args, env), sizeof(char *));
+	if (!new_args)
 		return (NULL);
+	i = 0;
+	j = 0;
+	while(cmd_args[i])
+	{
+		if (env->get(env, cmd_args[i] + 1))
+		{
+			expand = ft_split(env->get(env, cmd_args[i] + 1), ' ');
+			if (!expand || !set_args(expand, new_args, &j))
+				return (NULL);
+			i++;
+			continue ;
+		}
+		new_args[j++] = cmd_args[i++];
+	}
+	return (new_args);
 }
-
-// char	**expand_args(char **cmd_args, t_map *env)
-// {
-// 	char	**new_args;
-// 	int		i;
-// 	int 	j;
-
-// 	i = 0;
-// 	j = 0;
-// 	new_args = calloc(count_args(cmd_args, env), sizeof(char *));
-// 	if (!new_args)
-// 		return (NULL);
-// 	while (cmd_args[i])
-// 	{
-// 		if (find_var(cmd_args[i]))
-// 		{
-// 			if (!set_var_in_args(cmd_args, new_args, env))
-// 				return (NULL);
-// 		}
-// 	}
-// }
 
 
 int	expansion(t_cmd *cmd, t_map *env)
@@ -64,7 +74,8 @@ int	expansion(t_cmd *cmd, t_map *env)
 	head = cmd;
 	while (head)
 	{
-		// cmd->args = expand_args(cmd->args, env);
+		if (finding_arg(head->args, env))
+			head->args = expanded_args(head->args, env);
 		head = head->next;
 	}
 	return (1);

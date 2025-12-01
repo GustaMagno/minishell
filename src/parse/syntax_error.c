@@ -1,18 +1,33 @@
 #include "minishell.h"
 
+int	redircmp(char *str)
+{
+	//se <<< exitstatus 0
+	if (!ft_strcmp(str, "<<"))
+		return (1);
+	if (!ft_strcmp(str, ">>"))
+		return (1);
+	if (!ft_strcmp(str, "<"))
+		return (1);
+	if (!ft_strcmp(str, ">"))
+		return (1);
+}
+
 int	error_in_pipe(char *line)
 {
 	int i;
 	int j;
 
 	i = 0;
+	if (line[0] == '\3')
+		return (1);
 	while (line[i])
 	{
 		if (line[i] == '\3')
 		{
 			j = i + 1;
-			while (line[j] == 32)
-				i++;
+			while (line[j] == 32 || line[j] == '\2')
+				j++;
 			if (line[j] == '\0' || line[j] == '\3')
 				return (1);
 		}
@@ -29,11 +44,11 @@ int	find_error(char	**args)
 	while (args[i])
 	{
 		if ((!ft_strcmp(args[i], "<<") || !ft_strcmp(args[i], ">>")) 
-			&& (!args[i + 1] || !ft_strcmp(args[i], "<") || !ft_strcmp(args[i], ">")))
+		&& (!args[i + 1] || redircmp(args[i + 1])))
 			return (1);
-		if (!ft_strcmp(args[i], "<") && (!args[i + 1] || !ft_strcmp(args[i + 1], ">")))
+		if (!ft_strcmp(args[i], "<") && (!args[i + 1] || redircmp(args[i + 1])))
 			return (1);
-		if (!ft_strcmp(args[i], ">") && (!args[i + 1] || !ft_strcmp(args[i + 1], "<")))
+		if (!ft_strcmp(args[i], ">") && (!args[i + 1] || redircmp(args[i + 1])))
 			return (1);
 		i++;
 	}
@@ -48,7 +63,6 @@ int	syntax_error(t_cmd *head, char *line)
 		return (free(line), 0);
 	if (error_in_pipe(line))
 		return (free(line), free_structs(head), 1);
-	printf("%s\n", line);
 	cmd = head;
 	while (cmd)
 	{
