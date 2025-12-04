@@ -22,6 +22,8 @@ void	free_structs(t_cmd *cmd)
 	t_redir	*temp_r;
 	t_cmd	*temp_c;
 
+	if (!cmd)
+		return;
 	node = cmd;
 	while (node)
 	{
@@ -35,7 +37,6 @@ void	free_structs(t_cmd *cmd)
 			free(r_node);
 			r_node = temp_r;
 		}
-		// free(node->redir);
 		temp_c = node->next;
 		free(node);
 		node = temp_c;

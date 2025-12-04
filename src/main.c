@@ -2,20 +2,22 @@
 
 static void run(t_map *env)
 {
-	char	*line;
+	char *line;
+	t_cmd	*cmd;
 
 	while (1)
 	{
 		line = readline("minishel: ");
-		if (!line || !ft_strncmp(line, "exit", 5))
-		{
-			env->destroy(env);
-			exit (1);
-		}
-		if (!syntax_error(line))
-			continue ;
-		parsing(line, env);
+		if (!line)
+			break;
+		cmd = parsing(line, env);
+		if (!cmd) 
+			continue;
+		print_cmd(cmd);
+		// exec(cmd, env);
+		free_structs(cmd);
 	}
+	env->destroy(env);
 }
 
 int main(int argv, char **argc, char **envp)
@@ -28,4 +30,3 @@ int main(int argv, char **argc, char **envp)
 	create_env(env, envp);
 	run(env);
 }
-

@@ -1,102 +1,66 @@
 #include "minishell.h"
 
-void	print_args(char **args, int flag)
+static int	put_redir(char *line, char *new_line, size_t *i, size_t *j)
 {
-	int i = 0;
+	size_t i1;
+	size_t j1;
 
-	while (args[i])
+	i1 = *i;
+	j1 = *j;
+	if (line[i1] == '>' || line[i1] == '<')
 	{
-		if (flag)
-			printf("CMD ");
-		else
-			printf("REDIR ");
-		printf("%s\n", args[i++]);
+		new_line[j1++] = '\2';
+		new_line[j1++] = line[i1++];
+		if (line[*i] == line[i1])
+			new_line[j1++] = line[i1++];
+		new_line[j1++] = '\2';
+		*i = i1;
+		*j = j1;
+		return (1);	
 	}
+	return (0);
 }
 
-void	print_cmd(t_cmd *cmd)
+static char	*transformate_line(char *line, char *new_line)
 {
-	t_cmd	*node;
-	t_redir	*rnode;
+	size_t	i;
+	size_t	j;
+	char	f;
 
-	node = cmd;
-	while (node)
-	{
-		rnode = node->redir;
-		printf("NODE :\n\n");
-		print_args(node->args, 1);
-		while (rnode)
-		{
-			print_args(rnode->args, 0);
-			rnode = rnode->next;
-		}
-		node = node->next;
-	}
-}
-
-char	verify_char(char c, int in_quotes)
-{
-	if (c == ' ' && !in_quotes)
-		return ('\2');
-	if (c == '|' && !in_quotes)
-		return ('\3');
-	return (c);
-}
-
-char	*new_line(char *line)
-{
-	char	*new_line;
-	int 	i;
-	int 	j;
-	
 	i = 0;
 	j = 0;
-	new_line = calloc(len_line(line) + 1, 1);
-	if (!new_line)
-		return (NULL);
+	f = 0;
 	while (line[i])
 	{
-		if (!ft_strncmp(&line[i], "<", 1) || !ft_strncmp(&line[i], ">", 1))
-		{
-			new_line[j++] = ' ';
-			new_line[j++] = line[i++];
-			if (!ft_strncmp(&line[i], "<", 1) || !ft_strncmp(&line[i], ">", 1))
-				new_line[j++] = line[i++];
-			new_line[j++] = ' ';
-		}
-		else
-			new_line[j++] = line[i++];
+		if (f == line[i] || (!f && (line[i] == '\'' || line[i] == '\"')))
+			f = line[i] * (f == '\0');
+		if (!f && line[i] == '|')
+			line[i] = '\3';
+		else if (!f && line[i] == ' ')
+			line[i] = '\2';
+		else if (put_redir(line, new_line, &i, &j))
+			continue;
+		new_line[j++] = line[i++];
 	}
 	return (free(line), new_line);
 }
 
-char	*transformate_line(char *line)
-{
-	int	i;
-	int	in_quotes;
-
-	i = 0;
-	in_quotes = 0;
-	line = new_line(line);
-	while (line[i])
-	{
-		if (line[i] == '"' || line[i] == '\'')
-			in_quotes = (in_quotes == 0);
-		line[i] = verify_char(line[i], in_quotes);
-		i++;
-	}
-	return (line);
-}
-
-int	parsing(char *line, t_map *env)
+t_cmd	*parsing(char *line, t_map *env)
 {
 	t_cmd	*cmd;
 
-	cmd = parsing_cmd(transformate_line(line));
-	if (!cmd || !parsing_redir(cmd))
-		return (0);
-	// print_cmd(cmd);
-	exec(cmd, env);
-	free_structs(cmd);
-	return (1);
+	if (is_space(line))
+		return (free(line), NULL);
+	cmd = NULL;
+	add_history(line);
+	line = transformate_line(line, ft_calloc((ft_strlen(line) * 3) + 1, 1));
+	cmd = parsing_cmd(line);
+	if (!cmd)
+		return (free(line), NULL);
+	if (syntax_error(cmd, line))
+		return (write(1, "bash: syntax error near unexpected token\n", 41), NULL);
+	if (!parsing_redir(cmd))
+		return (free(line), NULL);
+	return (cmd);
 }
+//cat <<< ls

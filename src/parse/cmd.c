@@ -16,13 +16,15 @@ t_cmd	*new_cmd(char **args)
 t_cmd	*parsing_cmd(char *line)
 {
 	char	**args;
-	t_cmd	*cmd_head;
+	t_cmd	*cmd_head = NULL;
 	t_cmd	*node;
 	int		i;
 
 	i = 0;
+	if (!line)
+		return (NULL);
 	args = ft_split(line, '\3');
-	if (!*line || !args)
+	if (!args)
 		return (NULL);
 	cmd_head = new_cmd(ft_split(args[i++], '\2'));
 	if (!cmd_head)

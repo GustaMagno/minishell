@@ -1,28 +1,29 @@
 #include "minishell.h"
 
-int	len_line(char *line)
+int	count_args(char **cmd_args, t_map *env)
 {
-	int len;
-	int redir_space;
+	int i;
+	int count;
 
-	len = 0;
-	redir_space = 0;
-	while (line[len])
+	i = 0;
+	while (cmd_args[i])
 	{
-		if (!ft_strncmp(&line[len], ">>", 2) || !ft_strncmp(&line[len], "<<", 2)
-			|| !ft_strncmp(&line[len], "<", 1) || !ft_strncmp(&line[len], ">", 1))
-			redir_space += 2;
-		len++;
+		if (env->get(env, cmd_args[i] + 1))
+			count += count_words(env->get(env, cmd_args[i] + 1), ' ');
+		i++;
 	}
-	len += redir_space;
-	return (len);
+	count += i;
+	return (count);
 }
+
 
 int	ft_argslen(char **args)
 {
 	int i;
 
 	i = 0;
+	if (!args)
+		return (0);
 	while (args[i])
 		i++;
 	return (i);

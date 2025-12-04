@@ -27,13 +27,16 @@ int	count_nodes(t_node	*head)
 	t_node	*temp_node;
 	int	i;
 
+	i = 0;
+	if (!head)
+		return (0);
 	temp_node = head;
 	while (temp_node)
 	{
 		temp_node = temp_node->next;
 		i++;
 	}
-	return (i);
+	return (i + 1);
 }
 
 void	free_node(t_node *node)

@@ -1,59 +1,74 @@
 #include "minishell.h"
 
-int	redir_cases(char *line, int i)
+int	redircmp(char *str)
 {
-	int	check;
-
-	check = 0;
-	if (line[i] == '>' && ++i)
-	{
-		if (line[i] == '<')
-			return (0);
-		if (line[i] == '>' && line[i + 1] == '>')
-			return (0);
-		while (line[i] == 32 && ++check)
-			i++;
-		if (line[i] == '\0' || ((line[i] == '>' || line[i] == '<') && check))
-			return (0);
-	}
-	if (line[i] == '<' && ++i)
-	{
-		if (line[i] == '<' && line[i + 1] == '<' && (line[i + 2] == '<' || line[i + 2] == '>'))
-			return (0);
-		while (line[i] == 32 && ++check)
-			i++;
-		if (line[i] == '\0' || ((line[i] == '>' || line[i] == '<') && check))
-			return (0);
-	}
-	return (1);
-}
-
-int	cases_syntax(char *line, int i)
-{
-	if (line[i] != '|' && line[i] != '<' && line[i] != '>')
+	//se <<< exitstatus 0
+	if (!ft_strcmp(str, "<<"))
 		return (1);
-	if (!redir_cases(line , i))
-		return (0);
-	if (line[i] == '|' && ++i)
-	{
-		while (line[i] == 32)
-			i++;
-		if (line[i] == '\0' || line[i] == '|')
-			return (0);
-	}
-	return (1);
+	if (!ft_strcmp(str, ">>"))
+		return (1);
+	if (!ft_strcmp(str, "<"))
+		return (1);
+	if (!ft_strcmp(str, ">"))
+		return (1);
 }
 
-int	syntax_error(char *line)
+int	error_in_pipe(char *line)
+{
+	int i;
+	int j;
+
+	i = 0;
+	if (line[0] == '\3')
+		return (1);
+	while (line[i])
+	{
+		if (line[i] == '\3')
+		{
+			j = i + 1;
+			while (line[j] == 32 || line[j] == '\2')
+				j++;
+			if (line[j] == '\0' || line[j] == '\3')
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	find_error(char	**args)
 {
 	int	i;
 
 	i = 0;
-	while (line[i])
+	while (args[i])
 	{
-		if (!cases_syntax(line, i))
-			return (printf("bash: syntax error near unexpected token\n"), 0);
+		if ((!ft_strcmp(args[i], "<<") || !ft_strcmp(args[i], ">>")) 
+		&& (!args[i + 1] || redircmp(args[i + 1])))
+			return (1);
+		if (!ft_strcmp(args[i], "<") && (!args[i + 1] || redircmp(args[i + 1])))
+			return (1);
+		if (!ft_strcmp(args[i], ">") && (!args[i + 1] || redircmp(args[i + 1])))
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
+}
+
+int	syntax_error(t_cmd *head, char *line)
+{
+	t_cmd	*cmd;
+	
+	if (!head)
+		return (free(line), 0);
+	if (error_in_pipe(line))
+		return (free(line), free_structs(head), 1);
+	cmd = head;
+	while (cmd)
+	{
+		if (find_error(cmd->args))
+			return (free(line), free_structs(head), 1);
+		cmd = cmd->next;
+	}
+	return (free(line), 0);
 }
