@@ -14,10 +14,10 @@ static void run(t_map *env)
 		if (!cmd) 
 			continue;
 		print_cmd(cmd);
-		// exec(cmd, env);
+		//  exec(cmd, env);
 		free_structs(cmd);
 	}
-	env->destroy(env);
+	// env->destroy(env);
 }
 
 
@@ -29,5 +29,7 @@ int main(int argv, char **argc, char **envp)
 	(void) argv;
 	env = new_map();
 	create_env(env, envp);
-	run(env);
+	expanded(" tes $PWD.TES e viado", env);
+	// run(env);
+	env->destroy(env);
 }
