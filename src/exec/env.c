@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2025/11/28 22:18:26 by matmagal         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:00:42 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char	*find_value(char *envp)
 		i++;
 	i++;
 	value = malloc(sizeof(char) * (ft_strlen(envp) - i + 1));
+	if (!value)
+		return (NULL);
 	while (envp[i])
 	{
 		value[j] = envp[i];
@@ -59,13 +61,21 @@ char	*find_value(char *envp)
 void	create_env(t_map *env, char **envp)
 {
 	int		i;
+	char	*key;
+	char	*value;
 
 	i = 0;
 	while (envp[i])
 	{
-		env->put(env, find_key(envp[i]) ,find_value(envp[i]));
+		key = find_key(envp[i]);
+		value = find_value(envp[i]);
+		env->put(env, ft_strdup(key), ft_strdup(value));
+		free(key);
+		free(value);
 		i++;
 	}
+	if (envp)
+		free_split(envp);
 }
 
 void	print_env(t_map *env)
