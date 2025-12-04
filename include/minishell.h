@@ -29,15 +29,15 @@ typedef struct s_path
 	struct s_path	*next;
 }	t_path;
 
-void		exec(t_cmd *cmd, t_map *env);
-t_cmd		*parsing(char *line, t_map *env);
-t_cmd		*new_cmd(char **args);
-size_t		ft_strlen(const char *str);
 char		**ft_split(char const *s, char c);
 size_t		count_words(char const *s, char c);
 void		*ft_calloc(size_t nmemb, size_t size);
 int			ft_strcmp(const char *s1, const char *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t		ft_strlen(const char *str);
+t_cmd		*parsing(char *line, t_map *env);
+t_cmd		*new_cmd(char **args);
+void		exec(t_cmd *cmd, t_map *env);
 size_t		ft_strlen(const char *str);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_mapstrjoin(char *s1, char *s2);
@@ -58,6 +58,21 @@ char		*ft_pathjoin(char *s1, char *s2);
 void		create_env(t_map *env, char **envp);
 char		*find_value(char *envp);
 char		*find_key(char *envp);
-void		fill_path(t_map *env, t_path **path);
+char		*cd_list(t_map *env, t_cmd *cmd);
+void		exec_cd(t_map *env, t_cmd *cmd);
+void		free_all(char **str, t_path **path, t_path *node);
+void		ft_external(t_cmd *cmd, t_map *env);
+void		exec_external(t_cmd *cmd, t_map *env, char *exec_path);
+char		*find_value(char *envp);
+char		*find_key(char *envp);
+void		create_env(t_map *env, char **envp);
+void		ft_echo(t_cmd *cmd);
+void		ft_pwd(t_map *env);
+void		print_env(t_map *env);
+void		free_path(t_path **path);
+int			is_space(char *line);
+void		print_cmd(t_cmd *cmd);
+int			count_args(char **cmd_args, t_map *env);
+void 		access_check(t_cmd *cmd, t_map *env, char *exec_path);
 
 #endif

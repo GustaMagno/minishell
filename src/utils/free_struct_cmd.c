@@ -68,6 +68,6 @@ void	free_all(char **str, t_path **path, t_path *node)
 		free_path(path);
 	if (str)
 		free_split(str);
-	exit (1);
+	return ;
 }
 

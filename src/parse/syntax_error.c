@@ -11,6 +11,7 @@ int	redircmp(char *str)
 		return (1);
 	if (!ft_strcmp(str, ">"))
 		return (1);
+	return (0);
 }
 
 int	error_in_pipe(char *line)

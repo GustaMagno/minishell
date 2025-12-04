@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2025/12/04 17:07:44 by matmagal         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:30:08 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ void	create_env(t_map *env, char **envp)
 		free(value);
 		i++;
 	}
-	if (envp)
-		free_split(envp);
 }
 
 void	print_env(t_map *env)

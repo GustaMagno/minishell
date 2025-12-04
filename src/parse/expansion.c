@@ -12,7 +12,7 @@ int finding_arg(char **cmd_args, t_map *env)
 		j = 0;
 		while (cmd_args[i][j])
 		{
-			if (cmd_args[i][j] == '$' && cmd_args[i][j + 1]);
+			if (cmd_args[i][j] == '$' && cmd_args[i][j + 1])
 				return (1);
 			j++;
 		}
