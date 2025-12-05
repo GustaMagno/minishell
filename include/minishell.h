@@ -64,6 +64,8 @@ int			expansion(t_cmd *cmd, t_map *env);
 int			is_space(char *line);
 int			count_args(char **cmd_args, t_map *env);
 char		*expanded(char *str, t_map *env);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+size_t		ft_strlcpy(char *dest, const char *src, size_t size);
 
 //DEBUG
 void		print_cmd(t_cmd *cmd);

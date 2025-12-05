@@ -29,7 +29,8 @@ int main(int argv, char **argc, char **envp)
 	(void) argv;
 	env = new_map();
 	create_env(env, envp);
-	expanded(" tes $PWD.TES e viado", env);
-	// run(env);
+	env->get(env, "PWD");
+	run(env);
 	env->destroy(env);
 }
+
