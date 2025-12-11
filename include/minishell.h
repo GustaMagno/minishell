@@ -77,8 +77,7 @@ void 		access_check(t_cmd *cmd, t_map *env, char *exec_path);
 int			ft_lstsize(t_cmd *lst);
 void		pipeline(t_cmd *cmd, t_map *env);
 int		**alloc_pipe(int n_cmds);
-void	exec_pipe(t_cmd *cmd, t_map *env, int **fd_pipes, int args);
-void	close_pipes(int	**fd_pipes, int	t_pipes, int c_pipe);
+void	close_pipes(int	**fd_pipes, int	t_pipes);
 void	exec_functions(t_cmd *cmd, t_map *env);
 
 #endif
