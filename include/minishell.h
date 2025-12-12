@@ -48,6 +48,8 @@ char		**final_split(char *line);
 int			parsing_redir(t_cmd *cmd);
 int			ft_argslen(char **args);
 void		free_structs(t_cmd *cmd);
+void		free_node_content(t_cmd *node);
+void		remove_node(t_cmd **list, t_cmd *node);
 void		free_split(char **args);
 int			redir_in_cmd(char *cmd_arg);
 int			len_line(char *line);
@@ -63,7 +65,6 @@ void		fill_path(t_map *env, t_path **path);
 int			expansion(t_cmd *cmd, t_map *env);
 int			is_space(char *line);
 int			count_args(char **cmd_args, t_map *env);
-char		*expanded(char *str, t_map *env);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 size_t		ft_strlcpy(char *dest, const char *src, size_t size);
 

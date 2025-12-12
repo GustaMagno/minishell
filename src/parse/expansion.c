@@ -1,11 +1,95 @@
 #include "minishell.h"
 #include "map.h"
 
+int	count_new_split(char **cmd_args)
+{
+	int count;
+	int i;
+
+	count = 0;
+	i = 0;
+	while (cmd_args[i])
+	{
+		count += count_words(cmd_args[i], ' ');
+		i++;
+	}
+	return (count);
+}
+
+int		out_quotes(char *arg)
+{
+	int		i;
+	int		in_quote;
+
+	i = 0;
+	in_quote = 0;
+	while (arg[i])
+	{
+		if (arg[i] == '"')
+			in_quote = (in_quote == 0);
+		if (arg[i] == ' ' && !in_quote)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	split_words(char *arg, char **new_args, int *j)
+{
+	//comecar a splitar e pssar para newargs e iterar J
+}
+
+char	**new_split(char **cmd_args)
+{
+	char	**new_args;
+	char	**temp;
+	int		i;
+	int		j;
+	int		k;
+
+	new_args = ft_calloc(count_new_split(cmd_args) + 1, sizeof(char *));
+	if (!new_args)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (cmd_args[i])
+	{
+		if (out_quotes(cmd_args[i]))
+			split_words(cmd_args[i], new_args, &j);
+		else
+			new_args[j] = ft_strdup(cmd_args[i]);
+		j++;
+		i++;
+	}
+	return (free_split(cmd_args), new_args);
+}
+
+int remove_null_node(t_cmd *cmd)
+{
+	t_cmd	*node;
+
+	node = cmd;
+	if (!node->args[0][0])
+		return (free_structs(cmd), 0);
+	while (node)
+	{
+		if (!node->args[0][0])
+		{
+			remove_node(&cmd, node);
+			node = cmd;
+			continue ;
+		}
+		node = node->next;
+	}
+	return (1);
+}
+
 static int replace(char **str, int start, int end, t_map *env)
 {
 	char	*str_value = NULL;
 	char	*replaced;
 	char	*key;
+	char	*temp_str;
 	char	*value;
 
 	key = ft_substr(*str, start, end - start);
@@ -18,10 +102,14 @@ static int replace(char **str, int start, int end, t_map *env)
 	replaced = ft_strjoin(str_value, &(*str)[end]);
 	free(str_value);
 	free(key);
+	temp_str = *str;
 	*str = replaced;
-	return (start + ft_strlen(value));
+	free(temp_str);
+	return (start + ft_strlen(value) - 1);
 }
-char	*expanded(char *str, t_map *env)
+// -1 por causa da iteracao do expanded.
+
+char	*expanded(char *str, t_map *env, int *flag)
 {
 	int		i;
 	char	f;
@@ -32,11 +120,13 @@ char	*expanded(char *str, t_map *env)
 	i = -1;
 	start = 0;
 	f = 0;
+	if (!str)
+		return (NULL);
 	while (str[++i])
 	{
 		if ((str[i] == '\'' || str[i] == '"') && (!f || f == str[i]))
 			f = str[i] * (f == 0);
-		if (str[i] == '$' && (!f || f == '"'))
+		if (str[i] == '$' && (!f || f == '"') && ++(*flag))
 		{
 			start = i;
 			end = start;
@@ -50,26 +140,28 @@ char	*expanded(char *str, t_map *env)
 
 int	expansion(t_cmd *cmd, t_map *env)
 {
-	t_cmd	*head;
-	char	**new_args;
+	t_cmd	*node;
 	int 	i;
+	int		flag;
 
-	head = cmd;
-	while (head)
+	node = cmd;
+	while (node)
 	{
 		i = -1;
-		while (head->args[++i])
-			head->args[i] = expanded(head->args[i], env);
-		head = head->next;
+		flag = 0;
+		while (node->args[++i])
+		{
+			node->args[i] = expanded(node->args[i], env, &flag);
+			if (!node->args[i])
+				return (0);
+		}
+		if (flag)
+			node->args = new_split(node->args);
+		if (!node->args)
+			return (0);
+		node = node->next;
 	}
+	// if (!remove_null_node(cmd))
+	// 	return (0);
 	return (1);
 }
-// " tes $PWD.TES e viado"
-// char *key=PWD
-// int		start=6
-// int		end=9
-
-// char *satrt = " tes "
-// char *end= ".TES e viado"
-// t = jo(star, value);
-//  value = jo(t, end);
