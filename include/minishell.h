@@ -67,6 +67,9 @@ int			is_space(char *line);
 int			count_args(char **cmd_args, t_map *env);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 size_t		ft_strlcpy(char *dest, const char *src, size_t size);
+int 		remove_null_node(t_cmd *cmd);
+int			count_new_split(char **cmd_args);
+int			out_quotes(char *arg);
 
 //DEBUG
 void		print_cmd(t_cmd *cmd);

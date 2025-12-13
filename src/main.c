@@ -29,7 +29,7 @@ int main(int argv, char **argc, char **envp)
 	(void) argv;
 	env = new_map();
 	create_env(env, envp);
-	env->get(env, "PWD");
+	env->put(env, ft_strdup("eles"), ft_strdup("ls -l"));
 	run(env);
 	env->destroy(env);
 }

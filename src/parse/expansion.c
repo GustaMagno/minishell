@@ -1,42 +1,21 @@
 #include "minishell.h"
 #include "map.h"
 
-int	count_new_split(char **cmd_args)
-{
-	int count;
-	int i;
-
-	count = 0;
-	i = 0;
-	while (cmd_args[i])
-	{
-		count += count_words(cmd_args[i], ' ');
-		i++;
-	}
-	return (count);
-}
-
-int		out_quotes(char *arg)
-{
-	int		i;
-	int		in_quote;
-
-	i = 0;
-	in_quote = 0;
-	while (arg[i])
-	{
-		if (arg[i] == '"')
-			in_quote = (in_quote == 0);
-		if (arg[i] == ' ' && !in_quote)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 void	split_words(char *arg, char **new_args, int *j)
 {
-	//comecar a splitar e pssar para newargs e iterar J
+	char	**split_arg;
+	int		i;
+	int 	k;
+
+	i = 0;
+	k = *j;
+	split_arg = ft_split(arg, ' ');
+	if (!split_arg)
+		return ;
+	while (split_arg[i])
+		new_args[k++] = ft_strdup(split_arg[i++]);
+	*j = k;
+	free_split(split_arg);
 }
 
 char	**new_split(char **cmd_args)
@@ -45,7 +24,6 @@ char	**new_split(char **cmd_args)
 	char	**temp;
 	int		i;
 	int		j;
-	int		k;
 
 	new_args = ft_calloc(count_new_split(cmd_args) + 1, sizeof(char *));
 	if (!new_args)
@@ -64,25 +42,6 @@ char	**new_split(char **cmd_args)
 	return (free_split(cmd_args), new_args);
 }
 
-int remove_null_node(t_cmd *cmd)
-{
-	t_cmd	*node;
-
-	node = cmd;
-	if (!node->args[0][0])
-		return (free_structs(cmd), 0);
-	while (node)
-	{
-		if (!node->args[0][0])
-		{
-			remove_node(&cmd, node);
-			node = cmd;
-			continue ;
-		}
-		node = node->next;
-	}
-	return (1);
-}
 
 static int replace(char **str, int start, int end, t_map *env)
 {
