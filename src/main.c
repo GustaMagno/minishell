@@ -7,18 +7,22 @@ static void run(t_map *env)
 
 	while (1)
 	{
-		line = readline("minishel: ");
+		line = readline("minishell: ");
 		if (!line)
 			break;
+		if ((ft_strcmp(line, "exit") == 0))
+		{
+			free(line);
+			break;
+		}
 		cmd = parsing(line, env);
 		if (!cmd) 
 			continue;
-		print_cmd(cmd);
-		//  exec(cmd, env);
+		// print_cmd(cmd);
+		exec(cmd, env);
 		free_structs(cmd);
 	}
 }
-
 
 int main(int argv, char **argc, char **envp)
 {

@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	int	fd_pipe[2];
+	char buffer[10000];
+	int	readbytes;
+
+	// while(1)
+	// {
+	// 	readbytes = read(STDIN_FILENO, buffer, 100);
+	// 	buffer[readbytes] = '\0';
+	// 	printf("buffer: %s\n\n", buffer);
+	// }
+	// exit(1);
+	printf("%i, %i\n", fd_pipe[0], fd_pipe[1]);
+	pipe(fd_pipe);
+	printf("%i, %i\n", fd_pipe[0], fd_pipe[1]);
+	write(fd_pipe[1], "Teste\n", 10);
+	readbytes = read(fd_pipe[0], buffer, 100);
+	buffer[readbytes] = '\0';
+	printf("resultado: %s\n\n", buffer);
+	// printf("teste\n");	
+}

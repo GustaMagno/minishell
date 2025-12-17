@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2025/11/29 19:25:03 by gustoliv         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:30:08 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char	*find_value(char *envp)
 		i++;
 	i++;
 	value = malloc(sizeof(char) * (ft_strlen(envp) - i + 1));
+	if (!value)
+		return (NULL);
 	while (envp[i])
 	{
 		value[j] = envp[i];
@@ -59,11 +61,31 @@ char	*find_value(char *envp)
 void	create_env(t_map *env, char **envp)
 {
 	int		i;
+	char	*key;
+	char	*value;
 
 	i = 0;
 	while (envp[i])
 	{
-		env->put(env, find_key(envp[i]) ,find_value(envp[i]));
+		key = find_key(envp[i]);
+		value = find_value(envp[i]);
+		env->put(env, ft_strdup(key), ft_strdup(value));
+		free(key);
+		free(value);
 		i++;
 	}
+}
+
+void	print_env(t_map *env)
+{
+	char	**my_env;
+	int		i;
+
+	my_env = env->to_str(env);
+	while (my_env[i])
+	{
+		printf("%s\n", my_env[i]);
+		i++;
+	}
+	free_split(my_env);
 }

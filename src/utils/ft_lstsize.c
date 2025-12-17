@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 16:24:19 by matmagal          #+#    #+#             */
-/*   Updated: 2025/11/27 20:45:33 by matmagal         ###   ########.fr       */
+/*   Created: 2025/04/18 20:34:41 by matmagal          #+#    #+#             */
+/*   Updated: 2025/12/06 20:58:58 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_path	*ft_lstnew(char *path)
+int	ft_lstsize(t_cmd *lst)
 {
-	t_path	*new_node;
+	int	i;
 
-	new_node = (t_path *) malloc(sizeof(t_path));
-	if (!new_node)
-		return (NULL);
-	new_node->path = ft_strdup(path);
-	new_node->next = NULL;
-	return (new_node);
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
 }

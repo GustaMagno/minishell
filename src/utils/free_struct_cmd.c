@@ -53,3 +53,32 @@ void	free_structs(t_cmd *cmd)
 		node = temp_c;
 	}
 }
+
+void	free_path(t_path **path)
+{
+	t_path	*tmp;
+	t_path	*next;
+
+	if (!path || !*path)
+		return ;
+	tmp = *path;
+	while (tmp)
+	{
+		next = tmp->next;
+		free(tmp);
+		tmp = next;
+	}
+	*path = NULL;
+}
+
+void	free_all(char **str, t_path **path, t_path *node)
+{
+	if (node)
+		free(node);
+	if (path)
+		free_path(path);
+	if (str)
+		free_split(str);
+	return ;
+}
+
