@@ -40,7 +40,7 @@ int remove_null_node(t_cmd *cmd)
 	t_cmd	*node;
 
 	node = cmd;
-	if (!node->args[0][0])
+	if (!*(node->args) || !node->args[0][0])
 		return (free_structs(cmd), 0);
 	while (node)
 	{
