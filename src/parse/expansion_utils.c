@@ -11,6 +11,8 @@ int	count_new_split(char **cmd_args)
 	while (cmd_args[i])
 	{
 		count += count_words(cmd_args[i], ' ');
+		if (!count_words(cmd_args[i], ' '))
+			count++;
 		i++;
 	}
 	return (count);

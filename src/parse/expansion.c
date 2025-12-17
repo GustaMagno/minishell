@@ -34,9 +34,8 @@ char	**new_split(char **cmd_args)
 	{
 		if (out_quotes(cmd_args[i]))
 			split_words(cmd_args[i], new_args, &j);
-		else
-			new_args[j] = ft_strdup(cmd_args[i]);
-		j++;
+		else if (cmd_args[i][0])
+			new_args[j++] = ft_strdup(cmd_args[i]);
 		i++;
 	}
 	return (free_split(cmd_args), new_args);
@@ -120,7 +119,7 @@ int	expansion(t_cmd *cmd, t_map *env)
 			return (0);
 		node = node->next;
 	}
-	// if (!remove_null_node(cmd))
-	// 	return (0);
+	if (!remove_null_node(cmd))
+		return (0);
 	return (1);
 }

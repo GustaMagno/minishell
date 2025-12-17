@@ -15,9 +15,8 @@ static void run(t_map *env)
 			continue;
 		print_cmd(cmd);
 		//  exec(cmd, env);
-		// free_structs(cmd);
+		free_structs(cmd);
 	}
-	// env->destroy(env);
 }
 
 
