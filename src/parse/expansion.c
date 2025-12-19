@@ -51,6 +51,8 @@ static int replace(char **str, int start, int end, t_map *env)
 	char	*value;
 
 	key = ft_substr(*str, start, end - start);
+	if (!ft_stralpha(key + 1))
+		return (free(key), start);
 	if (env->get(env, key + 1))
 		value = env->get(env, key + 1);
 	else
@@ -82,17 +84,19 @@ char	*expanded(char *str, t_map *env, int *flag)
 		return (NULL);
 	while (str[++i])
 	{
+		printf("STRING : %s, char: %c, iterator: %i\n\n", str, str[i], i);
 		if ((str[i] == '\'' || str[i] == '"') && (!f || f == str[i]))
 			f = str[i] * (f == 0);
 		if (str[i] == '$' && (!f || f == '"') && ++(*flag))
 		{
 			start = i;
-			end = start;
-			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end])
+			end = start + 1;
+			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end] && str[end] != '$')
 				end++;
 			i = replace(&str, start, end, env);
 		}
 	}
+	printf("STING FINAL; %s\n", str);
 	return (str);
 }
 

@@ -73,6 +73,7 @@ void		ft_pwd(t_map *env);
 void		print_env(t_map *env);
 void		free_path(t_path **path);
 int			is_space(char *line);
+int			ft_stralpha(char *str);
 void		print_cmd(t_cmd *cmd);
 int			count_args(char **cmd_args, t_map *env);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
