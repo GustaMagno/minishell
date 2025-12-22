@@ -1,22 +1,6 @@
 #include "minishell.h"
 #include "map.h"
 
-void	split_words(char *arg, char **new_args, int *j)
-{
-	char	**split_arg;
-	int		i;
-	int 	k;
-
-	i = 0;
-	k = *j;
-	split_arg = ft_split(arg, ' ');
-	if (!split_arg)
-		return ;
-	while (split_arg[i])
-		new_args[k++] = ft_strdup(split_arg[i++]);
-	*j = k;
-	free_split(split_arg);
-}
 
 char	**new_split(char **cmd_args)
 {
@@ -51,17 +35,18 @@ static int replace(char **str, int start, int end, t_map *env)
 	char	*value;
 
 	key = ft_substr(*str, start, end - start);
-	if (!ft_stralpha(key + 1))
+	if (!ft_stralpha(key + 1) && key)
 		return (free(key), start);
 	if (env->get(env, key + 1))
-		value = env->get(env, key + 1);
+		value = set_expansion(env->get(env, key + 1));
 	else
-		value = "\0";
+		value = ft_strdup("\0");
 	(*str)[start] = '\0';
 	str_value = ft_strjoin(*str, value);
 	replaced = ft_strjoin(str_value, &(*str)[end]);
 	free(str_value);
 	free(key);
+	free(value);
 	temp_str = *str;
 	*str = replaced;
 	free(temp_str);
@@ -84,19 +69,17 @@ char	*expanded(char *str, t_map *env, int *flag)
 		return (NULL);
 	while (str[++i])
 	{
-		printf("STRING : %s, char: %c, iterator: %i\n\n", str, str[i], i);
 		if ((str[i] == '\'' || str[i] == '"') && (!f || f == str[i]))
 			f = str[i] * (f == 0);
 		if (str[i] == '$' && (!f || f == '"') && ++(*flag))
 		{
 			start = i;
 			end = start + 1;
-			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end] && str[end] != '$')
+			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end] != '$' && str[end])
 				end++;
 			i = replace(&str, start, end, env);
 		}
 	}
-	printf("STING FINAL; %s\n", str);
 	return (str);
 }
 

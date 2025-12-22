@@ -1,6 +1,23 @@
 #include "minishell.h"
 #include "map.h"
 
+void	split_words(char *arg, char **new_args, int *j)
+{
+	char	**split_arg;
+	int		i;
+	int 	k;
+
+	i = 0;
+	k = *j;
+	split_arg = ft_split(arg, ' ');
+	if (!split_arg)
+		return ;
+	while (split_arg[i])
+		new_args[k++] = ft_strdup(split_arg[i++]);
+	*j = k;
+	free_split(split_arg);
+}
+
 int	count_new_split(char **cmd_args)
 {
 	int count;
@@ -53,4 +70,22 @@ int remove_null_node(t_cmd *cmd)
 		node = node->next;
 	}
 	return (1);
+}
+
+char	*set_expansion(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+
+	new_str = ft_calloc(ft_strlen(str) + 3, 1);
+	if (!str)
+		return (NULL);
+	new_str[0] = '\2';
+	new_str[ft_strlen(str) + 1] = '\2';
+	i = 0;
+	j = 1;
+	while (str[i])
+		new_str[j++] = str[i++];
+	return (new_str);
 }

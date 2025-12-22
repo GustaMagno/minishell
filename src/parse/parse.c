@@ -59,7 +59,6 @@ t_cmd	*parsing(char *line, t_map *env)
 		return (free(line), NULL);
 	if (syntax_error(cmd, line))
 		return (write(1, "bash: syntax error near unexpected token\n", 41), NULL);
-	// printf("line: %s\n", line);
 	if (!parsing_redir(cmd) || !expansion(cmd, env))
 		return (NULL);
 	return (cmd);

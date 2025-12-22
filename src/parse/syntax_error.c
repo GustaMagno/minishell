@@ -44,12 +44,7 @@ int	find_error(char	**args)
 	i = 0;
 	while (args[i])
 	{
-		if ((!ft_strcmp(args[i], "<<") || !ft_strcmp(args[i], ">>")) 
-		&& (!args[i + 1] || redircmp(args[i + 1])))
-			return (1);
-		if (!ft_strcmp(args[i], "<") && (!args[i + 1] || redircmp(args[i + 1])))
-			return (1);
-		if (!ft_strcmp(args[i], ">") && (!args[i + 1] || redircmp(args[i + 1])))
+		if (redircmp(args[i]) && (!args[i + 1] || redircmp(args[i + 1])))
 			return (1);
 		i++;
 	}
