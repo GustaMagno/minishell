@@ -5,18 +5,29 @@ char	*new_str(char *str)
 {
 	int		i;
 	int		j;
+	int		f;
 	char	*new_str;
 
-	i = 0;
+	i = -1;
 	j = 0;
+	f = 0;
 	new_str = ft_calloc(ft_strlen(str) + 1, 1);
 	if (!new_str)
 		return (NULL);
-	while (str[i])
+	while (str[++i])
 	{
-		//if (condition_quote(str, i))
-		//	new_str[j++] = str[i];
-		i++;
+		if ((str[i] == '"' || str[i] == '\'' || str[i] == '\2') && (!f || f == str[i]))
+		{
+			f = str[i] * (f == '\0');
+			continue ;
+		}
+		if (str[i] == '"' && f != '\'' && f != '\2' && str[i - 1] != '\\')
+			continue ;
+		if (str[i] == '\'' && f != '"' && f != '\2' && str[i - 1] != '\\')
+			continue ;
+		if (str[i] == '\\' && (str[i + 1] == '\'' || str[i + 1] == '"'))
+			continue ;
+		new_str[j++] = str[i];
 	}
 	return (new_str);
 }
