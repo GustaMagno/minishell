@@ -26,7 +26,7 @@ char	*new_str(char *str)
 		if (str[i] == '\'' && f != '"' && f != '\2' && str[i - 1] != '\\')
 			continue ;
 		if (str[i] == '\\' && (str[i + 1] == '\'' || str[i + 1] == '"'))
-			continue ;
+			i++;
 		new_str[j++] = str[i];
 	}
 	return (new_str);
