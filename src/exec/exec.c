@@ -95,6 +95,8 @@ void	exec_functions(t_cmd *cmd, t_map *env)
 		print_env(env);
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 		exec_cd(env, cmd);
+	else if (ft_strcmp(cmd->args[0], "unset") == 0)
+		ft_unset(env, cmd);
 	else
 		ft_external(cmd, env);
 }

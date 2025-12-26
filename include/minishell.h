@@ -91,5 +91,6 @@ void		exec_functions(t_cmd *cmd, t_map *env);
 int			remove_quotes(t_cmd *cmd);
 char		*set_expansion(char *str);
 void		split_words(char *arg, char **new_args, int *j);
+void		ft_unset(t_map *env, t_cmd *cmd);
 
 #endif

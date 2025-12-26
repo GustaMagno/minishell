@@ -43,7 +43,7 @@ void	_remove(struct s_map_private *this, char *key)
 	t_node	*node;
 	t_node	*node_to_free;
 
-	if (!key)
+	if (!key || !this->get(this, key))
 		return ;
 	node = this->head;
 	if (!ft_strcmp(this->head->key, key))
