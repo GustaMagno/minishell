@@ -4,12 +4,24 @@ void	print_export(t_map *env)
 {
 	char	**my_export;
 	int		i;
+	int		j;
 
+	i = -1;
 	my_export = env->to_str(env);
-	while (my_export[i])
+	while (my_export[++i])
 	{
-		printf("declare -x %s\n", my_export[i]);
-		i++;
+		j = 0;
+		write(1, "declare -x ", 12);
+		while (my_export[i][j] && my_export[i][j] != '=')
+				write(1, &my_export[i][j++], 1);
+		if (my_export[i][j + 1] == '\2' && write(1, "\n", 1))
+			continue ;
+		write(1, &my_export[i][j++], 1);
+		write(1, "\"", 1);
+		while (my_export[i][j] && my_export[i][j] != '=')
+				write(1, &my_export[i][j++], 1);
+		write(1, "\"", 1);
+		write(1, "\n", 1);
 	}
 	free_split(my_export);
 }
@@ -23,8 +35,8 @@ int	export_str(char *str, t_map *env)
 	i = 0;
 	while (str[i] != '=' && str[i])
 		i++;
-	if (!str[i] || !str[i + 1])
-		return (1);
+	if (!str[i])
+		return (env->put(env, ft_strdup(str), ft_strdup("\2")), 1);
 	key = ft_substr(str, 0, i);
 	if (!key)
 		return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2025/12/04 17:30:08 by matmagal         ###   ########.fr       */
+/*   Updated: 2025/12/29 00:17:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,18 @@ void	print_env(t_map *env)
 {
 	char	**my_env;
 	int		i;
+	int		last;
 
+	i = 0;
 	my_env = env->to_str(env);
 	while (my_env[i])
 	{
+		last = ft_strlen(my_env[i]) - 1;
+		if (my_env[i][last] == '\2')
+		{
+			i++;
+			continue ;
+		}
 		printf("%s\n", my_env[i]);
 		i++;
 	}
