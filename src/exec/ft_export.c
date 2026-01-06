@@ -70,7 +70,7 @@ int	export_str(char *str, t_map *env)
 		return (write(2, "bash: export: not a valid identifier\n", 37), free(key), 1);
 	value = ft_substr(str, i + 1, ft_strlen(str + i));
 	if (!value)
-		return (0);
+		return (free(key), 0);
 	if (str[i] != '=')
 		return (free(key), free(value), 1);
 	env->put(env, key, value);
