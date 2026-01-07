@@ -44,7 +44,7 @@ void	print_export(t_map *env)
 			continue ;
 		write(1, &my_export[i][j++], 1);
 		write(1, "\"", 1);
-		while (my_export[i][j] && my_export[i][j] != '=')
+		while (my_export[i][j])
 				write(1, &my_export[i][j++], 1);
 		write(1, "\"", 1);
 		write(1, "\n", 1);
