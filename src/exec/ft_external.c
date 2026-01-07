@@ -10,6 +10,11 @@ void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)
 	my_env = env->to_str(env);
 	if (pid == 0)
 	{
+		// if (is_directory(exec_path))
+		// {
+		// 	printf("minishell: %s: Is a directory\n", exec_path);
+		// 	exit(127);
+		// }
 		execve(exec_path, cmd->args, my_env);
 		perror("execve");
 		exit(127);
