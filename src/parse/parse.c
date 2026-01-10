@@ -27,6 +27,8 @@ static char	*transformate_line(char *line, char *new_line)
 	size_t	j;
 	char	f;
 
+	if (!new_line)
+		return (free(line), NULL);
 	i = 0;
 	j = 0;
 	f = 0;
@@ -54,13 +56,14 @@ t_cmd	*parsing(char *line, t_map *env)
 	cmd = NULL;
 	add_history(line);
 	line = transformate_line(line, ft_calloc((ft_strlen(line) * 3) + 1, 1));
+	if (!line)
+		return (NULL);
 	cmd = parsing_cmd(line);
 	if (!cmd)
 		return (free(line), NULL);
 	if (syntax_error(cmd, line))
 		return (write(1, "bash: syntax error near unexpected token\n", 41), NULL);
 	if (!parsing_redir(cmd) || !expansion(cmd, env) || !remove_quotes(cmd))
-		return (NULL);
+		return (free_structs(cmd), NULL);
 	return (cmd);
 }
-//cat <<< ls

@@ -4,6 +4,8 @@ t_cmd	*new_cmd(char **args)
 {
 	t_cmd	*cmd;
 
+	if (!args)
+		return (NULL);
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
@@ -16,10 +18,11 @@ t_cmd	*new_cmd(char **args)
 t_cmd	*parsing_cmd(char *line)
 {
 	char	**args;
-	t_cmd	*cmd_head = NULL;
+	t_cmd	*cmd_head;
 	t_cmd	*node;
 	int		i;
 
+	cmd_head = NULL;
 	i = 0;
 	if (!line)
 		return (NULL);

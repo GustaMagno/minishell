@@ -31,6 +31,8 @@ char	*ft_mapstrjoin(char *s1, char *s2)
 	char	*temp_str;
 	char	*temp_s1;
 
+	if (!s1 || !s2)
+		return (NULL);
 	check = (*s2 == '=');
 	temp_s1 = s1;
 	len_s1 = ft_strlen(s1);

@@ -31,6 +31,8 @@ int main(int argv, char **argc, char **envp)
 	(void) argc;
 	(void) argv;
 	env = new_map();
+	if (!env)
+		return (1);
 	create_env(env, envp);
 	run(env);
 	env->destroy(env);

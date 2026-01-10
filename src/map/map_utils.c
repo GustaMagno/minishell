@@ -12,6 +12,8 @@ t_map *new_map()
 	struct s_map_private *map;
 
 	map = malloc(sizeof(struct s_map_private));
+	if (!map)
+		return (NULL);
 	map->put = (void *) __put;
 	map->get = _get;
 	map->remove = _remove;
