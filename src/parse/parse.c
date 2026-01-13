@@ -58,11 +58,13 @@ t_cmd	*parsing(char *line, t_map *env)
 	line = transformate_line(line, ft_calloc((ft_strlen(line) * 3) + 1, 1));
 	if (!line)
 		return (NULL);
+	if (error_in_pipe(line))
+		return (free(line), write(1, SYNTAX_ERROR, 41), NULL);
 	cmd = parsing_cmd(line);
 	if (!cmd)
 		return (free(line), NULL);
 	if (syntax_error(cmd, line))
-		return (write(1, "bash: syntax error near unexpected token\n", 41), NULL);
+		return (write(1, SYNTAX_ERROR, 41), free_structs(cmd), NULL);
 	if (!parsing_redir(cmd) || !expansion(cmd, env) || !remove_quotes(cmd))
 		return (free_structs(cmd), NULL);
 	return (cmd);

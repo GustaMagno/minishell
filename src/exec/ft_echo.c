@@ -22,7 +22,11 @@ void	ft_echo(t_cmd *cmd)
 {
 	int	i;
 
+	if (!cmd->args[1])
+		return ((void)printf("\n"));
 	i = is_flag(cmd->args);
+	if (!cmd->args[i])
+		return ;
 	while (cmd->args[i + 1])
 	{
 		printf("%s ", cmd->args[i]);

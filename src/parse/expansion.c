@@ -46,11 +46,12 @@ static int replace(char **str, int start, int end, t_map *env)
 	replaced = ft_strjoin(str_value, &(*str)[end]);
 	free(str_value);
 	free(key);
-	free(value);
 	temp_str = *str;
 	*str = replaced;
+	start += ft_strlen(value) - 1;
+	free(value);
 	free(temp_str);
-	return (start + ft_strlen(value) - 1);
+	return (start);
 }
 // -1 por causa da iteracao do expanded.
 

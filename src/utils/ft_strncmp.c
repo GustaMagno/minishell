@@ -5,6 +5,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	size_t	cont1;
 
 	cont1 = 0;
+	if (!s1 || !s2)
+		return (1);
 	while (cont1 < n)
 	{
 		if (s1[cont1] != s2[cont1] || s1[cont1] == '\0' || s2[cont1] == '\0')

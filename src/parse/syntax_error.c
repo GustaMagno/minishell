@@ -54,16 +54,14 @@ int	find_error(char	**args)
 int	syntax_error(t_cmd *head, char *line)
 {
 	t_cmd	*cmd;
-	
+
 	if (!head)
 		return (free(line), 0);
-	if (error_in_pipe(line))
-		return (free(line), free_structs(head), 1);
 	cmd = head;
 	while (cmd)
 	{
 		if (find_error(cmd->args))
-			return (free(line), free_structs(head), 1);
+			return (free(line), 1);
 		cmd = cmd->next;
 	}
 	return (free(line), 0);

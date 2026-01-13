@@ -9,6 +9,8 @@
 # include <sys/wait.h>
 # include "map.h"
 
+# define SYNTAX_ERROR "bash: syntax error near unexpected token\n"
+
 typedef struct s_redir
 {
 	char			*args[3];
@@ -47,12 +49,13 @@ char		**final_split(char *line);
 int			parsing_redir(t_cmd *cmd);
 int			ft_argslen(char **args);
 void		free_structs(t_cmd *cmd);
-void		free_node_content(t_cmd *node);
+int			free_node_content(t_cmd *node);
 void		remove_node(t_cmd **list, t_cmd *node);
 void		free_split(char **args);
 int			redir_in_cmd(char *cmd_arg);
 int			len_line(char *line);
 int			syntax_error(t_cmd *cmd, char *line);
+int			error_in_pipe(char *line);
 t_path		*ft_lstnew(char *path);
 void		ft_lstadd_back(t_path **lst, t_path *new);
 t_path		*ft_lstlast(t_path *lst);

@@ -37,7 +37,7 @@ t_cmd	*parsing_cmd(char *line)
 	{
 		node->next = new_cmd(ft_split(args[i++], '\2'));
 		if (!node->next)
-			return (NULL);
+			return (free_split(args), NULL);
 		node = node->next;
 	}
 	free_split(args);

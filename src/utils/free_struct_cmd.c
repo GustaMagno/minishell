@@ -15,13 +15,13 @@ void	free_split(char **args)
 	free(args);
 }
 
-void	free_node_content(t_cmd *node)
+int	free_node_content(t_cmd *node)
 {
 	t_redir	*r_node;
 	t_redir	*temp_r;
 
 	if (!node)
-		return ;
+		return (0);
 	if (node->args)
 		free_split(node->args);
 	r_node = node->redir;
@@ -33,6 +33,7 @@ void	free_node_content(t_cmd *node)
 		free(r_node);
 		r_node = temp_r;
 	}
+	return (1);
 }
 
 void	free_structs(t_cmd *cmd)
@@ -47,9 +48,9 @@ void	free_structs(t_cmd *cmd)
 	node = cmd;
 	while (node)
 	{
-		free_node_content(node);
 		temp_c = node->next;
-		free(node);
+		if (free_node_content(node))
+			free(node);
 		node = temp_c;
 	}
 }
