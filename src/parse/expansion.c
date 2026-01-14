@@ -25,6 +25,11 @@ char	**new_split(char **cmd_args)
 	return (free_split(cmd_args), new_args);
 }
 
+// OLA TUDO BEM $HOME TUDO BEM SIM str
+// OLA TUDO BEM \0HOME. TUDO BEM SIM str
+// value = gustoliv
+// OLA TUDO BEM /GUSTOLIV
+// OLA TUDO BEM /GUSTOLIV TUDO BEM SIM
 
 static int replace(char **str, int start, int end, t_map *env)
 {

@@ -103,7 +103,8 @@ void		ft_echo(t_cmd *cmd);
 void		ft_pwd(t_map *env);
 int			is_directory(char *path);
 int			expansion(t_cmd *cmd, t_map *env);
-void		stat_check(char *path);
+void		stat_check(char *path, t_cmd *cmd, t_map *env);
 char		*ft_strchr(const char *s, int c);
+void		free_and_exit(t_map *env, t_cmd *cmd, int exit_status);
 
 #endif

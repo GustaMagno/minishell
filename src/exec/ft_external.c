@@ -5,16 +5,17 @@ void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)
 {
 	char	**my_env;
 	pid_t	pid;
+	int		flag_exec;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		stat_check(exec_path);
+		stat_check(exec_path, cmd, env);
 		my_env = env->to_str(env);
 		execve(exec_path, cmd->args, my_env);
 		perror("execve");
 		free_split(my_env);
-		exit(127);
+		free_and_exit(env, cmd, 127);
 	}
 	else
 		wait(NULL);
