@@ -8,7 +8,7 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 
 	tmp = ft_strdup(env->get(env, "PWD"));
 	cd = cd_list(env, cmd);
-	env->put(env, "OLDPWD", tmp);
+	env->put(env, ft_strdup("OLDPWD"), tmp);
 	if (!is_directory(cd))
 	{
 		fprintf(stderr, "minishell: cd: %s: Not a directory\n", cd);
@@ -17,7 +17,7 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 	}
 	if (chdir(cd) != 0)
 		perror("cd");
-	env->put(env, "PWD", getcwd(NULL, 0));
+	env->put(env, ft_strdup("PWD"), getcwd(NULL, 0));
 	free (cd);
 	
 }
