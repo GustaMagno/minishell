@@ -7,16 +7,17 @@ void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)
 	pid_t	pid;
 
 	pid = fork();
-	my_env = env->to_str(env);
 	if (pid == 0)
 	{
+		stat_check(exec_path);
+		my_env = env->to_str(env);
 		execve(exec_path, cmd->args, my_env);
 		perror("execve");
+		free_split(my_env);
 		exit(127);
 	}
 	else
 		wait(NULL);
-	free_split(my_env);
 }
 
 void	ft_external(t_cmd *cmd, t_map *env)
@@ -25,30 +26,32 @@ void	ft_external(t_cmd *cmd, t_map *env)
 	int		i;
 	char	**abs_path;
 
+	if (ft_strchr(cmd->args[0], '/'))
+	{
+		exec_external(cmd, env, cmd->args[0]);
+		return ;
+	}
 	i = 0;
 	abs_path = ft_split(env->get(env, "PATH"), ':');
-	while (abs_path[i])
+	while (abs_path && abs_path[i])
 	{
-		if (access(cmd->args[0], X_OK) == 0)
-		{
-			exec_path = ft_strdup(cmd->args[0]);
-			break ;
-		}
 		exec_path = ft_pathjoin(abs_path[i], cmd->args[0]);
 		if (access(exec_path, X_OK) == 0)
 			break ;
 		free(exec_path);
+		exec_path = NULL;
 		i++;
 	}
-	access_check(cmd, env, exec_path);
 	free_split(abs_path);
+	access_check(cmd, env, exec_path);
 }
 
 void access_check(t_cmd *cmd, t_map *env, char *exec_path)
 {
-	if (access(exec_path, X_OK) != 0)
+	if (exec_path == NULL)
 	{
-		printf("minishell: command not found: %s\n", cmd->args[0]);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0]));
+		write(2, ": command not found\n", 20);
 		return ;
 	}
 	else

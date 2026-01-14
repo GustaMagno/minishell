@@ -7,6 +7,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include "map.h"
 
 # define SYNTAX_ERROR "bash: syntax error near unexpected token\n"
@@ -89,9 +90,9 @@ void 		access_check(t_cmd *cmd, t_map *env, char *exec_path);
 int			ft_lstsize(t_cmd *lst);
 int			expansion(t_cmd *cmd, t_map *env);
 void		pipeline(t_cmd *cmd, t_map *env);
-int			**alloc_pipe(int n_cmds);
-void		close_pipes(int	**fd_pipes, int	t_pipes);
-void		exec_functions(t_cmd *cmd, t_map *env);
+int				**alloc_pipe(int n_cmds);
+void			close_pipes(int	**fd_pipes, int	t_pipes);
+void			exec_functions(t_cmd *cmd, t_map *env);
 int			remove_quotes(t_cmd *cmd);
 char		*set_expansion(char *str);
 void		split_words(char *arg, char **new_args, int *j);
@@ -100,5 +101,9 @@ void		ft_export(t_map *env, t_cmd *cmd);
 void		ft_exit(t_map *env, t_cmd *cmd);
 void		ft_echo(t_cmd *cmd);
 void		ft_pwd(t_map *env);
+int			is_directory(char *path);
+int			expansion(t_cmd *cmd, t_map *env);
+void		stat_check(char *path);
+char		*ft_strchr(const char *s, int c);
 
 #endif

@@ -69,3 +69,4 @@ t_cmd	*parsing(char *line, t_map *env)
 		return (free_structs(cmd), NULL);
 	return (cmd);
 }
+
