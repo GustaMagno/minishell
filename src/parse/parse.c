@@ -59,12 +59,12 @@ t_cmd	*parsing(char *line, t_map *env)
 	if (!line)
 		return (NULL);
 	if (error_in_pipe(line))
-		return (free(line), write(1, SYNTAX_ERROR, 41), NULL);
+		return (free(line), write(2, SYNTAX_ERROR, 41), NULL);
 	cmd = parsing_cmd(line);
 	if (!cmd)
 		return (free(line), NULL);
 	if (syntax_error(cmd, line))
-		return (write(1, SYNTAX_ERROR, 41), free_structs(cmd), NULL);
+		return (write(2, SYNTAX_ERROR, 41), free_structs(cmd), NULL);
 	if (!parsing_redir(cmd) || !expansion(cmd, env) || !remove_quotes(cmd))
 		return (free_structs(cmd), NULL);
 	return (cmd);

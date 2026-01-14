@@ -99,6 +99,8 @@ void	exec_functions(t_cmd *cmd, t_map *env)
 		ft_unset(env, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		ft_export(env, cmd);
+	else if (ft_strcmp(cmd->args[0], "exit") == 0)
+		ft_exit(env, cmd);
 	else
 		ft_external(cmd, env);
 }

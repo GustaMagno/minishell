@@ -76,7 +76,7 @@ char	*expanded(char *str, t_map *env, int *flag)
 		{
 			start = i;
 			end = start + 1;
-			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end] != '$' && str[end])
+			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end] != '$' && str[end] && str[end] != '/')
 				end++;
 			i = replace(&str, start, end, env);
 		}

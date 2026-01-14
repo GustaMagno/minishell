@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 char	*new_str(char *str)
 {
 	int		i;
@@ -21,12 +20,10 @@ char	*new_str(char *str)
 			f = str[i] * (f == '\0');
 			continue ;
 		}
-		if (str[i] == '"' && f != '\'' && f != '\2' && str[i - 1] != '\\')
+		if ((str[i] == '"' && f != '\'' && f != '\2' && str[i - 1] != '\\') || (str[i] == '\'' 
+			&& f != '"' && f != '\2' && str[i - 1] != '\\'))
 			continue ;
-		if (str[i] == '\'' && f != '"' && f != '\2' && str[i - 1] != '\\')
-			continue ;
-		if (str[i] == '\\' && (str[i + 1] == '\'' || str[i + 1] == '"'))
-			i++;
+		i += (str[i] == '\\' && (str[i + 1] == '\'' || str[i + 1] == '"'));
 		new_str[j++] = str[i];
 	}
 	return (new_str);

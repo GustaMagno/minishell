@@ -10,16 +10,11 @@ static void run(t_map *env)
 		line = readline("minishell: ");
 		if (!line)
 			break;
-		if ((ft_strcmp(line, "exit") == 0))
-		{
-			free(line);
-			break;
-		}
 		cmd = parsing(line, env);
 		if (!cmd) 
 			continue;
-		print_cmd(cmd);
-		// exec(cmd, env);
+		// print_cmd(cmd);
+		exec(cmd, env);
 		free_structs(cmd);
 	}
 }

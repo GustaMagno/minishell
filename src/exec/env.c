@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2025/12/29 00:17:15 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/14 16:10:46 by gustoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	create_env(t_map *env, char **envp)
 		free(value);
 		i++;
 	}
+	env->put(env, ft_strdup("?"), ft_strdup("0"));
 }
 
 void	print_env(t_map *env)
