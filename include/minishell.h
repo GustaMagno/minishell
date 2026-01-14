@@ -81,5 +81,8 @@ int			**alloc_pipe(int n_cmds);
 void		close_pipes(int	**fd_pipes, int	t_pipes);
 void		exec_functions(t_cmd *cmd, t_map *env);
 int			is_directory(char *path);
+int			expansion(t_cmd *cmd, t_map *env);
+void		stat_check(char *path);
+char		*ft_strchr(const char *s, int c);
 
 #endif

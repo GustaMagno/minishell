@@ -61,6 +61,8 @@ t_cmd	*parsing(char *line, t_map *env)
 		return (write(1, "bash: syntax error near unexpected token\n", 41), NULL);
 	if (!parsing_redir(cmd))
 		return (free(line), NULL);
+	if (!expansion(cmd, env))
+		return (free(line), NULL);
 	return (cmd);
 }
 //cat <<< ls
