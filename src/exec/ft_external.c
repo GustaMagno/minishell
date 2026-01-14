@@ -39,7 +39,7 @@ void	ft_external(t_cmd *cmd, t_map *env)
 		if (access(exec_path, X_OK) == 0)
 			break ;
 		free(exec_path);
-		exec_path == NULL;
+		exec_path = NULL;
 		i++;
 	}
 	free_split(abs_path);
@@ -48,14 +48,16 @@ void	ft_external(t_cmd *cmd, t_map *env)
 
 void access_check(t_cmd *cmd, t_map *env, char *exec_path)
 {
-	if (access(exec_path, X_OK) != 0)
+	if (exec_path == NULL)
 	{
-		write(2, "minishell: command not found: ", 31);
 		write(2, cmd->args[0], ft_strlen(cmd->args[0]));
-		write(2, "\n", 1);
+		write(2, ": command not found\n", 20);
 		return ;
 	}
-	// free(cmd->args[0]);
-	cmd->args[0] = exec_path;
-	exec_external(cmd, env, exec_path);
+	else
+	{
+		free(cmd->args[0]);
+		cmd->args[0] = exec_path;
+		exec_external(cmd, env, exec_path);
+	}
 }
