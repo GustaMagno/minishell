@@ -31,10 +31,10 @@ void	pipeline(t_cmd *cmd, t_map *env)
 				dup2(fd_pipes[i - 1][0], STDIN_FILENO);
 			if (i < cmd_len - 1)
 				dup2(fd_pipes[i][1], STDOUT_FILENO);
-			
-			close_pipes(fd_pipes, cmd_len - 1);
 			exec_functions(tmp, env);
-			exit(127);
+			close_pipes(fd_pipes, cmd_len - 1);
+			free_int_array(fd_pipes, cmd_len - 1);
+			free_and_exit(env, cmd, 127);
 		}
 		if (i > 0)
 		{
@@ -45,11 +45,14 @@ void	pipeline(t_cmd *cmd, t_map *env)
 		i++;
 	}
 	i = 0;
-	while (i < cmd_len)
-	{
-		wait(NULL);
-		i++;
-	}
+	waitpid(pid, NULL, 0);
+	// while (i < cmd_len)
+	// {
+	// 	wait(NULL);
+	// 	i++;
+	// }
+	free_int_array(fd_pipes, cmd_len - 1);
+	// if (pid ==)
 }
 
 int	**alloc_pipe(int n_cmds)
@@ -57,13 +60,13 @@ int	**alloc_pipe(int n_cmds)
 	int	**pipes;
 	int	i;
 
-	pipes = malloc(sizeof(int *) * (n_cmds - 1));
+	pipes = ft_calloc(sizeof(int *), (n_cmds - 1));
 	i = 0;
 	if (!pipes)
 		return (NULL);
 	while (i < n_cmds - 1)
 	{
-		pipes[i] = malloc(sizeof(int) * 2);
+		pipes[i] = ft_calloc(sizeof(int), 2);
 		if (!pipes[i])
 			return (NULL);
 		i++;
@@ -88,7 +91,7 @@ void	close_pipes(int	**fd_pipes, int	t_pipes)
 void	exec_functions(t_cmd *cmd, t_map *env)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		ft_echo(cmd);
+		ft_echo(cmd, env);
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		ft_pwd(env);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)

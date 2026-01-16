@@ -13,4 +13,5 @@ void	ft_pwd(t_map *env)
 	else
 		write(2, "pwd: error retrieving current directory: \
                 getcwd: cannot access parent directories:", 100);
+	free(pwd);
 }

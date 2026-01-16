@@ -18,7 +18,7 @@ int	is_flag(char **args)
 	return (i);
 }
 
-void	ft_echo(t_cmd *cmd)
+void	ft_echo(t_cmd *cmd, t_map *env)
 {
 	int	i;
 

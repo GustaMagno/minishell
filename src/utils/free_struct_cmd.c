@@ -15,6 +15,21 @@ void	free_split(char **args)
 	free(args);
 }
 
+void	free_int_array(int **args, int n)
+{
+	int i;
+
+	i = 0;
+	if (!args)
+		return ;
+	while (i < n)
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}
+
 int	free_node_content(t_cmd *node)
 {
 	t_redir	*r_node;
