@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2026/01/14 16:10:46 by gustoliv         ###   ########.fr       */
+/*   Updated: 2026/01/19 21:53:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	print_env(t_map *env)
 	while (my_env[i])
 	{
 		last = ft_strlen(my_env[i]) - 1;
-		if (my_env[i][last] == '\2')
+		if (my_env[i][last] == '\2' || my_env[i][0] == '?')
 		{
 			i++;
 			continue ;

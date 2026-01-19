@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-int	ft_atoi(const char *str)
+long long	ft_atoll(const char *str)
 {
 	unsigned int	i;
 	int				check;
-	int				nb;
+	long long		nb;
 
 	i = 0;
 	check = 0;
