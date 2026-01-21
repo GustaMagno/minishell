@@ -77,6 +77,7 @@ void				create_env(t_map *env, char **envp);
 void				print_env(t_map *env);
 void				free_path(t_path **path);
 int					is_space(char *line);
+int					ft_charalpha(char *str, int i);
 int					ft_strisnum(char *str);
 int					ft_stralpha(char *str);
 void				print_cmd(t_cmd *cmd);
@@ -109,5 +110,6 @@ void				free_and_exit(t_map *env, t_cmd *cmd, int exit_status);
 long long			ft_atoll(const char *str);
 void				free_int_array(int **args, int n);
 unsigned long long	ft_atoull(const char *str);
+void				ex_code(t_map *env, char *str);
 
 #endif

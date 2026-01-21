@@ -6,7 +6,7 @@
 /*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 21:57:42 by matmagal          #+#    #+#             */
-/*   Updated: 2026/01/20 18:11:21 by gustoliv         ###   ########.fr       */
+/*   Updated: 2026/01/21 16:30:30 by gustoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	create_env(t_map *env, char **envp)
 		free(value);
 		i++;
 	}
-	env->put(env, ft_strdup("?"), ft_strdup("0"));
+	ex_code(env, "0");
 }
 
 void	print_env(t_map *env)

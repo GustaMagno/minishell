@@ -40,8 +40,8 @@ static int replace(char **str, int start, int end, t_map *env)
 	char	*value;
 
 	key = ft_substr(*str, start, end - start);
-	if (!ft_stralpha(key + 1) && key && ft_strcmp(key + 1, "?"))
-		return (free(key), start);
+	if (!key)
+		return (start);
 	if (env->get(env, key + 1))
 		value = set_expansion(env->get(env, key + 1));
 	else
@@ -81,7 +81,7 @@ char	*expanded(char *str, t_map *env, int *flag)
 		{
 			start = i;
 			end = start + 1;
-			while (str[end] != 32 && str[end] != '"' && str[end] != '\'' && str[end] != '$' && str[end] && str[end] != '/')
+			while (str[end] != 32 && ft_charalpha(str, end))
 				end++;
 			i = replace(&str, start, end, env);
 		}

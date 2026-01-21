@@ -35,4 +35,5 @@ void	ft_echo(t_cmd *cmd, t_map *env)
 	printf("%s", cmd->args[i]);
 	if (is_flag(cmd->args) == 1)
 		printf("\n");
+	ex_code(env, "0");
 }

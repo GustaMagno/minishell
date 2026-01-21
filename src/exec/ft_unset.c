@@ -11,4 +11,5 @@ void	ft_unset(t_map *env, t_cmd *cmd)
 			env->remove(env, cmd->args[i]);
 		i++;
 	}
+	ex_code(env, "0");
 }

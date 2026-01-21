@@ -31,13 +31,13 @@ t_cmd	*parsing_cmd(char *line)
 		return (NULL);
 	cmd_head = new_cmd(ft_split(args[i++], '\2'));
 	if (!cmd_head)
-		return (NULL);
+		return (free_split(args), NULL);
 	node = cmd_head;
 	while (args[i])
 	{
 		node->next = new_cmd(ft_split(args[i++], '\2'));
 		if (!node->next)
-			return (free_split(args), NULL);
+			return (free_structs(cmd_head), free_split(args), NULL);
 		node = node->next;
 	}
 	free_split(args);

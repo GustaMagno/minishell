@@ -41,7 +41,7 @@ void	ft_exit(t_map *env, t_cmd *cmd)
 	else if (cmd->args[2])
 	{
 		printf("exit\nbash: exit: too many argument\n");
-		env->put(env, ft_strdup("?"), ft_strdup("1"));
+		ex_code(env, "1");
 	}
 	else
 		status_and_end(env, cmd, ft_atoll(cmd->args[1]), "");

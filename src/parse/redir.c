@@ -8,10 +8,16 @@ t_redir	*new_redir(char *arg1, char *arg2)
 	if (!redir)
 		return (NULL);
 	redir->args[0] = ft_strdup(arg1);
+	if (!redir->args[0])
+		return (free(redir), NULL);
 	if (!arg2)
 		redir->args[1] = NULL;
 	else
+	{
 		redir->args[1] = ft_strdup(arg2);
+		if (!redir->args[1])
+			return (free(redir->args[0]), free(redir), NULL);
+	}
 	redir->args[2] = NULL;
 	redir->next = NULL;
 	return (redir);
@@ -36,7 +42,7 @@ char	**clean_cmd(char **args)
 	
 	new_args = ft_calloc(ft_argslen(args) + 1, sizeof(char *));
 	if (!new_args)
-		return (0);
+		return (args);
 	while (args[i])
 	{
 		if (!redir_in_cmd(args[i]))
