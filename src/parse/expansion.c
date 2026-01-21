@@ -40,7 +40,7 @@ static int replace(char **str, int start, int end, t_map *env)
 	char	*value;
 
 	key = ft_substr(*str, start, end - start);
-	if (!ft_stralpha(key + 1) && key)
+	if (!ft_stralpha(key + 1) && key && ft_strcmp(key + 1, "?"))
 		return (free(key), start);
 	if (env->get(env, key + 1))
 		value = set_expansion(env->get(env, key + 1));

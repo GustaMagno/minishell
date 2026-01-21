@@ -9,8 +9,10 @@ int		exceed_limits(char	*str)
 	negative = 0;
 	if (str[0] == '-' && str++)
 		negative++;
+	if (ft_strlen(str) > 19)
+		return (1);
 	nb = ft_atoull(str);
-	if (negative && nb > 9223372036854775808)
+	if (negative && nb > 9223372036854775807 && ft_strcmp("9223372036854775808", str))
 		return (1);
 	else if (!negative && nb > 9223372036854775807)
 		return (1);
@@ -19,7 +21,8 @@ int		exceed_limits(char	*str)
 
 void	status_and_end(t_map *env, t_cmd *cmd, long long exit_status, char *msg)
 {
-	env->put(env, ft_strdup("?"), ft_itoa(exit_status));
+	if (exit_status)
+		env->put(env, ft_strdup("?"), ft_itoa(exit_status));
 	env->destroy(env);
 	free_structs(cmd);
 	return (printf("exit\n%s", msg), exit(exit_status));

@@ -66,8 +66,8 @@ int	export_str(char *str, t_map *env)
 	key = ft_substr(str, 0, i);
 	if (!key)
 		return (0);
-	if (!ft_stralpha(key) || str[0] == '=')
-		return (write(2, "bash: export: not a valid identifier\n", 37), free(key), 1);
+	if ((!ft_stralpha(key) || str[0] == '=') && write(2, "bash: export: not a valid identifier\n", 37))
+		return (free(key), env->put(env, ft_strdup("?"), ft_strdup("ERROR")), 1);
 	value = ft_substr(str, i + 1, ft_strlen(str + i));
 	if (!value)
 		return (free(key), 0);
@@ -90,4 +90,8 @@ void	ft_export(t_map *env, t_cmd *cmd)
 	}
 	if (i == 1)
 		print_export(env);
+	if (ft_strcmp(env->get(env, "?"), "ERROR"))
+		env->put(env, ft_strdup("?"), ft_strdup("1"));
+	else
+		env->put(env, ft_strdup("?"), ft_strdup("0"));
 }
