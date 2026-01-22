@@ -1,10 +1,34 @@
 #include "minishell.h"
 
-static void run(t_map *env)
+// t_map	*adress_env()
+// {
+// 	static t_map	*env;
+// 	static int		i = 0;
+
+// 	if (i == 0)
+// 	{
+// 		env = new_map();
+// 		if (!env)
+// 			return (NULL);
+// 		i++;
+// 	}
+// }
+
+void	handler_C(int signal)
+{
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	return ;
+}
+
+void	run(t_map *env)
 {
 	char *line;
 	t_cmd	*cmd;
 
+	signal(SIGINT, handler_C);
 	while (1)
 	{
 		line = readline("minishell: ");

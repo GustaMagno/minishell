@@ -5,15 +5,14 @@ void	remove_node(t_cmd **list, t_cmd *node)
 	t_cmd	*head;
 	t_cmd	*next;
 
-	head = *list;
 	if (node == head)
 	{
 		*list = (*list)->next;
 		free_node_content(node);
 		free(node);
-		printf("AAAAAAAAA\n");
 		return ;
 	}
+	head = *list;
 	while (head)
 	{
 		next = head->next;

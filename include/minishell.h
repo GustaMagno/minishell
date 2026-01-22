@@ -3,6 +3,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <signal.h>
 # include <unistd.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -111,5 +112,6 @@ long long			ft_atoll(const char *str);
 void				free_int_array(int **args, int n);
 unsigned long long	ft_atoull(const char *str);
 void				ex_code(t_map *env, char *str);
+void				run(t_map *env);
 
 #endif

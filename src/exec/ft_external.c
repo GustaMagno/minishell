@@ -37,7 +37,7 @@ void	ft_external(t_cmd *cmd, t_map *env)
 	while (abs_path && abs_path[i])
 	{
 		exec_path = ft_pathjoin(abs_path[i], cmd->args[0]);
-		if (access(exec_path, X_OK) == 0)
+		if (access(exec_path, X_OK) == 0 && cmd->args[0][0])
 			break ;
 		free(exec_path);
 		exec_path = NULL;

@@ -1,7 +1,6 @@
 #include "minishell.h"
 #include "map.h"
 
-
 char	**new_split(char **cmd_args)
 {
 	char	**new_args;
@@ -11,7 +10,7 @@ char	**new_split(char **cmd_args)
 
 	new_args = ft_calloc(count_new_split(cmd_args) + 1, sizeof(char *));
 	if (!new_args)
-		return (NULL);
+		return (free_split(cmd_args), NULL);
 	i = 0;
 	j = 0;
 	while (cmd_args[i])
@@ -25,11 +24,6 @@ char	**new_split(char **cmd_args)
 	return (free_split(cmd_args), new_args);
 }
 
-// OLA TUDO BEM $HOME TUDO BEM SIM str
-// OLA TUDO BEM \0HOME. TUDO BEM SIM str
-// value = gustoliv
-// OLA TUDO BEM /GUSTOLIV
-// OLA TUDO BEM /GUSTOLIV TUDO BEM SIM
 
 static int replace(char **str, int start, int end, t_map *env)
 {
@@ -49,13 +43,13 @@ static int replace(char **str, int start, int end, t_map *env)
 	(*str)[start] = '\0';
 	str_value = ft_strjoin(*str, value);
 	replaced = ft_strjoin(str_value, &(*str)[end]);
-	free(str_value);
-	free(key);
+	(free(str_value), free(key));
 	temp_str = *str;
+	if (!replaced)
+		return (free(value), start);
 	*str = replaced;
 	start += ft_strlen(value) - 1;
-	free(value);
-	free(temp_str);
+	(free(value), free(temp_str));
 	return (start);
 }
 // -1 por causa da iteracao do expanded.
@@ -64,7 +58,6 @@ char	*expanded(char *str, t_map *env, int *flag)
 {
 	int		i;
 	char	f;
-	char	*expanded;
 	int		start;
 	int		end;
 

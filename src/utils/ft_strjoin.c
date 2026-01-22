@@ -8,6 +8,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		j;
 	char	*temp;
 
+	if (!s1 || !s2)
+		return (NULL);
 	i = ft_strlen(s1);
 	j = ft_strlen(s2);
 	str = malloc((i + j + 1) * sizeof(char));
