@@ -10,6 +10,7 @@ void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)
 	pid = fork();
 	if (pid == 0)
 	{
+		set_child_sig();
 		stat_check(exec_path, cmd, env);
 		my_env = env->to_str(env);
 		execve(exec_path, cmd->args, my_env);

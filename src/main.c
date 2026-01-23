@@ -14,23 +14,16 @@
 // 	}
 // }
 
-void	handler_C(int signal)
-{
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-	return ;
-}
 
 void	run(t_map *env)
 {
 	char *line;
 	t_cmd	*cmd;
 
-	signal(SIGINT, handler_C);
 	while (1)
 	{
+		signal(SIGINT, handler_C);
+		signal(SIGQUIT, SIG_IGN);
 		line = readline("minishell: ");
 		if (!line)
 			break;

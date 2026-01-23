@@ -1,7 +1,10 @@
 #include "minishell.h"
 
+
 void	exec(t_cmd	*cmd, t_map *env)
 {
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
 	else if (ft_lstsize(cmd) == 1)
@@ -20,19 +23,22 @@ void	pipeline(t_cmd *cmd, t_map *env)
 	i = 0;
 	cmd_len = ft_lstsize(cmd);
 	fd_pipes = alloc_pipe(cmd_len);
+	
 	while (i < cmd_len)
 	{
 		if (i < cmd_len - 1)
 			pipe(fd_pipes[i]);
+		
 		pid = fork();
 		if (pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
 			if (i > 0)
 				dup2(fd_pipes[i - 1][0], STDIN_FILENO);
 			if (i < cmd_len - 1)
 				dup2(fd_pipes[i][1], STDOUT_FILENO);
-			exec_functions(tmp, env);
 			close_pipes(fd_pipes, cmd_len - 1);
+			exec_functions(tmp, env);
 			free_int_array(fd_pipes, cmd_len - 1);
 			free_and_exit(env, cmd, 127);
 		}

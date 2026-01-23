@@ -35,19 +35,22 @@ fclean: clean
 
 re: fclean all
 
-r:
-	make re && clear && ./$(NAME)
+reclear:
+	make re && clear
 
-v:
-	make re && clear &&  valgrind --suppressions=readline.supp ./$(NAME)
+r: reclear
+	@./$(NAME)
 
-vl:
-	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./$(NAME)
+v: reclear
+	 valgrind --suppressions=readline.supp ./$(NAME)
 
-vc:
-	make re && clear && valgrind --track-origins=yes --suppressions=readline.supp ./$(NAME)
+vl: reclear
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./$(NAME)
 
-vall:
-	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
+vc: reclear
+	valgrind --track-origins=yes --suppressions=readline.supp ./$(NAME)
+
+vall: reclear
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re r
