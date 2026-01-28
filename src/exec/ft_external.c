@@ -5,7 +5,7 @@ void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)
 {
 	char	**my_env;
 	pid_t	pid;
-	int		flag_exec;
+	int		status;
 
 	pid = fork();
 	if (pid == 0)
@@ -19,7 +19,11 @@ void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)
 		free_and_exit(env, cmd, 127);
 	}
 	else
-		wait(NULL);
+	{
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
+	}
 }
 
 void	ft_external(t_cmd *cmd, t_map *env)

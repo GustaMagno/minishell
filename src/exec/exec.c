@@ -16,6 +16,7 @@ void	pipeline(t_cmd *cmd, t_map *env)
 	int		**fd_pipes;
 	int		cmd_len;
 	int		i;
+	int		status;
 	pid_t	pid;
 	t_cmd	*tmp;
 
@@ -23,7 +24,6 @@ void	pipeline(t_cmd *cmd, t_map *env)
 	i = 0;
 	cmd_len = ft_lstsize(cmd);
 	fd_pipes = alloc_pipe(cmd_len);
-	
 	while (i < cmd_len)
 	{
 		if (i < cmd_len - 1)
@@ -51,7 +51,9 @@ void	pipeline(t_cmd *cmd, t_map *env)
 		i++;
 	}
 	i = 0;
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
 	// while (i < cmd_len)
 	// {
 	// 	wait(NULL);
@@ -79,7 +81,6 @@ int	**alloc_pipe(int n_cmds)
 	}
 	return (pipes);
 }
-
 
 void	close_pipes(int	**fd_pipes, int	t_pipes)
 {
