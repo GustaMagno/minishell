@@ -4,11 +4,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include "map.h"
+# include "get_next_line.h"
 
 # define SYNTAX_ERROR "bash: syntax error near unexpected token\n"
 

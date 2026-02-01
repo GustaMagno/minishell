@@ -2,6 +2,8 @@
 
 void	exec(t_cmd	*cmd, t_map *env)
 {
+	if (cmd->redir)
+		loop_redir(cmd);
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
 	else if (ft_lstsize(cmd) == 1)
@@ -26,29 +28,35 @@ void	pipeline(t_cmd *cmd, t_map *env)
 			pipe(fd_pipes[i]);
 		pid = fork();
 		if (pid == 0)
-		{
-			if (i > 0)
-				dup2(fd_pipes[i - 1][0], STDIN_FILENO);
-			if (i < cmd_len - 1)
-				dup2(fd_pipes[i][1], STDOUT_FILENO);
-			
-			close_pipes(fd_pipes, cmd_len - 1);
-			exec_functions(tmp, env);
-			exit(127);
-		}
-		if (i > 0)
-		{
-			close(fd_pipes[i - 1][0]);
-			close(fd_pipes[i - 1][1]);
-		}
+			exec_child_process(tmp, fd_pipes, i, cmd_len, env);
+		close_parent_pipes(fd_pipes, i);
 		tmp = tmp->next;
 		i++;
 	}
-	i = 0;
-	while (i < cmd_len)
-	{
+	i = -1;
+	while (++i < cmd_len)
 		wait(NULL);
-		i++;
+}
+
+void	exec_child_process(t_cmd *tmp, int **fd_pipes, int i, int cmd_len, t_map *env)
+{
+	if (i > 0)
+		dup2(fd_pipes[i - 1][0], STDIN_FILENO);
+	if (i < cmd_len - 1)
+		dup2(fd_pipes[i][1], STDOUT_FILENO);
+	if (tmp->redir)
+		loop_redir(tmp);
+	close_pipes(fd_pipes, cmd_len - 1);
+	exec_functions(tmp, env);
+	exit(127);
+}
+
+void	close_parent_pipes(int **fd_pipes, int i)
+{
+	if (i > 0)
+	{
+		close(fd_pipes[i - 1][0]);
+		close(fd_pipes[i - 1][1]);
 	}
 }
 
