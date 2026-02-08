@@ -10,7 +10,6 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include "map.h"
-# include "get_next_line.h"
 
 # define SYNTAX_ERROR "bash: syntax error near unexpected token\n"
 
@@ -108,5 +107,8 @@ int			expansion(t_cmd *cmd, t_map *env);
 void		stat_check(char *path, t_cmd *cmd, t_map *env);
 char		*ft_strchr(const char *s, int c);
 void		free_and_exit(t_map *env, t_cmd *cmd, int exit_status);
+void		exec_child_process(t_cmd *tmp, int **fd_pipes, int i, int cmd_len, t_map *env);
+void		close_parent_pipes(int **fd_pipes, int i);
+void		loop_redir(t_cmd *cmd);
 
 #endif

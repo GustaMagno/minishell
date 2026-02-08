@@ -12,5 +12,5 @@ void	ft_pwd(t_map *env)
 		printf("%s\n", pwd);
 	else
 		write(2, "pwd: error retrieving current directory: \
-                getcwd: cannot access parent directories:", 100);
+                getcwd: cannot access parent directories:", 99);
 }

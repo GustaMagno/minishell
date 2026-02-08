@@ -2,12 +2,31 @@
 
 void	exec(t_cmd	*cmd, t_map *env)
 {
-	if (cmd->redir)
-		loop_redir(cmd);
+	pid_t	pid;
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
+	
 	else if (ft_lstsize(cmd) == 1)
-		exec_functions(cmd, env);
+	{
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
+			ft_exit(env, cmd);
+		else if (ft_strcmp(cmd->args[0], "export") == 0)
+			ft_export(env, cmd);
+		else if (ft_strcmp(cmd->args[0], "unset") == 0)
+			ft_unset(env, cmd);
+		else if (ft_strcmp(cmd->args[0], "cd") == 0)
+			exec_cd(env, cmd);
+		pid = fork();
+		if (pid == 0)
+		{
+			if (cmd->redir)
+				loop_redir(cmd);
+			exec_functions(cmd, env);
+			exit(0);
+		}
+		else
+			wait(NULL);
+	}
 }
 
 void	pipeline(t_cmd *cmd, t_map *env)
@@ -101,14 +120,6 @@ void	exec_functions(t_cmd *cmd, t_map *env)
 		ft_pwd(env);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		print_env(env);
-	else if (ft_strcmp(cmd->args[0], "cd") == 0)
-		exec_cd(env, cmd);
-	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-		ft_unset(env, cmd);
-	else if (ft_strcmp(cmd->args[0], "export") == 0)
-		ft_export(env, cmd);
-	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		ft_exit(env, cmd);
 	else
 		ft_external(cmd, env);
 }

@@ -32,19 +32,16 @@ int	heredoc(char *end)
 		return (-1);
 	while (1)
 	{
-		write(here_pipes[1], "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (!line)
 			break ;
-		if (line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
 		if (strcmp(line, end) == 0)
 		{
 			free(line);
 			break ;
 		}
 		write(here_pipes[1], line, ft_strlen(line));
-		write(here_pipes[1], '\n', 1);
+		write(here_pipes[1], "\n", 1);
 		free(line);
 	}
 	close(here_pipes[1]);
