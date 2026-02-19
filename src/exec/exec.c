@@ -5,7 +5,6 @@ void	exec(t_cmd	*cmd, t_map *env)
 	pid_t	pid;
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
-	
 	else if (ft_lstsize(cmd) == 1)
 	{
 		if (exec_functions(cmd, env))
@@ -25,43 +24,44 @@ void	exec(t_cmd	*cmd, t_map *env)
 
 void	pipeline(t_cmd *cmd, t_map *env)
 {
-	int		**fd_pipes;
-	int		cmd_len;
 	int		i;
 	pid_t	pid;
 	t_cmd	*tmp;
+	t_ctx	ctx;
 
 	tmp = cmd;
 	i = 0;
-	cmd_len = ft_lstsize(cmd);
-	fd_pipes = alloc_pipe(cmd_len);
-	while (i < cmd_len)
+	init_ctx(&ctx, env, cmd);
+	init_pipes(ctx.fd_pipes, ctx.cmd_len);
+	while (i < ctx.cmd_len)
 	{
-		if (i < cmd_len - 1)
-			pipe(fd_pipes[i]);
 		pid = fork();
 		if (pid == 0)
-			exec_child_process(tmp, fd_pipes, i, cmd_len, env);
-		close_parent_pipes(fd_pipes, i);
+			exec_child_process(tmp, ctx, i);
+		close_parent_pipes(ctx.fd_pipes, i);
 		tmp = tmp->next;
 		i++;
 	}
 	i = -1;
-	while (++i < cmd_len)
+	while (++i < ctx.cmd_len)
 		wait(NULL);
+	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
 }
 
-void	exec_child_process(t_cmd *tmp, int **fd_pipes, int i, int cmd_len, t_map *env)
+void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 {
 	if (i > 0)
-		dup2(fd_pipes[i - 1][0], STDIN_FILENO);
-	if (i < cmd_len - 1)
-		dup2(fd_pipes[i][1], STDOUT_FILENO);
+		dup2(ctx.fd_pipes[i - 1][0], STDIN_FILENO);
+	if (i < ctx.cmd_len - 1)
+		dup2(ctx.fd_pipes[i][1], STDOUT_FILENO);
 	if (tmp->redir)
 		loop_redir(tmp);
-	close_pipes(fd_pipes, cmd_len - 1);
-	exec_functions(tmp, env);
-	exit(127);
+	close_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
+	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
+	if (exec_functions(tmp, ctx.env))
+		free_and_exit(ctx.env, ctx.cmd, 0);
+	else
+		free_and_exit(ctx.env, ctx.cmd, 127);
 }
 
 void	close_parent_pipes(int **fd_pipes, int i)
@@ -123,4 +123,39 @@ int	exec_functions(t_cmd *cmd, t_map *env)
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 		return(exec_cd(env, cmd), 1);
 	return (0);
+}
+
+void	free_pipes(int **pipes, int	len)
+{
+	int	i;
+
+	i = 0;
+	if (!pipes)
+		return ;
+	while (i < len)
+	{
+		free(pipes[i]);
+		i++;
+	}
+	free(pipes);
+}
+
+void	init_pipes(int **fd_pipes, int cmd_len)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd_len - 1)
+	{
+		pipe(fd_pipes[i]);
+		i++;
+	}
+}
+
+void	init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd)
+{
+	ctx->cmd = cmd;
+	ctx->cmd_len = ft_lstsize(cmd);
+	ctx->env = env;
+	ctx->fd_pipes = alloc_pipe(ctx->cmd_len);
 }

@@ -33,6 +33,14 @@ typedef struct s_path
 	struct s_path	*next;
 }	t_path;
 
+typedef struct s_ctx
+{
+	t_map			*env;
+	int				cmd_len;
+	int				**fd_pipes;
+	t_cmd			*cmd;
+}	t_ctx;
+
 char		**ft_split(char const *s, char c);
 size_t		count_words(char const *s, char c);
 void		*ft_calloc(size_t nmemb, size_t size);
@@ -107,8 +115,11 @@ int			expansion(t_cmd *cmd, t_map *env);
 void		stat_check(char *path, t_cmd *cmd, t_map *env);
 char		*ft_strchr(const char *s, int c);
 void		free_and_exit(t_map *env, t_cmd *cmd, int exit_status);
-void		exec_child_process(t_cmd *tmp, int **fd_pipes, int i, int cmd_len, t_map *env);
+void		exec_child_process(t_cmd *tmp, t_ctx ctx, int i);
 void		close_parent_pipes(int **fd_pipes, int i);
 void		loop_redir(t_cmd *cmd);
+void		free_pipes(int **pipes, int len);
+void		init_pipes(int **fd_pipes, int cmd_len);
+void		init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd);
 
 #endif
