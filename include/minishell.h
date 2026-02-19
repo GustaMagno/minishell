@@ -121,5 +121,7 @@ void		loop_redir(t_cmd *cmd);
 void		free_pipes(int **pipes, int len);
 void		init_pipes(int **fd_pipes, int cmd_len);
 void		init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd);
+void		exec_heredoc(t_cmd *cmd);
+void		close_heredoc_fds(t_cmd *cmd);
 
 #endif

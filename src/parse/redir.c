@@ -13,6 +13,7 @@ t_redir	*new_redir(char *arg1, char *arg2)
 	else
 		redir->args[1] = ft_strdup(arg2);
 	redir->args[2] = NULL;
+	redir->fd = -1;
 	redir->next = NULL;
 	return (redir);
 }

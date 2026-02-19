@@ -69,12 +69,8 @@ void	exec_redir(t_cmd *cmd, t_redir *redir)
 		stdout_1(redir->args[1]);
 	else if (ft_strcmp(redir->args[0], ">>") == 0)
 		stdout_2(redir->args[1]);
-	else if (ft_strcmp(redir->args[0], "<<") == 0)
-	{
-		redir->fd = heredoc(redir->args[1]);
-		if (redir->fd != -1)
-			dup2(redir->fd, STDIN_FILENO);
-	}
+	else if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd != -1)
+		dup2(redir->fd, STDIN_FILENO);
 }
 
 void	loop_redir(t_cmd *cmd)
@@ -86,5 +82,23 @@ void	loop_redir(t_cmd *cmd)
 	{
 		exec_redir(cmd, temp);
 		temp = temp->next;
+	}
+}
+void	exec_heredoc(t_cmd *cmd)
+{
+	t_cmd	*tmp;
+	t_redir	*redir;
+
+	tmp = cmd;
+	while(tmp)
+	{
+		redir = tmp->redir;
+		while (redir)
+		{
+		if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
+				redir->fd = heredoc(redir->args[1]);
+			redir = redir->next;
+		}
+		tmp = tmp->next;
 	}
 }
