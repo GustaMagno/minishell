@@ -93,7 +93,7 @@ int			expansion(t_cmd *cmd, t_map *env);
 void		pipeline(t_cmd *cmd, t_map *env);
 int				**alloc_pipe(int n_cmds);
 void			close_pipes(int	**fd_pipes, int	t_pipes);
-void			exec_functions(t_cmd *cmd, t_map *env);
+int			exec_functions(t_cmd *cmd, t_map *env);
 int			remove_quotes(t_cmd *cmd);
 char		*set_expansion(char *str);
 void		split_words(char *arg, char **new_args, int *j);

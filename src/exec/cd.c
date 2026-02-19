@@ -19,7 +19,6 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 		perror("cd");
 	env->put(env, ft_strdup("PWD"), getcwd(NULL, 0));
 	free (cd);
-	
 }
 
 char	*cd_list(t_map *env, t_cmd *cmd)
