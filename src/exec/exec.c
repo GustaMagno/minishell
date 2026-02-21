@@ -3,6 +3,7 @@
 void	exec(t_cmd	*cmd, t_map *env)
 {
 	pid_t	pid;
+
 	exec_heredoc(cmd);
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
@@ -63,7 +64,10 @@ void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 	if (exec_functions(tmp, ctx.env))
 		free_and_exit(ctx.env, ctx.cmd, 0);
 	else
+	{
+		ft_external(tmp, ctx.env);
 		free_and_exit(ctx.env, ctx.cmd, 127);
+	}
 }
 
 void	close_parent_pipes(int **fd_pipes, int i)
