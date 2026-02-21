@@ -19,7 +19,7 @@ void	exec_2(t_cmd *cmd, t_map *env)
 {
 	pid_t	pid;
 
-	if (exec_functions(cmd, env))
+	if (exec_functions(cmd, env, 0))
 			return ;
 	{
 	pid = fork();
@@ -105,7 +105,7 @@ void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 	close_heredoc_fds(ctx.cmd);
 	close_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
 	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
-	if (exec_functions(tmp, ctx.env))
+	if (exec_functions(tmp, ctx.env, 1))
 		free_and_exit(ctx.env, ctx.cmd, 0);
 	else
 	{
@@ -156,7 +156,7 @@ void	close_pipes(int	**fd_pipes, int	t_pipes)
 	}
 }
 
-int	exec_functions(t_cmd *cmd, t_map *env)
+int	exec_functions(t_cmd *cmd, t_map *env, int child)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return(ft_echo(cmd, env), 1);
@@ -165,7 +165,7 @@ int	exec_functions(t_cmd *cmd, t_map *env)
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		return(print_env(env), 1);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return(ft_exit(env, cmd), 1);
+		return(ft_exit(env, cmd, child), 1);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		return(ft_export(env, cmd), 1);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
