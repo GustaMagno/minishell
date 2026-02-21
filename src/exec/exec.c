@@ -1,66 +1,76 @@
 #include "minishell.h"
 
-
 void	exec(t_cmd	*cmd, t_map *env)
 {
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	pid_t	pid;
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
 	else if (ft_lstsize(cmd) == 1)
-		exec_functions(cmd, env);
+	{
+		if (exec_functions(cmd, env))
+			return ;
+		pid = fork();
+		if (pid == 0)
+		{
+			if (cmd->redir)
+				loop_redir(cmd);
+			ft_external(cmd, env);
+			free_and_exit(env, cmd, 127);
+		}
+		else
+			wait(NULL);
+	}
 }
 
 void	pipeline(t_cmd *cmd, t_map *env)
 {
-	int		**fd_pipes;
-	int		cmd_len;
 	int		i;
-	int		status;
 	pid_t	pid;
 	t_cmd	*tmp;
+	t_ctx	ctx;
 
 	tmp = cmd;
 	i = 0;
-	cmd_len = ft_lstsize(cmd);
-	fd_pipes = alloc_pipe(cmd_len);
-	while (i < cmd_len)
+	init_ctx(&ctx, env, cmd);
+	init_pipes(ctx.fd_pipes, ctx.cmd_len);
+	while (i < ctx.cmd_len)
 	{
-		if (i < cmd_len - 1)
-			pipe(fd_pipes[i]);
-		
 		pid = fork();
 		if (pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			if (i > 0)
-				dup2(fd_pipes[i - 1][0], STDIN_FILENO);
-			if (i < cmd_len - 1)
-				dup2(fd_pipes[i][1], STDOUT_FILENO);
-			close_pipes(fd_pipes, cmd_len - 1);
-			exec_functions(tmp, env);
-			free_int_array(fd_pipes, cmd_len - 1);
-			free_and_exit(env, cmd, 127);
-		}
-		if (i > 0)
-		{
-			close(fd_pipes[i - 1][0]);
-			close(fd_pipes[i - 1][1]);
-		}
+			exec_child_process(tmp, ctx, i);
+		close_parent_pipes(ctx.fd_pipes, i);
 		tmp = tmp->next;
 		i++;
 	}
-	i = 0;
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			write(1, "\n", 1);
-	// while (i < cmd_len)
-	// {
-	// 	wait(NULL);
-	// 	i++;
-	// }
-	free_int_array(fd_pipes, cmd_len - 1);
-	// if (pid ==)
+	i = -1;
+	while (++i < ctx.cmd_len)
+		wait(NULL);
+	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
+}
+
+void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
+{
+	if (i > 0)
+		dup2(ctx.fd_pipes[i - 1][0], STDIN_FILENO);
+	if (i < ctx.cmd_len - 1)
+		dup2(ctx.fd_pipes[i][1], STDOUT_FILENO);
+	if (tmp->redir)
+		loop_redir(tmp);
+	close_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
+	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
+	if (exec_functions(tmp, ctx.env))
+		free_and_exit(ctx.env, ctx.cmd, 0);
+	else
+		free_and_exit(ctx.env, ctx.cmd, 127);
+}
+
+void	close_parent_pipes(int **fd_pipes, int i)
+{
+	if (i > 0)
+	{
+		close(fd_pipes[i - 1][0]);
+		close(fd_pipes[i - 1][1]);
+	}
 }
 
 int	**alloc_pipe(int n_cmds)
@@ -68,19 +78,20 @@ int	**alloc_pipe(int n_cmds)
 	int	**pipes;
 	int	i;
 
-	pipes = ft_calloc(sizeof(int *), (n_cmds - 1));
+	pipes = malloc(sizeof(int *) * (n_cmds - 1));
 	i = 0;
 	if (!pipes)
 		return (NULL);
 	while (i < n_cmds - 1)
 	{
-		pipes[i] = ft_calloc(sizeof(int), 2);
+		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i])
 			return (NULL);
 		i++;
 	}
 	return (pipes);
 }
+
 
 void	close_pipes(int	**fd_pipes, int	t_pipes)
 {
@@ -95,22 +106,56 @@ void	close_pipes(int	**fd_pipes, int	t_pipes)
 	}
 }
 
-void	exec_functions(t_cmd *cmd, t_map *env)
+int	exec_functions(t_cmd *cmd, t_map *env)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		ft_echo(cmd, env);
+		return(ft_echo(cmd, env), 1);
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		ft_pwd(env);
+		return(ft_pwd(env), 1);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
-		print_env(env);
-	else if (ft_strcmp(cmd->args[0], "cd") == 0)
-		exec_cd(env, cmd);
-	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-		ft_unset(env, cmd);
-	else if (ft_strcmp(cmd->args[0], "export") == 0)
-		ft_export(env, cmd);
+		return(print_env(env), 1);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		ft_exit(env, cmd);
-	else
-		ft_external(cmd, env);
+		return(ft_exit(env, cmd), 1);
+	else if (ft_strcmp(cmd->args[0], "export") == 0)
+		return(ft_export(env, cmd), 1);
+	else if (ft_strcmp(cmd->args[0], "unset") == 0)
+		return(ft_unset(env, cmd), 1);
+	else if (ft_strcmp(cmd->args[0], "cd") == 0)
+		return(exec_cd(env, cmd), 1);
+	return (0);
+}
+
+void	free_pipes(int **pipes, int	len)
+{
+	int	i;
+
+	i = 0;
+	if (!pipes)
+		return ;
+	while (i < len)
+	{
+		free(pipes[i]);
+		i++;
+	}
+	free(pipes);
+}
+
+void	init_pipes(int **fd_pipes, int cmd_len)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd_len - 1)
+	{
+		pipe(fd_pipes[i]);
+		i++;
+	}
+}
+
+void	init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd)
+{
+	ctx->cmd = cmd;
+	ctx->cmd_len = ft_lstsize(cmd);
+	ctx->env = env;
+	ctx->fd_pipes = alloc_pipe(ctx->cmd_len);
 }

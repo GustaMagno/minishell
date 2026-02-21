@@ -19,6 +19,7 @@ t_redir	*new_redir(char *arg1, char *arg2)
 			return (free(redir->args[0]), free(redir), NULL);
 	}
 	redir->args[2] = NULL;
+	redir->fd = -1;
 	redir->next = NULL;
 	return (redir);
 }

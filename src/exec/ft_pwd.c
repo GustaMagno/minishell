@@ -4,9 +4,11 @@
 void	ft_pwd(t_map *env)
 {
 	char	*pwd;
+	int		check;
 
+	check = 1;
 	pwd = getcwd(NULL, 0);
-	if (!pwd)
+	if (!pwd && check--)
 		pwd = env->get(env, "PWD");
 	if (pwd)
 		printf("%s\n", pwd);
@@ -20,5 +22,6 @@ void	ft_pwd(t_map *env)
 		ex_code(env, "1");
 	else
 		ex_code(env, "0");
-	free(pwd);
+	if (check)
+		free(pwd);
 }

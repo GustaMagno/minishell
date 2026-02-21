@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <sys/wait.h>
@@ -32,6 +33,14 @@ typedef struct s_path
 	char			*path;
 	struct s_path	*next;
 }	t_path;
+
+typedef struct s_ctx
+{
+	t_map			*env;
+	int				cmd_len;
+	int				**fd_pipes;
+	t_cmd			*cmd;
+}	t_ctx;
 
 char				**ft_split(char const *s, char c);
 size_t				count_words(char const *s, char c);
@@ -94,7 +103,7 @@ int					expansion(t_cmd *cmd, t_map *env);
 void				pipeline(t_cmd *cmd, t_map *env);
 int					**alloc_pipe(int n_cmds);
 void				close_pipes(int	**fd_pipes, int	t_pipes);
-void				exec_functions(t_cmd *cmd, t_map *env);
+int					exec_functions(t_cmd *cmd, t_map *env);
 int					remove_quotes(t_cmd *cmd);
 char				*set_expansion(char *str);
 void				split_words(char *arg, char **new_args, int *j);
@@ -115,5 +124,13 @@ void				ex_code(t_map *env, char *str);
 void				run(t_map *env);
 void				handler_C(int signal);
 void				set_child_sig(void);
+void				exec_child_process(t_cmd *tmp, t_ctx ctx, int i);
+void				close_parent_pipes(int **fd_pipes, int i);
+void				loop_redir(t_cmd *cmd);
+void				free_pipes(int **pipes, int len);
+void				init_pipes(int **fd_pipes, int cmd_len);
+void				init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd);
+void				exec_heredoc(t_cmd *cmd);
+void				close_heredoc_fds(t_cmd *cmd);
 
 #endif
