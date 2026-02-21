@@ -35,12 +35,12 @@ int	heredoc(char *end)
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (strcmp(line, end) == 0)
+		if (ft_strcmp(line, end) == 0)
 		{
 			free(line);
 			break ;
 		}
-		write(here_pipes[1], line, ft_strlen(line));
+		write(here_pipes[1], line, ft_strlen(line));    //nao escrever no pipe porque ele tem um limite baixo
 		write(here_pipes[1], "\n", 1);
 		free(line);
 	}
