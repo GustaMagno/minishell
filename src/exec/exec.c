@@ -9,19 +9,62 @@ void	exec(t_cmd	*cmd, t_map *env)
 		pipeline(cmd, env);
 	else if (ft_lstsize(cmd) == 1)
 	{
-		if (exec_functions(cmd, env))
+		if (!redir_input(cmd, env))
 			return ;
-		pid = fork();
-		if (pid == 0)
-		{
-			if (cmd->redir)
-				loop_redir(cmd);
-			ft_external(cmd, env);
-			free_and_exit(env, cmd, 127);
-		}
-		else
-			wait(NULL);
+		exec_2(cmd, env);
 	}
+}
+
+void	exec_2(t_cmd *cmd, t_map *env)
+{
+	pid_t	pid;
+
+	if (exec_functions(cmd, env))
+			return ;
+	{
+	pid = fork();
+	if (pid == 0)
+	{
+		if (cmd->redir)
+			loop_redir(cmd);
+		ft_external(cmd, env);
+		free_and_exit(env, cmd, 127);
+	}
+	else
+		wait(NULL);
+	close_heredoc_fds(cmd);}
+}
+
+int	redir_input(t_cmd *cmd, t_map *env)
+{
+	t_redir	*redir;
+
+	if (cmd->redir)
+	{
+		redir = cmd->redir;
+		while(redir)
+		{
+			if (ft_strcmp(redir->args[0], "<") == 0)
+			{
+				if(!check_input(redir->args[1], cmd, env))
+					return (0);
+			}
+			redir = redir->next;		
+		}
+	}
+	return (1);
+}
+
+int	check_input(char *path, t_cmd *cmd, t_map *env)
+{
+	if (!path || access(path, R_OK) == -1)
+	{
+		write(2, "minishell: ", 11);
+		write(2, path, ft_strlen(path));
+		write(2, ": No such file or directory\n", 29);
+		return (0);
+	}
+	return (1);
 }
 
 void	pipeline(t_cmd *cmd, t_map *env)

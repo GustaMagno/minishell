@@ -133,5 +133,8 @@ void				init_pipes(int **fd_pipes, int cmd_len);
 void				init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd);
 void				exec_heredoc(t_cmd *cmd);
 void				close_heredoc_fds(t_cmd *cmd);
+void				exec_2(t_cmd *cmd, t_map *env);
+int					check_input(char *path, t_cmd *cmd, t_map *env);
+int					redir_input(t_cmd *cmd, t_map *env);
 
 #endif

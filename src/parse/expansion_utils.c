@@ -57,6 +57,8 @@ int remove_null_node(t_cmd *cmd)
 	t_cmd	*node;
 
 	node = cmd;
+	if (cmd->redir->args && *(cmd->redir->args))
+		return (1);
 	if (!*(node->args) || !node->args[0][0])
 		return (0);
 	while (node)
