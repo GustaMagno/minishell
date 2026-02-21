@@ -3,6 +3,8 @@
 void	exec(t_cmd	*cmd, t_map *env)
 {
 	pid_t	pid;
+
+	exec_heredoc(cmd);
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
 	else if (ft_lstsize(cmd) == 1)
@@ -56,12 +58,16 @@ void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 		dup2(ctx.fd_pipes[i][1], STDOUT_FILENO);
 	if (tmp->redir)
 		loop_redir(tmp);
+	close_heredoc_fds(ctx.cmd);
 	close_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
 	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
 	if (exec_functions(tmp, ctx.env))
 		free_and_exit(ctx.env, ctx.cmd, 0);
 	else
+	{
+		ft_external(tmp, ctx.env);
 		free_and_exit(ctx.env, ctx.cmd, 127);
+	}
 }
 
 void	close_parent_pipes(int **fd_pipes, int i)
@@ -158,4 +164,26 @@ void	init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd)
 	ctx->cmd_len = ft_lstsize(cmd);
 	ctx->env = env;
 	ctx->fd_pipes = alloc_pipe(ctx->cmd_len);
+}
+
+void	close_heredoc_fds(t_cmd *cmd)
+{
+	t_cmd	*tmp;
+	t_redir	*redir;
+
+	tmp = cmd;
+	while (tmp)
+	{
+		redir = tmp->redir;
+		while (redir)
+		{
+			if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd != -1)
+			{
+				close(redir->fd);
+				redir->fd = -1;
+			}
+			redir = redir->next;
+		}
+		tmp = tmp->next;
+	}
 }

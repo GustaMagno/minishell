@@ -42,6 +42,7 @@ typedef struct s_ctx
 	t_cmd			*cmd;
 }	t_ctx;
 
+
 char				**ft_split(char const *s, char c);
 size_t				count_words(char const *s, char c);
 void				*ft_calloc(size_t nmemb, size_t size);
