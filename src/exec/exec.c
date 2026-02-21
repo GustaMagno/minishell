@@ -48,6 +48,7 @@ void	pipeline(t_cmd *cmd, t_map *env)
 	while (++i < ctx.cmd_len)
 		wait(NULL);
 	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
+	close_heredoc_fds(ctx.cmd);
 }
 
 void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
