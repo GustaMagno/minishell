@@ -11,7 +11,9 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 	env->put(env, ft_strdup("OLDPWD"), tmp);
 	if (!is_directory(cd))
 	{
-		fprintf(stderr, "minishell: cd: %s: Not a directory\n", cd);
+		write(2, "minishell: cd: ", 16);
+		write(2, cd, ft_strlen(cd));
+		write(2, ": Not a directory\n", 19);
 		free(cd);
 		return ;
 	}

@@ -70,7 +70,11 @@ void	exec_redir(t_cmd *cmd, t_redir *redir)
 	else if (ft_strcmp(redir->args[0], ">>") == 0)
 		stdout_2(redir->args[1]);
 	else if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd != -1)
+	{
 		dup2(redir->fd, STDIN_FILENO);
+		close(redir->fd);
+		redir->fd = -1;
+	}
 }
 
 void	loop_redir(t_cmd *cmd)

@@ -21,18 +21,19 @@ void	exec_2(t_cmd *cmd, t_map *env)
 
 	if (exec_functions(cmd, env, 0))
 			return ;
-	{
 	pid = fork();
 	if (pid == 0)
 	{
 		if (cmd->redir)
 			loop_redir(cmd);
+		if (!cmd->args || !cmd->args[0])
+			free_and_exit(env, cmd, 0);
 		ft_external(cmd, env);
 		free_and_exit(env, cmd, 127);
 	}
 	else
 		wait(NULL);
-	close_heredoc_fds(cmd);}
+	close_heredoc_fds(cmd);
 }
 
 int	redir_input(t_cmd *cmd, t_map *env)
