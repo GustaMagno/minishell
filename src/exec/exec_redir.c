@@ -25,27 +25,31 @@ void	stdout_1(char *output)
 
 int	heredoc(char *end)
 {
-	int	here_pipes[2];
+	int		here_pipes[2];
 	char	*line;
+	char	*buffer;
+	int		save_stdin;
+	int 	check;
 
+	line = NULL;
+	check = 0;
+	save_stdin = dup(STDIN_FILENO);
 	if (pipe(here_pipes) == -1)
 		return (-1);
-	while (1)
+	set_heredoc_sig();
+	while (write(1, "> ", 2))
 	{
-		line = readline("> ");
-		if (!line)
-			break ;
-		if (ft_strcmp(line, end) == 0)
-		{
+		buffer = get_next_line(STDIN_FILENO);
+		if (!buffer && ++check && write(1, "\n", 1))
 			free(line);
+		if (!buffer || ft_strcmp(buffer, end) == 0)
 			break ;
-		}
-		write(here_pipes[1], line, ft_strlen(line));    //nao escrever no pipe porque ele tem um limite baixo
-		write(here_pipes[1], "\n", 1);
-		free(line);
+		line = ft_strjoinfree(line, buffer, line, buffer);
 	}
-	close(here_pipes[1]);
-	return (here_pipes[0]);
+	if (!check && write(here_pipes[1], line, ft_strlen(line)))
+		(free(line), free(buffer));
+	dup2(save_stdin, STDIN_FILENO);
+	return (free(end), close(save_stdin), close(here_pipes[1]), here_pipes[0]);
 }
 
 void	stdout_2(char *output)
@@ -96,7 +100,7 @@ void	exec_heredoc(t_cmd *cmd)
 		while (redir)
 		{
 		if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
-				redir->fd = heredoc(redir->args[1]);
+				redir->fd = heredoc(ft_strjoin(redir->args[1], "\n"));
 			redir = redir->next;
 		}
 		tmp = tmp->next;

@@ -13,6 +13,9 @@
 # include "map.h"
 
 # define SYNTAX_ERROR "bash: syntax error near unexpected token\n"
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 2
+# endif
 
 typedef struct s_redir
 {
@@ -91,6 +94,7 @@ int					is_space(char *line);
 int					ft_charalpha(char *str, int i);
 int					ft_strisnum(char *str);
 int					ft_stralpha(char *str);
+char				*ft_strjoinfree(char *s1, char *s2, char *s1_temp, char *s2_temp);
 void				print_cmd(t_cmd *cmd);
 int					count_args(char **cmd_args, t_map *env);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
@@ -125,6 +129,7 @@ void				ex_code(t_map *env, char *str);
 void				run(t_map *env);
 void				handler_C(int signal);
 void				set_child_sig(void);
+void				set_heredoc_sig(void);
 void				exec_child_process(t_cmd *tmp, t_ctx ctx, int i);
 void				close_parent_pipes(int **fd_pipes, int i);
 void				loop_redir(t_cmd *cmd);
@@ -133,5 +138,7 @@ void				init_pipes(int **fd_pipes, int cmd_len);
 void				init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd);
 void				exec_heredoc(t_cmd *cmd);
 void				close_heredoc_fds(t_cmd *cmd);
+char				*get_next_line(int fd);
+void				restaured_stdin(int dup_stdin);
 
 #endif

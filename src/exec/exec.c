@@ -3,6 +3,7 @@
 void	exec(t_cmd	*cmd, t_map *env)
 {
 	pid_t	pid;
+	int		status;
 
 	exec_heredoc(cmd);
 	if (ft_lstsize(cmd) > 1)
@@ -11,16 +12,18 @@ void	exec(t_cmd	*cmd, t_map *env)
 	{
 		if (exec_functions(cmd, env))
 			return ;
+		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == 0)
 		{
+			set_child_sig();
 			if (cmd->redir)
 				loop_redir(cmd);
 			ft_external(cmd, env);
 			free_and_exit(env, cmd, 127);
 		}
-		else
-			wait(NULL);
+		else if (pid > 0 && waitpid(pid, &status, 0))
+			(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
 	}
 }
 
