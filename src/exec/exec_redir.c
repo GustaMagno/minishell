@@ -25,32 +25,36 @@ void	stdout_1(char *output)
 
 int	heredoc(char *end)
 {
-	int	here_pipes[2];
+	char	tmp[256];
 	char	*line;
+	int		fd;
 
-	if (pipe(here_pipes) == -1)
+	fd = create_temp(tmp, sizeof(tmp));
+	if (fd == -1)
 		return (-1);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (strcmp(line, end) == 0)
+		if (ft_strcmp(line, end) == 0)
 		{
 			free(line);
 			break ;
 		}
-		write(here_pipes[1], line, ft_strlen(line));
-		write(here_pipes[1], "\n", 1);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
 		free(line);
 	}
-	close(here_pipes[1]);
-	return (here_pipes[0]);
+	close(fd);
+	fd = open(tmp, O_RDONLY);
+	unlink(tmp);
+	return (fd);
 }
 
 void	stdout_2(char *output)
 {
-		int	fd;
+	int	fd;
 
 	fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
@@ -105,4 +109,52 @@ void	exec_heredoc(t_cmd *cmd)
 		}
 		tmp = tmp->next;
 	}
+}
+
+static int	create_temp(char *tmp, size_t size)
+{
+	int		counter;
+	int		fd;
+	char	*tmp_name;
+
+	counter = 0;
+	while (counter < 1000)
+	{
+		tmp_name = build_tmp_name(counter);
+		if (!tmp_name || ft_strlen(tmp_name) + 1 > size)
+			return (free(tmp_name), -1);
+		ft_strlcpy(tmp, tmp_name, size);
+		free(tmp_name);
+		fd = open_tmp(tmp);
+		if (fd >= 0)
+			return (fd);
+		counter++;
+	}
+	return (-1);
+}
+
+static char	*build_tmp_name(int counter)
+{
+	char	*pid;
+	char	*cnt;
+	char	*tmp;
+
+	pid = ft_itoa(getpid());
+	cnt = ft_itoa(counter);
+	if (!pid || !cnt)
+		return (free(pid), free(cnt), NULL);
+	tmp = ft_strjoin("/tmp/minishell_heredoc_", pid);
+	if (!tmp)
+		return (free(pid), free(cnt), NULL);
+	tmp = ft_strjoin(tmp, "_");
+	tmp = ft_strjoin(tmp, cnt);
+	return (free(pid), free(cnt), tmp);
+}
+
+static int	open_tmp(char *path)
+{
+	int	fd;
+
+	fd = open(path, O_CREAT | O_EXCL | O_RDWR, 0600);
+	return (fd);
 }
