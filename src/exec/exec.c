@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+int	set_end_status(int signal)
+{
+	t_map	*env;
+
+	env = adress_env(NULL);
+	if (signal == SIGINT)
+		env->put(env, ft_strdup("?"), ft_strdup("131"));
+	else if (signal == SIGQUIT)
+		env->put(env, ft_strdup("?"), ft_strdup("132"));
+}
+
 void	exec(t_cmd	*cmd, t_map *env)
 {
 	pid_t	pid;
@@ -22,7 +33,7 @@ void	exec(t_cmd	*cmd, t_map *env)
 			ft_external(cmd, env);
 			free_and_exit(env, cmd, 127);
 		}
-		else if (pid > 0 && waitpid(pid, &status, 0))
+		else if (pid > 0 && waitpid(pid, &status, 0) && set_end_status(status))
 			(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
 	}
 }

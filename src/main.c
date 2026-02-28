@@ -1,18 +1,15 @@
 #include "minishell.h"
 
-// t_map	*adress_env()
-// {
-// 	static t_map	*env;
-// 	static int		i = 0;
+int	g_signal = 0;
 
-// 	if (i == 0)
-// 	{
-// 		env = new_map();
-// 		if (!env)
-// 			return (NULL);
-// 		i++;
-// 	}
-// }
+t_map	*adress_env(t_map *env)
+{
+	static t_map	*copy;
+
+	if (env)
+		copy = env;
+	return (copy);
+}
 
 
 void	run(t_map *env)
@@ -46,6 +43,7 @@ int main(int argv, char **argc, char **envp)
 	if (!env)
 		return (1);
 	create_env(env, envp);
+	adress_env(env);
 	run(env);
 	env->destroy(env);
 }

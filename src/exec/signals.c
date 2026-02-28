@@ -3,10 +3,17 @@
 
 void	heredoc_handler(int signal)
 {
-	int	save_stdin;
+	t_map	*env;
 
+	env = adress_env(NULL);
 	if (signal == SIGINT)
+	{
 		close(STDIN_FILENO);
+		g_signal = SIGINT;
+		env->put(env, ft_strdup("?"), ft_strdup("131"));
+	}
+	else if (signal == SIGQUIT)
+		env->put(env, ft_strdup("?"), ft_strdup("132"));
 }
 
 void	set_heredoc_sig(void)

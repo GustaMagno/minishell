@@ -17,6 +17,7 @@
 #  define BUFFER_SIZE 2
 # endif
 
+extern int g_signal;
 typedef struct s_redir
 {
 	char			*args[3];
@@ -140,5 +141,7 @@ void				exec_heredoc(t_cmd *cmd);
 void				close_heredoc_fds(t_cmd *cmd);
 char				*get_next_line(int fd);
 void				restaured_stdin(int dup_stdin);
+t_map				*adress_env(t_map *env);
+int					set_end_status(int signal);
 
 #endif

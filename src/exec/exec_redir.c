@@ -40,13 +40,13 @@ int	heredoc(char *end)
 	while (write(1, "> ", 2))
 	{
 		buffer = get_next_line(STDIN_FILENO);
-		if (!buffer && ++check && write(1, "\n", 1))
+		if (!buffer && g_signal == SIGINT)
 			free(line);
-		if (!buffer || ft_strcmp(buffer, end) == 0)
+		if ((!buffer && write(1, "\n", 1)) || ft_strcmp(buffer, end) == 0)
 			break ;
 		line = ft_strjoinfree(line, buffer, line, buffer);
 	}
-	if (!check && write(here_pipes[1], line, ft_strlen(line)))
+	if (!g_signal && write(here_pipes[1], line, ft_strlen(line)))
 		(free(line), free(buffer));
 	dup2(save_stdin, STDIN_FILENO);
 	return (free(end), close(save_stdin), close(here_pipes[1]), here_pipes[0]);
@@ -99,7 +99,8 @@ void	exec_heredoc(t_cmd *cmd)
 		redir = tmp->redir;
 		while (redir)
 		{
-		if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
+			g_signal = 0;
+			if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
 				redir->fd = heredoc(ft_strjoin(redir->args[1], "\n"));
 			redir = redir->next;
 		}
