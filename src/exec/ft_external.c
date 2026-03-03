@@ -43,6 +43,7 @@ void access_check(t_cmd *cmd, t_map *env, char *exec_path)
 {
 	if (exec_path == NULL)
 	{
+		write(2, "minishell: ", 11);
 		write(2, cmd->args[0], ft_strlen(cmd->args[0]));
 		write(2, ": command not found\n", 20);
 		ex_code(env, "127");

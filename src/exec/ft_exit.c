@@ -28,8 +28,10 @@ void	status_and_end(t_map *env, t_cmd *cmd, long long exit_status, char *msg)
 	return (printf("exit\n%s", msg), exit(exit_status));
 }
 
-void	ft_exit(t_map *env, t_cmd *cmd)
+void	ft_exit(t_map *env, t_cmd *cmd, int child)
 {
+	if (child)
+		return ;
 	if (!cmd->args[1])
 	{
 		status_and_end(env, cmd, 0, "");

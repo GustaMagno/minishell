@@ -5,19 +5,26 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 {
 	char	*cd;
 	char	*tmp;
+	char	*pwd;
 
 	tmp = ft_strdup(env->get(env, "PWD"));
 	cd = cd_list(env, cmd);
 	env->put(env, ft_strdup("OLDPWD"), tmp);
 	if (!is_directory(cd))
 	{
-		fprintf(stderr, "minishell: cd: %s: Not a directory\n", cd);
+		write(2, "minishell: cd: ", 16);
+		write(2, cd, ft_strlen(cd));
+		write(2, ": Not a directory\n", 19);
+		ex_code(env, "1");
 		free(cd);
 		return ;
 	}
 	if (chdir(cd) != 0)
-		perror("cd");
-	env->put(env, ft_strdup("PWD"), getcwd(NULL, 0));
+		(perror("cd"), ex_code(env, "1"));
+	else
+		ex_code(env, "0");
+	if ((pwd = getcwd(NULL, 0)))
+		env->put(env, ft_strdup("PWD"), pwd);
 	free (cd);
 }
 

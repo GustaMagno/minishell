@@ -61,19 +61,20 @@ char	*find_value(char *envp)
 void	create_env(t_map *env, char **envp)
 {
 	int		i;
-	char	*key;
-	char	*value;
+	int		shlvl;
+	char	*shlvl_value;
 
-	i = 0;
-	while (envp[i])
-	{
-		key = find_key(envp[i]);
-		value = find_value(envp[i]);
-		env->put(env, ft_strdup(key), ft_strdup(value));
-		free(key);
-		free(value);
-		i++;
-	}
+	i = -1;
+	while (envp[++i])
+		env->put(env, find_key(envp[i]), find_value(envp[i]));
+	shlvl_value = env->get(env, "SHLVL");
+	if (!shlvl_value)
+		shlvl = 0;
+	else
+		shlvl = ft_atoi(shlvl_value);
+	shlvl++;
+	shlvl_value = ft_itoa(shlvl);
+	env->put(env, ft_strdup("SHLVL"), shlvl_value);
 	ex_code(env, "0");
 }
 
@@ -98,4 +99,5 @@ void	print_env(t_map *env)
 	}
 	ex_code(env, "0");
 	free_split(my_env);
+	ex_code(env, "0");
 }

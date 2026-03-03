@@ -109,13 +109,13 @@ int					expansion(t_cmd *cmd, t_map *env);
 void				pipeline(t_cmd *cmd, t_map *env);
 int					**alloc_pipe(int n_cmds);
 void				close_pipes(int	**fd_pipes, int	t_pipes);
-int					exec_functions(t_cmd *cmd, t_map *env);
+int					exec_functions(t_cmd *cmd, t_map *env, int child);
 int					remove_quotes(t_cmd *cmd);
 char				*set_expansion(char *str);
 void				split_words(char *arg, char **new_args, int *j);
 void				ft_unset(t_map *env, t_cmd *cmd);
 void				ft_export(t_map *env, t_cmd *cmd);
-void				ft_exit(t_map *env, t_cmd *cmd);
+void				ft_exit(t_map *env, t_cmd *cmd, int child);
 void				ft_echo(t_cmd *cmd, t_map *env);
 void				ft_pwd(t_map *env);
 int					is_directory(char *path);
@@ -143,5 +143,8 @@ char				*get_next_line(int fd);
 void				restaured_stdin(int dup_stdin);
 t_map				*adress_env(t_map *env);
 int					set_end_status(int signal);
+void				exec_2(t_cmd *cmd, t_map *env);
+int					check_input(char *path, t_cmd *cmd, t_map *env);
+int					redir_input(t_cmd *cmd, t_map *env);
 
 #endif
