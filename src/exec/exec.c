@@ -16,7 +16,7 @@ void	exec(t_cmd	*cmd, t_map *env)
 	pid_t	pid;
 	int		status;
 
-	exec_heredoc(cmd);
+	exec_heredoc(cmd, env);
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
 	else if (ft_lstsize(cmd) == 1)

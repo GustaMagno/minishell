@@ -27,12 +27,13 @@ char	**new_split(char **cmd_args)
 
 static int replace(char **str, int start, int end, t_map *env)
 {
-	char	*str_value = NULL;
+	char	*str_value;
 	char	*replaced;
 	char	*key;
 	char	*temp_str;
 	char	*value;
 
+	str_value = NULL;
 	key = ft_substr(*str, start, end - start);
 	if (!key)
 		return (start);
