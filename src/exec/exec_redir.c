@@ -1,58 +1,6 @@
 
 #include "minishell.h"
 
-static int	open_tmp(char *path)
-{
-	int	fd;
-
-	fd = open(path, O_CREAT | O_EXCL | O_RDWR, 0600);
-	return (fd);
-}
-
-static char	*build_tmp_name(int counter)
-{
-	char	*pid;
-	char	*cnt;
-	char	*tmp;
-	char	*tmp2;
-
-	pid = ft_itoa(getpid());
-	cnt = ft_itoa(counter);
-	if (!pid || !cnt)
-		return (free(pid), free(cnt), NULL);
-	tmp = ft_strjoin("/tmp/minishell_heredoc_", pid);
-	if (!tmp)
-		return (free(pid), free(cnt), NULL);
-	tmp2 = ft_strjoin(tmp, "_");
-	free(tmp);
-	if (!tmp2)
-		return (free(pid), free(cnt), NULL);
-	tmp = ft_strjoin(tmp2, cnt);
-	return (free(tmp2), free(pid), free(cnt), tmp);
-}
-
-static int	create_temp(char *tmp, size_t size)
-{
-	int		counter;
-	int		fd;
-	char	*tmp_name;
-
-	counter = 0;
-	while (counter < 1000)
-	{
-		tmp_name = build_tmp_name(counter);
-		if (!tmp_name || ft_strlen(tmp_name) + 1 > size)
-			return (free(tmp_name), -1);
-		ft_strlcpy(tmp, tmp_name, size);
-		free(tmp_name);
-		fd = open_tmp(tmp);
-		if (fd >= 0)
-			return (fd);
-		counter++;
-	}
-	return (-1);
-}
-
 void	stdin_1(char *input)
 {
 	int	fd;
@@ -161,4 +109,56 @@ void	exec_heredoc(t_cmd *cmd)
 		}
 		tmp = tmp->next;
 	}
+}
+
+static int	open_tmp(char *path)
+{
+	int	fd;
+
+	fd = open(path, O_CREAT | O_EXCL | O_RDWR, 0600);
+	return (fd);
+}
+
+static char	*build_tmp_name(int counter)
+{
+	char	*pid;
+	char	*cnt;
+	char	*tmp;
+	char	*tmp2;
+
+	pid = ft_itoa(getpid());
+	cnt = ft_itoa(counter);
+	if (!pid || !cnt)
+		return (free(pid), free(cnt), NULL);
+	tmp = ft_strjoin("/tmp/minishell_heredoc_", pid);
+	if (!tmp)
+		return (free(pid), free(cnt), NULL);
+	tmp2 = ft_strjoin(tmp, "_");
+	free(tmp);
+	if (!tmp2)
+		return (free(pid), free(cnt), NULL);
+	tmp = ft_strjoin(tmp2, cnt);
+	return (free(tmp2), free(pid), free(cnt), tmp);
+}
+
+static int	create_temp(char *tmp, size_t size)
+{
+	int		counter;
+	int		fd;
+	char	*tmp_name;
+
+	counter = 0;
+	while (counter < 1000)
+	{
+		tmp_name = build_tmp_name(counter);
+		if (!tmp_name || ft_strlen(tmp_name) + 1 > size)
+			return (free(tmp_name), -1);
+		ft_strlcpy(tmp, tmp_name, size);
+		free(tmp_name);
+		fd = open_tmp(tmp);
+		if (fd >= 0)
+			return (fd);
+		counter++;
+	}
+	return (-1);
 }
