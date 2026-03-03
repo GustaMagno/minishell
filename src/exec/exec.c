@@ -18,9 +18,11 @@ void	exec(t_cmd	*cmd, t_map *env)
 void	exec_2(t_cmd *cmd, t_map *env)
 {
 	pid_t	pid;
+	int		status;
 
 	if (exec_functions(cmd, env, 0))
 			return ;
+	ex_code(env, "0");
 	pid = fork();
 	if (pid == 0)
 	{
@@ -32,7 +34,11 @@ void	exec_2(t_cmd *cmd, t_map *env)
 		free_and_exit(env, cmd, 127);
 	}
 	else
-		wait(NULL);
+	{
+		wait(&status);
+		if (status != -1)
+			ex_code(env, ft_itoa(status >> 8));
+	}
 	close_heredoc_fds(cmd);
 }
 
@@ -63,6 +69,7 @@ int	check_input(char *path, t_cmd *cmd, t_map *env)
 		write(2, "minishell: ", 11);
 		write(2, path, ft_strlen(path));
 		write(2, ": No such file or directory\n", 29);
+		ex_code(env, "1");
 		return (0);
 	}
 	return (1);
@@ -110,6 +117,8 @@ void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 		free_and_exit(ctx.env, ctx.cmd, 0);
 	else
 	{
+		if (!tmp->args || !tmp->args[0])
+			free_and_exit(ctx.env, ctx.cmd, 0);
 		ft_external(tmp, ctx.env);
 		free_and_exit(ctx.env, ctx.cmd, 127);
 	}

@@ -98,4 +98,5 @@ void	print_env(t_map *env)
 		i++;
 	}
 	free_split(my_env);
+	ex_code(env, "0");
 }
