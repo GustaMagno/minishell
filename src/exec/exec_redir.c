@@ -1,20 +1,6 @@
 
 #include "minishell.h"
 
-char	*no_quote(char *end)
-{
-	char	*ssub;
-	char	*sjoin;
-
-
-	if (end[0] != '\'' && end[0] != '"')
-		return (end);
-	ssub = ft_substr(end, 1, ft_strlen(end) - 3);
-	sjoin = ft_strjoin(ssub, "\n");
-	free(ssub);
-	return (sjoin);
-}
-
 void	stdin_1(char *input)
 {
 	int	fd;
@@ -35,6 +21,96 @@ void	stdout_1(char *output)
 		return ;
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+}
+
+int	heredoc(char *end, t_map *env)
+{
+	int		here_pipes[2];
+	char	*line;
+	int		save_stdin;
+
+	save_stdin = dup(STDIN_FILENO);
+	if (pipe(here_pipes) == -1)
+		return (-1);
+	set_heredoc_sig();
+	line = heredoc_loop(end, env);
+	if (!g_signal && write(here_pipes[1], line, ft_strlen(line)))
+		free(line);
+	dup2(save_stdin, STDIN_FILENO);
+	return (free(end), close(save_stdin), close(here_pipes[1]), here_pipes[0]);
+}
+
+void	stdout_2(char *output)
+{
+	int	fd;
+
+	fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+		return ;
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	exec_redir(t_cmd *cmd, t_redir *redir)
+{
+	if (!redir->args[0] || !redir->args[1])
+		return ;
+	if (ft_strcmp(redir->args[0], "<") == 0)
+		stdin_1(redir->args[1]);
+	else if (ft_strcmp(redir->args[0], ">") == 0)
+		stdout_1(redir->args[1]);
+	else if (ft_strcmp(redir->args[0], ">>") == 0)
+		stdout_2(redir->args[1]);
+	else if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd != -1)
+	{
+		dup2(redir->fd, STDIN_FILENO);
+		close(redir->fd);
+		redir->fd = -1;
+	}
+}
+
+void	loop_redir(t_cmd *cmd)
+{
+	t_redir	*temp;
+
+	temp = cmd->redir;
+	while (temp)
+	{
+		exec_redir(cmd, temp);
+		temp = temp->next;
+	}
+}
+void	exec_heredoc(t_cmd *cmd, t_map *env)
+{
+	t_cmd	*tmp;
+	t_redir	*redir;
+
+	tmp = cmd;
+	while(tmp)
+	{
+		redir = tmp->redir;
+		while (redir)
+		{
+			g_signal = 0;
+			if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
+				redir->fd = heredoc(ft_strjoin(redir->args[1], "\n"), env);
+			redir = redir->next;
+		}
+		tmp = tmp->next;
+	}
+}
+char	*no_quote(char *end)
+{
+	char	*ssub;
+	char	*sjoin;
+
+
+	if (end[0] != '\'' && end[0] != '"')
+		return (end);
+	ssub = ft_substr(end, 1, ft_strlen(end) - 3);
+	sjoin = ft_strjoin(ssub, "\n");
+	free(ssub);
+	return (sjoin);
 }
 
 int	modify_line(char **str, int start, int end, t_map *env)
@@ -116,81 +192,4 @@ static char	*heredoc_loop(char *end, t_map *env)
 	if (end_no_quotes != end)
 		free(end_no_quotes);
 	return (expanded_heredoc(line, end[0], env));
-}
-
-int	heredoc(char *end, t_map *env)
-{
-	int		here_pipes[2];
-	char	*line;
-	int		save_stdin;
-
-	save_stdin = dup(STDIN_FILENO);
-	if (pipe(here_pipes) == -1)
-		return (-1);
-	set_heredoc_sig();
-	line = heredoc_loop(end, env);
-	if (!g_signal && write(here_pipes[1], line, ft_strlen(line)))
-		free(line);
-	dup2(save_stdin, STDIN_FILENO);
-	return (free(end), close(save_stdin), close(here_pipes[1]), here_pipes[0]);
-}
-
-void	stdout_2(char *output)
-{
-	int	fd;
-
-	fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		return ;
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-}
-
-void	exec_redir(t_cmd *cmd, t_redir *redir)
-{
-	if (!redir->args[0] || !redir->args[1])
-		return ;
-	if (ft_strcmp(redir->args[0], "<") == 0)
-		stdin_1(redir->args[1]);
-	else if (ft_strcmp(redir->args[0], ">") == 0)
-		stdout_1(redir->args[1]);
-	else if (ft_strcmp(redir->args[0], ">>") == 0)
-		stdout_2(redir->args[1]);
-	else if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd != -1)
-	{
-		dup2(redir->fd, STDIN_FILENO);
-		close(redir->fd);
-		redir->fd = -1;
-	}
-}
-
-void	loop_redir(t_cmd *cmd)
-{
-	t_redir	*temp;
-
-	temp = cmd->redir;
-	while (temp)
-	{
-		exec_redir(cmd, temp);
-		temp = temp->next;
-	}
-}
-void	exec_heredoc(t_cmd *cmd, t_map *env)
-{
-	t_cmd	*tmp;
-	t_redir	*redir;
-
-	tmp = cmd;
-	while(tmp)
-	{
-		redir = tmp->redir;
-		while (redir)
-		{
-			g_signal = 0;
-			if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
-				redir->fd = heredoc(ft_strjoin(redir->args[1], "\n"), env);
-			redir = redir->next;
-		}
-		tmp = tmp->next;
-	}
 }
