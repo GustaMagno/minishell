@@ -37,14 +37,14 @@ int	count_new_split(char **cmd_args)
 int		out_quotes(char *arg)
 {
 	int		i;
-	int		in_quote;
+	char	in_quote;
 
 	i = 0;
 	in_quote = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '"')
-			in_quote = (in_quote == 0);
+		if ((arg[i] == '\2' || arg[i] == '"') && (!in_quote || in_quote == arg[i]))
+			in_quote = arg[i] * (in_quote == 0);
 		if (arg[i] == ' ' && !in_quote)
 			return (1);
 		i++;

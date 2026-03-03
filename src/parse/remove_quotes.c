@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*new_str(char *str)
+char	*str_noquote(char *str)
 {
 	int		i;
 	int		j;
@@ -40,7 +40,7 @@ char	**new_args(char **args)
 		return (NULL);
 	while (args[++i])
 	{
-		new_args[i] = new_str(args[i]);
+		new_args[i] = str_noquote(args[i]);
 		if (!new_args[i])
 			return (NULL);
 	}

@@ -255,3 +255,8 @@ void	close_heredoc_fds(t_cmd *cmd)
 		tmp = tmp->next;
 	}
 }
+
+/* mkdir a
+cd a
+mkdir aa
+cd a */

@@ -146,5 +146,6 @@ int					set_end_status(int signal);
 void				exec_2(t_cmd *cmd, t_map *env);
 int					check_input(char *path, t_cmd *cmd, t_map *env);
 int					redir_input(t_cmd *cmd, t_map *env);
+char				*str_noquote(char *str);
 
 #endif
