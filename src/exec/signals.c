@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 void	heredoc_handler(int signal)
 {
 	t_map	*env;
@@ -10,10 +9,10 @@ void	heredoc_handler(int signal)
 	{
 		close(STDIN_FILENO);
 		g_signal = SIGINT;
-		env->put(env, ft_strdup("?"), ft_strdup("131"));
+		env->put(env, ft_strdup("?"), ft_strdup("130"));
 	}
 	else if (signal == SIGQUIT)
-		env->put(env, ft_strdup("?"), ft_strdup("132"));
+		env->put(env, ft_strdup("?"), ft_strdup("131"));
 }
 
 void	set_heredoc_sig(void)

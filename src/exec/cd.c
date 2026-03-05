@@ -37,7 +37,7 @@ char	*cd_list(t_map *env, t_cmd *cmd)
 	if (ft_argslen(cmd->args) == 1)
 		cd = ft_strdup(home);
 	else if (ft_strcmp(cmd->args[1], "--") == 0)
-		cd = ft_strdup(env->get(env, "OLDPWD"));
+		cd = ft_strdup((env, "OLDPWD"));
 	else
 		cd = ft_strdup(cmd->args[1]);
 	return (cd);

@@ -6,9 +6,9 @@ int	set_end_status(int signal)
 
 	env = adress_env(NULL);
 	if (signal == SIGINT)
-		env->put(env, ft_strdup("?"), ft_strdup("131"));
+		env->put(env, ft_strdup("?"), ft_strdup("130"));
 	else if (signal == SIGQUIT)
-		env->put(env, ft_strdup("?"), ft_strdup("132"));
+		env->put(env, ft_strdup("?"), ft_strdup("131"));
 }
 
 void	exec(t_cmd	*cmd, t_map *env)
@@ -16,6 +16,7 @@ void	exec(t_cmd	*cmd, t_map *env)
 	pid_t	pid;
 	int		status;
 
+	ex_code(env, "0");
 	exec_heredoc(cmd, env);
 	if (ft_lstsize(cmd) > 1)
 		pipeline(cmd, env);
@@ -34,7 +35,6 @@ void	exec_2(t_cmd *cmd, t_map *env)
 
 	if (exec_functions(cmd, env, 0))
 			return ;
-	ex_code(env, "0");
 	set_ign_sig();
 	pid = fork();
 	if (pid == 0)
@@ -50,7 +50,7 @@ void	exec_2(t_cmd *cmd, t_map *env)
 	else if (pid > 0 && waitpid(pid, &status, 0) && set_end_status(status))
 	{
 		(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
-		if (status != -1)
+		if (status != -1 && !ft_strcmp(env->get(env, "?"), 0))
 			ex_code(env, ft_itoa(status >> 8));
 	}
 	close_heredoc_fds(cmd);
