@@ -28,6 +28,12 @@ void	set_child_sig(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+void	set_ign_sig(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 void	handler_C(int signal)
 {
 	write(1, "\n", 2);

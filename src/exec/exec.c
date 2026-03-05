@@ -35,7 +35,7 @@ void	exec_2(t_cmd *cmd, t_map *env)
 	if (exec_functions(cmd, env, 0))
 			return ;
 	ex_code(env, "0");
-	signal(SIGINT, SIG_IGN);
+	set_ign_sig();
 	pid = fork();
 	if (pid == 0)
 	{

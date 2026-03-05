@@ -31,7 +31,7 @@ static char	*build_tmp_name(int counter)
 	return (free(tmp2), free(pid), free(cnt), tmp);
 }
 
-static int	create_temp(char *tmp, size_t size)
+int	create_temp(char *tmp, size_t size)
 {
 	int		counter;
 	int		fd;
@@ -52,100 +52,7 @@ static int	create_temp(char *tmp, size_t size)
 	}
 	return (-1);
 }
-char	*no_quote(char *end)
-{
-	char	*ssub;
-	char	*sjoin;
 
-
-	if (end[0] != '\'' && end[0] != '"')
-		return (end);
-	ssub = ft_substr(end, 1, ft_strlen(end) - 3);
-	sjoin = ft_strjoin(ssub, "\n");
-	free(ssub);
-	return (sjoin);
-}
-
-int	modify_line(char **str, int start, int end, t_map *env)
-{
-	char	*key;
-	char	*temp_str;
-	char	*value;
-	char	*result1;
-	char	*result2;
-
-	result1 = NULL;
-	key = ft_substr(*str, start, end - start);
-	if (!key)
-		return (start);
-	if (env->get(env, key + 1))
-		value = set_expansion(env->get(env, key + 1));
-	else
-		value = ft_strdup("\0");
-	(*str)[start] = '\0';
-	result1 = ft_strjoin(*str, value);
-	result2 = ft_strjoin(result1, &(*str)[end]);
-	(free(key), free(result1));
-	temp_str = *str;
-	if (!result2)
-		return (free(value), start);
-	*str = result2;
-	start += ft_strlen(value) - 1;
-	(free(value), free(temp_str));
-	return (start);
-}
-
-char	*expanded_heredoc(char *line, char flag, t_map *env)
-{
-	int	i;
-	int	start;
-	int	end;
-
-	if (!line)
-		return (NULL);
-	if (flag == '\'' || flag == '"')
-		return (line);
-	i = -1;
-	while (line[++i])
-	{
-		if (line[i] == '$')
-		{
-			start = i;
-			end = start + 1;
-			while (ft_charalpha(line, end))
-				end++;
-			i = modify_line(&line, start, end, env);
-		}
-	}
-	return (line);
-}
-
-static char	*heredoc_loop(char *end, t_map *env)
-{
-	char	*line;
-	char	*buffer;
-	char	*end_no_quotes;
-
-	end_no_quotes = no_quote(end);
-	line = NULL;
-	while (write(1, "> ", 2))
-	{
-		buffer = get_next_line(STDIN_FILENO);
-		if (!buffer && g_signal == SIGINT)
-		{
-			free(line);
-			line = NULL;
-		}
-		if ((!buffer && write(1, "\n", 1)) || ft_strcmp(buffer, end_no_quotes) == 0)
-			break ;
-		line = ft_strjoinfree(line, buffer, line, buffer);
-	}
-	if (ft_strcmp(buffer, end_no_quotes) == 0)
-		free(buffer);
-	if (end_no_quotes != end)
-		free(end_no_quotes);
-	return (expanded_heredoc(line, end[0], env));
-}
 
 void	stdin_1(char *input)
 {
@@ -169,32 +76,12 @@ void	stdout_1(char *output)
 	close(fd);
 }
 
-int	heredoc(char *end, t_map *env)
-{
-	char	tmp[256];
-	int		fd;
-	char	*line;
-	int		save_stdin;
-
-	save_stdin = dup(STDIN_FILENO);
-	fd = create_temp(tmp, sizeof(tmp));
-	if (fd == -1)
-		return (-1);
-	set_heredoc_sig();
-	line = heredoc_loop(end, env);
-	if (!g_signal && write(fd, line, ft_strlen(line)))
-		free(line);
-	dup2(save_stdin, STDIN_FILENO);
-	close(fd);
-	fd = open(tmp, O_RDONLY);
-	unlink(tmp);
-	return (free(end), close(save_stdin), fd);
-}
 void	exec_heredoc(t_cmd *cmd, t_map *env)
 {
 	t_cmd	*tmp;
 	t_redir	*redir;
 
+	
 	tmp = cmd;
 	while(tmp)
 	{

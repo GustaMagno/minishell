@@ -147,5 +147,8 @@ void				exec_2(t_cmd *cmd, t_map *env);
 int					check_input(char *path, t_cmd *cmd, t_map *env);
 int					redir_input(t_cmd *cmd, t_map *env);
 char				*str_noquote(char *str);
+int					create_temp(char *tmp, size_t size);
+int					heredoc(char *end, t_map *env);
+void				set_ign_sig(void);
 
 #endif
