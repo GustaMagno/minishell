@@ -1,14 +1,22 @@
 #include "minishell.h"
 
-int	set_end_status(int signal)
+int	set_end_status(int status)
 {
 	t_map	*env;
+	char	*str_status;
 
+	str_status = NULL;
 	env = adress_env(NULL);
-	if (signal == SIGINT)
+	if (status == SIGINT)
 		env->put(env, ft_strdup("?"), ft_strdup("130"));
-	else if (signal == SIGQUIT)
+	else if (status == SIGQUIT)
 		env->put(env, ft_strdup("?"), ft_strdup("131"));
+	if (status != -1 && !ft_strcmp(env->get(env, "?"), "0"))
+	{
+		str_status = ft_itoa(status >> 8);
+		ex_code(env, str_status);
+		free(str_status);
+	}
 }
 
 void	exec(t_cmd	*cmd, t_map *env)
@@ -48,11 +56,7 @@ void	exec_2(t_cmd *cmd, t_map *env)
 		free_and_exit(env, cmd, 127);
 	}
 	else if (pid > 0 && waitpid(pid, &status, 0) && set_end_status(status))
-	{
 		(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
-		if (status != -1 && !ft_strcmp(env->get(env, "?"), 0))
-			ex_code(env, ft_itoa(status >> 8));
-	}
 	close_heredoc_fds(cmd);
 }
 
@@ -187,7 +191,7 @@ int	exec_functions(t_cmd *cmd, t_map *env, int child)
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return(ft_pwd(env), 1);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
-		return(print_env(env), 1);
+		return(print_env(env, cmd), 1);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return(ft_exit(env, cmd, child), 1);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)

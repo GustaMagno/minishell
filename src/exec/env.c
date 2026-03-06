@@ -78,12 +78,17 @@ void	create_env(t_map *env, char **envp)
 	ex_code(env, "0");
 }
 
-void	print_env(t_map *env)
+void	print_env(t_map *env, t_cmd *cmd)
 {
 	char	**my_env;
 	int		i;
 	int		last;
 
+	if (cmd->args[1])
+	{
+		write(1, "Invalid arguments", 18);
+		return ;
+	}
 	i = 0;
 	my_env = env->to_str(env);
 	while (my_env[i])

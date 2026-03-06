@@ -89,7 +89,7 @@ void				exec_external(t_cmd *cmd, t_map *env, char *exec_path);
 char				*find_value(char *envp);
 char				*find_key(char *envp);
 void				create_env(t_map *env, char **envp);
-void				print_env(t_map *env);
+void				print_env(t_map *env, t_cmd *cmd);
 void				free_path(t_path **path);
 int					is_space(char *line);
 int					ft_charalpha(char *str, int i);
@@ -150,5 +150,7 @@ char				*str_noquote(char *str);
 int					create_temp(char *tmp, size_t size);
 int					heredoc(char *end, t_map *env);
 void				set_ign_sig(void);
+char				*expanded_heredoc(char *line, char *eof, t_map *env);
+char				*no_quote(char *end);
 
 #endif
