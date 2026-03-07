@@ -40,7 +40,7 @@ static char	*transformate_line(char *line, char *new_line)
 			line[i] = '\3';
 		else if (!f && line[i] == ' ')
 			line[i] = '\2';
-		else if (put_redir(line, new_line, &i, &j))
+		else if (!f && put_redir(line, new_line, &i, &j))
 			continue;
 		new_line[j++] = line[i++];
 	}

@@ -7,7 +7,6 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 	char	*tmp;
 	char	*pwd;
 
-	if (cmd->args[2])
 	tmp = ft_strdup(env->get(env, "PWD"));
 	cd = cd_list(env, cmd);
 	env->put(env, ft_strdup("OLDPWD"), tmp);

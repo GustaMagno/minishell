@@ -35,6 +35,10 @@ void	set_ign_sig(void)
 
 void	handler_C(int signal)
 {
+	t_map	*env;
+
+	env = adress_env(NULL);
+	ex_code(env, "130");
 	write(1, "\n", 2);
 	rl_replace_line("", 0);
 	rl_on_new_line();

@@ -84,9 +84,9 @@ void	print_env(t_map *env, t_cmd *cmd)
 	int		i;
 	int		last;
 
-	if (cmd->args[1])
+	if (cmd->args[1] && write(1, "Invalid arguments\n", 19))
 	{
-		write(1, "Invalid arguments", 18);
+		ex_code(env, "1");
 		return ;
 	}
 	i = 0;
@@ -102,7 +102,6 @@ void	print_env(t_map *env, t_cmd *cmd)
 		printf("%s\n", my_env[i]);
 		i++;
 	}
-	ex_code(env, "0");
 	free_split(my_env);
 	ex_code(env, "0");
 }

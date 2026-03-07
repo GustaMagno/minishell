@@ -71,7 +71,8 @@ char	*expanded(char *str, t_map *env, int *flag)
 	{
 		if ((str[i] == '\'' || str[i] == '"') && (!f || f == str[i]))
 			f = str[i] * (f == 0);
-		if (str[i] == '$' && (!f || f == '"') && ++(*flag))
+		if (str[i] == '$' && str[i + 1] && str[i + 1] != 32  && str[i + 1] != '"'
+			&& str[i + 1] != '\'' && (!f || f == '"') && ++(*flag))
 		{
 			start = i;
 			end = start + 1;

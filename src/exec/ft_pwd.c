@@ -17,7 +17,7 @@ void	ft_pwd(t_map *env)
 			getcwd: cannot access parent directories:", 86);
 		ex_code(env, "ERROR");
 	}
-	if (ft_strcmp(env->get(env, "?"), "ERROR"))
+	if (!ft_strcmp(env->get(env, "?"), "ERROR"))
 		ex_code(env, "1");
 	else
 		ex_code(env, "0");
