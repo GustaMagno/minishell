@@ -8,15 +8,6 @@ void	free_and_exit(t_map *env, t_cmd *cmd, int exit_status)
 	exit(exit_status);
 }
 
-int	is_directory(char *path)
-{
-	struct stat path_stat;
-
-	if (!path || stat(path, &path_stat) == -1)
-		return (0);
-	return (S_ISDIR(path_stat.st_mode));
-}
-
 void	stat_check(char *path, t_cmd *cmd, t_map *env)
 {
 	struct stat path_stat;

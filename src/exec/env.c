@@ -65,6 +65,11 @@ void	create_env(t_map *env, char **envp)
 	char	*shlvl_value;
 
 	i = -1;
+	if (!envp || !envp[0])
+	{
+		empty_env(env);
+		return ;
+	}
 	while (envp[++i])
 		env->put(env, find_key(envp[i]), find_value(envp[i]));
 	shlvl_value = env->get(env, "SHLVL");
@@ -103,5 +108,18 @@ void	print_env(t_map *env, t_cmd *cmd)
 		i++;
 	}
 	free_split(my_env);
+	ex_code(env, "0");
+}
+
+void	empty_env(t_map *env)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (pwd)
+		env->put(env, ft_strdup("PWD"), pwd);
+	env->put(env, ft_strdup("SHLVL"), ft_strdup("1"));
+	env->put(env, ft_strdup("PATH"), 
+		ft_strdup("/usr/sbin:/usr/bin:/sbin:/bin"));
 	ex_code(env, "0");
 }

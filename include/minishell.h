@@ -118,7 +118,6 @@ void				ft_export(t_map *env, t_cmd *cmd);
 void				ft_exit(t_map *env, t_cmd *cmd, int child);
 void				ft_echo(t_cmd *cmd, t_map *env);
 void				ft_pwd(t_map *env);
-int					is_directory(char *path);
 int					expansion(t_cmd *cmd, t_map *env);
 void				stat_check(char *path, t_cmd *cmd, t_map *env);
 char				*ft_strchr(const char *s, int c);
@@ -152,5 +151,10 @@ int					heredoc(char *end, t_map *env);
 void				set_ign_sig(void);
 char				*expanded_heredoc(char *line, char *eof, t_map *env);
 char				*no_quote(char *end);
+void				path_dont_exist(t_map *env, char *cd);
+void				is_not_directory(t_map *env, char *cd);
+void				too_many_arguments(t_map *env, char *cd);
+int					conditions_check(t_map *env, t_cmd *cmd, char *cd);
+void				empty_env(t_map *env);
 
 #endif
