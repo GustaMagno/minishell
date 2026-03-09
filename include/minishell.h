@@ -156,5 +156,6 @@ void				is_not_directory(t_map *env, char *cd);
 void				too_many_arguments(t_map *env, char *cd);
 int					conditions_check(t_map *env, t_cmd *cmd, char *cd);
 void				empty_env(t_map *env);
+char				*create_new_pwd(char *oldpwd, char *cd);
 
 #endif
