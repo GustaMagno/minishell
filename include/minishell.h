@@ -160,5 +160,7 @@ char				*create_new_pwd(char *oldpwd, char *cd);
 int					stdin_1(char *input);
 int					stdout_1(char *output);
 int					stdout_2(char *output);
+void				wait_pipeline(int cmd_len, pid_t last_pid);
+void				exec_builtin_parent(t_cmd *cmd, t_map *env);
 
 #endif

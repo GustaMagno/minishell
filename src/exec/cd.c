@@ -1,6 +1,15 @@
 
 #include "minishell.h"
 
+static void	cd_error(t_map *env, char *tmp, char *cd)
+{
+	write(2, "minishell: cd: ", 15);
+	perror(cd);
+	ex_code(env, "1");
+	free(tmp);
+	free(cd);
+}
+
 void	exec_cd(t_map *env, t_cmd *cmd)
 {
 	char	*cd;
@@ -14,7 +23,7 @@ void	exec_cd(t_map *env, t_cmd *cmd)
 	if (conditions_check(env, cmd, cd) == 1)
 		return (free(tmp), (void)0);
 	if (chdir(cd) != 0)
-		return (perror("cd"), ex_code(env, "1"), free(tmp), free(cd));
+		return (cd_error(env, tmp, cd));
 	ex_code(env, "0");
 	if (tmp)
 		env->put(env, ft_strdup("OLDPWD"), tmp);
@@ -105,8 +114,7 @@ void	is_not_directory(t_map *env, char *cd)
 void	path_dont_exist(t_map *env, char *cd)
 {
 	write(2, "minishell: cd: ", 15);
-	write(2, cd, ft_strlen(cd));
-	write(2, ": No such file or directory\n", 28);
+	perror(cd);
 	ex_code(env, "1");
 	free(cd);
 	return ;
