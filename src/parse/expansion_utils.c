@@ -43,7 +43,7 @@ int		out_quotes(char *arg)
 	in_quote = 0;
 	while (arg[i])
 	{
-		if ((arg[i] == '\2' || arg[i] == '"') && (!in_quote || in_quote == arg[i]))
+		if ((arg[i] == '"') && (!in_quote || in_quote == arg[i]))
 			in_quote = arg[i] * (in_quote == 0);
 		if (arg[i] == ' ' && !in_quote)
 			return (1);
