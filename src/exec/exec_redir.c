@@ -54,26 +54,33 @@ int	create_temp(char *tmp, size_t size)
 }
 
 
-void	stdin_1(char *input)
+int	stdin_1(char *input)
 {
 	int	fd;
 
 	fd = open(input, O_RDONLY);
 	if (fd == -1)
-		return ;
+	{
+		write(2, "minishell:", 11);
+		write(2, input, ft_strlen(input));
+		write(2, ": No such file or directory\n", 28);
+		return (0);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	return (1);
 }
 
-void	stdout_1(char *output)
+int	stdout_1(char *output)
 {
 	int	fd;
 
 	fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return ;
+		return (0);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (1);
 }
 
 void	exec_heredoc(t_cmd *cmd, t_map *env)
@@ -97,23 +104,29 @@ void	exec_heredoc(t_cmd *cmd, t_map *env)
 	}
 }
 
-void	stdout_2(char *output)
+int	stdout_2(char *output)
 {
 	int	fd;
 
 	fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-		return ;
+	{
+		write(2, "minishell: ", 11);
+		write(2, output, ft_strlen(output));
+		write(2, ": Permission Denied\n", 21);
+		return (0);
+	};
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (1);
 }
 
-void	exec_redir(t_cmd *cmd, t_redir *redir)
+int	exec_redir(t_cmd *cmd, t_redir *redir)
 {
 	char	*temp;
 
 	if (!redir->args[0] || !redir->args[1])
-		return ;
+		return (1);
 	if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd != -1)
 	{
 		dup2(redir->fd, STDIN_FILENO);
@@ -124,22 +137,24 @@ void	exec_redir(t_cmd *cmd, t_redir *redir)
 	redir->args[1] = str_noquote(redir->args[1]);
 	free(temp);
 	if (ft_strcmp(redir->args[0], "<") == 0)
-		stdin_1(redir->args[1]);
+		return (stdin_1(redir->args[1]));
 	else if (ft_strcmp(redir->args[0], ">") == 0)
-		stdout_1(redir->args[1]);
+		return (stdout_1(redir->args[1]));
 	else if (ft_strcmp(redir->args[0], ">>") == 0)
-		stdout_2(redir->args[1]);
+		return (stdout_2(redir->args[1]));
+	return (1);
 }
 
-void	loop_redir(t_cmd *cmd)
+int	loop_redir(t_cmd *cmd)
 {
 	t_redir	*temp;
 
 	temp = cmd->redir;
 	while (temp)
 	{
-		exec_redir(cmd, temp);
+		if (!exec_redir(cmd, temp))
+			return (0);
 		temp = temp->next;
 	}
+	return (1);
 }
-

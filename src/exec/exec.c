@@ -49,8 +49,8 @@ void	exec_2(t_cmd *cmd, t_map *env)
 	if (pid == 0)
 	{
 		set_child_sig();
-		if (cmd->redir)
-			loop_redir(cmd);
+		if (cmd->redir && !loop_redir(cmd))
+			free_and_exit(env, cmd, 1);
 		if (!cmd->args || !cmd->args[0])
 			free_and_exit(env, cmd, 0);
 		ft_external(cmd, env);
@@ -127,8 +127,8 @@ void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 		dup2(ctx.fd_pipes[i - 1][0], STDIN_FILENO);
 	if (i < ctx.cmd_len - 1)
 		dup2(ctx.fd_pipes[i][1], STDOUT_FILENO);
-	if (tmp->redir)
-		loop_redir(tmp);
+	if (tmp->redir && !loop_redir(tmp))
+		free_and_exit(ctx.env, ctx.cmd, 1);
 	close_heredoc_fds(ctx.cmd);
 	close_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
 	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);

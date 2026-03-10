@@ -132,7 +132,7 @@ void				set_child_sig(void);
 void				set_heredoc_sig(void);
 void				exec_child_process(t_cmd *tmp, t_ctx ctx, int i);
 void				close_parent_pipes(int **fd_pipes, int i);
-void				loop_redir(t_cmd *cmd);
+int					loop_redir(t_cmd *cmd);
 void				free_pipes(int **pipes, int len);
 void				init_pipes(int **fd_pipes, int cmd_len);
 void				init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd);
@@ -157,5 +157,8 @@ void				too_many_arguments(t_map *env, char *cd);
 int					conditions_check(t_map *env, t_cmd *cmd, char *cd);
 void				empty_env(t_map *env);
 char				*create_new_pwd(char *oldpwd, char *cd);
+int					stdin_1(char *input);
+int					stdout_1(char *output);
+int					stdout_2(char *output);
 
 #endif

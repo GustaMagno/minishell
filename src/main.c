@@ -27,7 +27,7 @@ void	run(t_map *env)
 		cmd = parsing(line, env);
 		if (!cmd) 
 			continue;
-		print_cmd(cmd);
+		// print_cmd(cmd);
 		exec(cmd, env);
 		free_structs(cmd);
 	}
