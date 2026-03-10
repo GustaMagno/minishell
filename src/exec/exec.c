@@ -20,89 +20,95 @@ int	set_end_status(int status)
 	return (1);
 }
 
-void	exec(t_cmd	*cmd, t_map *env)
+void	exec(t_cmd *cmd, t_map *env)
 {
-	pid_t	pid;
-	int		status;
+    ex_code(env, "0");
+    exec_heredoc(cmd, env);
+    if (ft_lstsize(cmd) > 1)
+        pipeline(cmd, env);
+    else if (ft_lstsize(cmd) == 1)
+        exec_2(cmd, env);
+}
 
-	ex_code(env, "0");
-	exec_heredoc(cmd, env);
-	if (ft_lstsize(cmd) > 1)
-		pipeline(cmd, env);
-	else if (ft_lstsize(cmd) == 1)
-	{
-		if (!redir_input(cmd, env))
-			return ;
-		exec_2(cmd, env);
-	}
+static int	is_builtin(t_cmd *cmd)
+{
+    if (!cmd || !cmd->args || !cmd->args[0])
+        return (0);
+    if (ft_strcmp(cmd->args[0], "echo") == 0)
+        return (1);
+    if (ft_strcmp(cmd->args[0], "pwd") == 0)
+        return (1);
+    if (ft_strcmp(cmd->args[0], "env") == 0)
+        return (1);
+    if (ft_strcmp(cmd->args[0], "exit") == 0)
+        return (1);
+    if (ft_strcmp(cmd->args[0], "export") == 0)
+        return (1);
+    if (ft_strcmp(cmd->args[0], "unset") == 0)
+        return (1);
+    if (ft_strcmp(cmd->args[0], "cd") == 0)
+        return (1);
+    return (0);
+}
+
+void	exec_builtin_parent(t_cmd *cmd, t_map *env)
+{
+    int	save_in;
+    int	save_out;
+
+    save_in = dup(STDIN_FILENO);
+    save_out = dup(STDOUT_FILENO);
+    if (save_in < 0 || save_out < 0)
+        return ;
+    if (cmd->redir && !loop_redir(cmd))
+        ex_code(env, "1");
+    else
+        exec_functions(cmd, env, 0);
+    dup2(save_in, STDIN_FILENO);
+    dup2(save_out, STDOUT_FILENO);
+    close(save_in);
+    close(save_out);
 }
 
 void	exec_2(t_cmd *cmd, t_map *env)
 {
-	pid_t	pid;
-	int		status;
+    pid_t	pid;
+    int		status;
 
-	if (exec_functions(cmd, env, 0))
-			return ;
-	set_ign_sig();
-	pid = fork();
-	if (pid == 0)
-	{
-		set_child_sig();
-		if (cmd->redir && !loop_redir(cmd))
-			free_and_exit(env, cmd, 1);
-		if (!cmd->args || !cmd->args[0])
-			free_and_exit(env, cmd, 0);
-		ft_external(cmd, env);
-		free_and_exit(env, cmd, 127);
-	}
-	else if (pid > 0 && waitpid(pid, &status, 0) && set_end_status(status))
-		(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
-	close_heredoc_fds(cmd);
-}
-
-int	redir_input(t_cmd *cmd, t_map *env)
-{
-	t_redir	*redir;
-
-	if (cmd->redir)
-	{
-		redir = cmd->redir;
-		while(redir)
-		{
-			if (ft_strcmp(redir->args[0], "<") == 0)
-			{
-				if(!check_input(redir->args[1], cmd, env))
-					return (0);
-			}
-			redir = redir->next;		
-		}
-	}
-	return (1);
-}
-
-int	check_input(char *path, t_cmd *cmd, t_map *env)
-{
-	if (!path || access(path, R_OK) == -1)
-	{
-		write(2, "minishell: ", 11);
-		write(2, path, ft_strlen(path));
-		write(2, ": No such file or directory\n", 29);
-		ex_code(env, "1");
-		return (0);
-	}
-	return (1);
+    if (is_builtin(cmd))
+    {
+        exec_builtin_parent(cmd, env);
+        close_heredoc_fds(cmd);
+        return ;
+    }
+    set_ign_sig();
+    pid = fork();
+    if (pid == 0)
+    {
+        set_child_sig();
+        if (cmd->redir && !loop_redir(cmd))
+            free_and_exit(env, cmd, 1);
+        if (!cmd->args || !cmd->args[0])
+            free_and_exit(env, cmd, 0);
+        ft_external(cmd, env);
+        free_and_exit(env, cmd, 127);
+    }
+    else if (pid > 0 && waitpid(pid, &status, 0) && set_end_status(status))
+        (WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
+    close_heredoc_fds(cmd);
 }
 
 void	pipeline(t_cmd *cmd, t_map *env)
 {
 	int		i;
 	pid_t	pid;
+	pid_t	last_pid;
 	t_cmd	*tmp;
 	t_ctx	ctx;
 
 	tmp = cmd;
 	i = 0;
+	last_pid = -1;
 	init_ctx(&ctx, env, cmd);
 	init_pipes(ctx.fd_pipes, ctx.cmd_len);
 	while (i < ctx.cmd_len)
@@ -110,13 +116,13 @@ void	pipeline(t_cmd *cmd, t_map *env)
 		pid = fork();
 		if (pid == 0)
 			exec_child_process(tmp, ctx, i);
+		if (i == ctx.cmd_len - 1)
+			last_pid = pid;
 		close_parent_pipes(ctx.fd_pipes, i);
 		tmp = tmp->next;
 		i++;
 	}
-	i = -1;
-	while (++i < ctx.cmd_len)
-		wait(NULL);
+	wait_pipeline(ctx.cmd_len, last_pid);
 	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);
 	close_heredoc_fds(ctx.cmd);
 }
@@ -258,6 +264,22 @@ void	close_heredoc_fds(t_cmd *cmd)
 			redir = redir->next;
 		}
 		tmp = tmp->next;
+	}
+}
+
+void	wait_pipeline(int cmd_len, pid_t last_pid)
+{
+	int		i;
+	int		status;
+	pid_t	pid;
+
+	i = 0;
+	while (i < cmd_len)
+	{
+		pid = waitpid(-1, &status, 0);
+		if (pid == last_pid)
+			set_end_status(status);
+		i++;
 	}
 }
 

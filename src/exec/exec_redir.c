@@ -60,12 +60,7 @@ int	stdin_1(char *input)
 
 	fd = open(input, O_RDONLY);
 	if (fd == -1)
-	{
-		write(2, "minishell:", 11);
-		write(2, input, ft_strlen(input));
-		write(2, ": No such file or directory\n", 28);
-		return (0);
-	}
+		return (write(2, "minishell: ", 11), perror(input), 0);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (1);
@@ -77,7 +72,7 @@ int	stdout_1(char *output)
 
 	fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (0);
+		return (write(2, "minishell: ", 11), perror(output), 0);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (1);
@@ -110,12 +105,7 @@ int	stdout_2(char *output)
 
 	fd = open(output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-	{
-		write(2, "minishell: ", 11);
-		write(2, output, ft_strlen(output));
-		write(2, ": Permission Denied\n", 21);
-		return (0);
-	};
+		return (write(2, "minishell: ", 11), perror(output), 0);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (1);
