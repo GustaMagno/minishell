@@ -17,6 +17,7 @@ int	set_end_status(int status)
 		ex_code(env, str_status);
 		free(str_status);
 	}
+	return (1);
 }
 
 void	exec(t_cmd	*cmd, t_map *env)
