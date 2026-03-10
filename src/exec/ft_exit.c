@@ -6,6 +6,8 @@ int		exceed_limits(char	*str)
 	int					negative;
 
 	negative = 0;
+	while ((*str > 8 && *str < 14) || *str == 32)
+		str++;
 	if (str[0] == '-' && str++)
 		negative++;
 	if (ft_strlen(str) > 19)
