@@ -54,8 +54,6 @@ int	free_node_content(t_cmd *node)
 void	free_structs(t_cmd *cmd)
 {
 	t_cmd	*node;
-	t_redir	*r_node;
-	t_redir	*temp_r;
 	t_cmd	*temp_c;
 
 	if (!cmd)

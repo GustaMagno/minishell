@@ -4,7 +4,6 @@
 char	**new_split(char **cmd_args)
 {
 	char	**new_args;
-	char	**temp;
 	int		i;
 	int		j;
 

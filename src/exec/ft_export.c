@@ -80,7 +80,6 @@ int	export_str(char *str, t_map *env)
 void	ft_export(t_map *env, t_cmd *cmd)
 {
 	int	i;
-	int	j;
 
 	i = 1;
 	while (cmd->args[i])
