@@ -17,7 +17,6 @@ static int	eof_quote(char *end)
 char	*no_quote(char *end)
 {
 	char	*ssub;
-	char	*sjoin;
 
 	if (!eof_quote(end))
 		return (end);

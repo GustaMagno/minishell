@@ -2,7 +2,7 @@
 NAME = minishell
 CC = cc
 
-CFLAGS = -g -Iinclude # -fsanitize=address -fno-omit-frame-pointer #-Wall -Wextra -Werror
+CFLAGS = -g -Iinclude -Wall -Wextra -Werror # -fsanitize=address -fno-omit-frame-pointer 
 
 LDFLAGS = -lreadline
 

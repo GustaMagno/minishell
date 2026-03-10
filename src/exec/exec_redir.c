@@ -121,7 +121,7 @@ int	stdout_2(char *output)
 	return (1);
 }
 
-int	exec_redir(t_cmd *cmd, t_redir *redir)
+int	exec_redir(t_redir *redir)
 {
 	char	*temp;
 
@@ -152,7 +152,7 @@ int	loop_redir(t_cmd *cmd)
 	temp = cmd->redir;
 	while (temp)
 	{
-		if (!exec_redir(cmd, temp))
+		if (!exec_redir(temp))
 			return (0);
 		temp = temp->next;
 	}

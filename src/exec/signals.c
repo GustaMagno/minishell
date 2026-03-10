@@ -37,6 +37,7 @@ void	handler_C(int signal)
 {
 	t_map	*env;
 
+	(void) signal;
 	env = adress_env(NULL);
 	ex_code(env, "130");
 	write(1, "\n", 2);

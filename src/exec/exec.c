@@ -22,9 +22,6 @@ int	set_end_status(int status)
 
 void	exec(t_cmd	*cmd, t_map *env)
 {
-	pid_t	pid;
-	int		status;
-
 	ex_code(env, "0");
 	exec_heredoc(cmd, env);
 	if (ft_lstsize(cmd) > 1)
@@ -72,7 +69,7 @@ int	redir_input(t_cmd *cmd, t_map *env)
 		{
 			if (ft_strcmp(redir->args[0], "<") == 0)
 			{
-				if(!check_input(redir->args[1], cmd, env))
+				if(!check_input(redir->args[1], env))
 					return (0);
 			}
 			redir = redir->next;		
@@ -81,7 +78,7 @@ int	redir_input(t_cmd *cmd, t_map *env)
 	return (1);
 }
 
-int	check_input(char *path, t_cmd *cmd, t_map *env)
+int	check_input(char *path, t_map *env)
 {
 	if (!path || access(path, R_OK) == -1)
 	{
