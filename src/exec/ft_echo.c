@@ -6,7 +6,7 @@ int	is_flag(char **args)
 	int	j;
 
 	i = 1;
-	while (!(ft_strncmp(args[i], "-n", 2)))
+	while (args[i] && !(ft_strncmp(args[i], "-n", 2)))
 	{
 		j = 1;
 		while (args[i][0] == '-' && args[i][j] == 'n')
@@ -23,17 +23,18 @@ void	ft_echo(t_cmd *cmd, t_map *env)
 	int	i;
 
 	if (!cmd->args[1])
-		return ((void)printf("\n"));
+		return ((void)write(1, "\n", 1));
 	i = is_flag(cmd->args);
 	if (!cmd->args[i])
 		return ;
 	while (cmd->args[i + 1])
 	{
-		printf("%s ", cmd->args[i]);
+		write(1, cmd->args[i], ft_strlen(cmd->args[i]));
+		write(1, " ", 1);
 		i++;
 	}
-	printf("%s", cmd->args[i]);
+	write(1, cmd->args[i], ft_strlen(cmd->args[i]));
 	if (is_flag(cmd->args) == 1)
-		printf("\n");
+		write(1, "\n", 1);
 	ex_code(env, "0");
 }
