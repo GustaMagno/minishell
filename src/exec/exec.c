@@ -41,7 +41,7 @@ static int	is_builtin(t_cmd *cmd)
     if (ft_strcmp(cmd->args[0], "env") == 0)
         return (1);
     if (ft_strcmp(cmd->args[0], "exit") == 0)
-        return (1);
+        return (2);
     if (ft_strcmp(cmd->args[0], "export") == 0)
         return (1);
     if (ft_strcmp(cmd->args[0], "unset") == 0)
@@ -68,6 +68,7 @@ void	exec_builtin_parent(t_cmd *cmd, t_map *env)
     dup2(save_out, STDOUT_FILENO);
     close(save_in);
     close(save_out);
+	close_heredoc_fds(cmd);
 }
 
 void	exec_2(t_cmd *cmd, t_map *env)
@@ -75,12 +76,12 @@ void	exec_2(t_cmd *cmd, t_map *env)
     pid_t	pid;
     int		status;
 
-    if (is_builtin(cmd))
-    {
-        exec_builtin_parent(cmd, env);
-        close_heredoc_fds(cmd);
-        return ;
-    }
+    if (is_builtin(cmd) == 1)
+        return (exec_builtin_parent(cmd, env));
+	else if (is_builtin(cmd) == 2 && (!cmd->redir || loop_redir(cmd)))
+		return (ft_exit(env, cmd, 0), close_heredoc_fds(cmd), (void)0);
+	else if (is_builtin(cmd) == 2)
+		return (ex_code(env, "1"), close_heredoc_fds(cmd), (void)0);
     set_ign_sig();
     pid = fork();
     if (pid == 0)
