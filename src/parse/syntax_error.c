@@ -2,7 +2,6 @@
 
 int	redircmp(char *str)
 {
-	//se <<< exitstatus 0
 	if (!ft_strcmp(str, "<<"))
 		return (1);
 	if (!ft_strcmp(str, ">>"))
@@ -16,8 +15,8 @@ int	redircmp(char *str)
 
 int	error_in_pipe(char *line)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (line[0] == '\3')

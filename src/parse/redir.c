@@ -27,7 +27,7 @@ t_redir	*new_redir(char *arg1, char *arg2)
 int	redir_in_cmd(char *cmd_arg)
 {
 	if (!ft_strcmp(cmd_arg, ">>") || !ft_strcmp(cmd_arg, "<<")
-	|| !ft_strcmp(cmd_arg, "<") || !ft_strcmp(cmd_arg, ">"))
+		|| !ft_strcmp(cmd_arg, "<") || !ft_strcmp(cmd_arg, ">"))
 		return (1);
 	return (0);
 }
@@ -40,7 +40,6 @@ char	**clean_cmd(char **args)
 
 	i = 0;
 	j = 0;
-	
 	new_args = ft_calloc(ft_argslen(args) + 1, sizeof(char *));
 	if (!new_args)
 		return (args);

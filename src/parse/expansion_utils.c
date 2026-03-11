@@ -5,7 +5,7 @@ void	split_words(char *arg, char **new_args, int *j)
 {
 	char	**split_arg;
 	int		i;
-	int 	k;
+	int		k;
 
 	i = 0;
 	k = *j;
@@ -20,8 +20,8 @@ void	split_words(char *arg, char **new_args, int *j)
 
 int	count_new_split(char **cmd_args)
 {
-	int count;
-	int i;
+	int	count;
+	int	i;
 
 	count = 0;
 	i = 0;
@@ -34,7 +34,8 @@ int	count_new_split(char **cmd_args)
 	}
 	return (count);
 }
-int		out_quotes(char *arg)
+
+int	out_quotes(char *arg)
 {
 	int		i;
 	char	in_quote;
@@ -52,7 +53,7 @@ int		out_quotes(char *arg)
 	return (0);
 }
 
-int remove_null_node(t_cmd *cmd)
+int	remove_null_node(t_cmd *cmd)
 {
 	t_cmd	*node;
 

@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+int	char_flag(char c)
+{
+	if (c == '"' || c == '\'' || c == '\2')
+		return (1);
+	return (0);
+}
+
 char	*str_noquote(char *str)
 {
 	int		i;
@@ -15,13 +22,13 @@ char	*str_noquote(char *str)
 		return (NULL);
 	while (str[++i])
 	{
-		if ((str[i] == '"' || str[i] == '\'' || str[i] == '\2') && (!f || f == str[i]))
+		if (char_flag(str[i]) && (!f || f == str[i]))
 		{
 			f = str[i] * (f == '\0');
 			continue ;
 		}
-		if ((str[i] == '"' && f != '\'' && f != '\2' && str[i - 1] != '\\') || (str[i] == '\'' 
-			&& f != '"' && f != '\2' && str[i - 1] != '\\'))
+		if ((str[i] == '"' && f != '\'' && f != '\2' && str[i - 1] != '\\')
+			|| (str[i] == '\'' && f != '"' && f != '\2' && str[i - 1] != '\\'))
 			continue ;
 		i += (str[i] == '\\' && (str[i + 1] == '\'' || str[i + 1] == '"'));
 		new_str[j++] = str[i];
