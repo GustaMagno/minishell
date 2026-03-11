@@ -2,8 +2,8 @@
 
 static int	put_redir(char *line, char *new_line, size_t *i, size_t *j)
 {
-	size_t i1;
-	size_t j1;
+	size_t	i1;
+	size_t	j1;
 
 	i1 = *i;
 	j1 = *j;
@@ -16,7 +16,7 @@ static int	put_redir(char *line, char *new_line, size_t *i, size_t *j)
 		new_line[j1++] = '\2';
 		*i = i1;
 		*j = j1;
-		return (1);	
+		return (1);
 	}
 	return (0);
 }
@@ -41,7 +41,7 @@ static char	*transformate_line(char *line, char *new_line)
 		else if (!f && line[i] == ' ')
 			line[i] = '\2';
 		else if (!f && put_redir(line, new_line, &i, &j))
-			continue;
+			continue ;
 		new_line[j++] = line[i++];
 	}
 	return (free(line), new_line);
@@ -59,12 +59,12 @@ t_cmd	*parsing(char *line, t_map *env)
 	if (!line)
 		return (free(line), NULL);
 	if (error_in_pipe(line))
-		return (free(line), write(2, SYNTAX_ERROR, 41), ex_code(env, "2"), NULL);
+		return (free(line), write(2, S_ERRO, 41), ex_code(env, "2"), NULL);
 	cmd = parsing_cmd(line);
 	if (!cmd)
 		return (free(line), NULL);
-	if (syntax_error(cmd, line))
-		return (write(2, SYNTAX_ERROR, 41), ex_code(env, "2"), free_structs(cmd), NULL);
+	if (syntax_error(cmd, line) && write(2, S_ERRO, 41))
+		return (ex_code(env, "2"), free_structs(cmd), NULL);
 	if (!parsing_redir(cmd) || !expansion(cmd, env) || !remove_quotes(cmd))
 		return (free_structs(cmd), NULL);
 	return (cmd);

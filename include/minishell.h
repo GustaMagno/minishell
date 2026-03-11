@@ -12,7 +12,7 @@
 # include <sys/stat.h>
 # include "map.h"
 
-# define SYNTAX_ERROR "bash: syntax error near unexpected token\n"
+# define S_ERRO "bash: syntax error near unexpected token\n"
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 2
 # endif

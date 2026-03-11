@@ -23,8 +23,7 @@ char	**new_split(char **cmd_args)
 	return (free_split(cmd_args), new_args);
 }
 
-
-static int replace(char **str, int start, int end, t_map *env)
+static int	replace(char **str, int start, int end, t_map *env)
 {
 	char	*str_value;
 	char	*replaced;
@@ -70,7 +69,7 @@ char	*expanded(char *str, t_map *env, int *flag)
 	{
 		if ((str[i] == '\'' || str[i] == '"') && (!f || f == str[i]))
 			f = str[i] * (f == 0);
-		if (str[i] == '$' && str[i + 1] && str[i + 1] != 32  && str[i + 1] != '"'
+		if (str[i] == '$' && str[i + 1] && str[i + 1] != 32 && str[i + 1] != '"'
 			&& str[i + 1] != '\'' && (!f || f == '"') && ++(*flag))
 		{
 			start = i;
@@ -86,7 +85,7 @@ char	*expanded(char *str, t_map *env, int *flag)
 int	expansion(t_cmd *cmd, t_map *env)
 {
 	t_cmd	*node;
-	int 	i;
+	int		i;
 	int		flag;
 
 	node = cmd;
