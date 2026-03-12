@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 18:05:09 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 18:05:10 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAP_H
 # define MAP_H
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+# include <stdlib.h>
 
-typedef	struct s_map t_map;
-typedef	struct s_map_private t_map_private;
-typedef struct s_node t_node;
+typedef struct s_map			t_map;
+typedef struct s_map_private	t_map_private;
+typedef struct s_node			t_node;
 
-t_map 	*new_map();
+t_map	*new_map(void);
 
 struct s_node
 {

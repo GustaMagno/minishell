@@ -17,7 +17,7 @@
 #  define BUFFER_SIZE 2
 # endif
 
-extern int g_signal;
+extern int	g_signal;
 typedef struct s_redir
 {
 	char			*args[3];
@@ -45,7 +45,6 @@ typedef struct s_ctx
 	int				**fd_pipes;
 	t_cmd			*cmd;
 }	t_ctx;
-
 
 char				**ft_split(char const *s, char c);
 size_t				count_words(char const *s, char c);
@@ -95,20 +94,21 @@ int					is_space(char *line);
 int					ft_charalpha(char *str, int i);
 int					ft_strisnum(char *str);
 int					ft_stralpha(char *str);
-char				*ft_strjoinfree(char *s1, char *s2, char *s1_temp, char *s2_temp);
+char				*ft_strjoinfree(char *s1, char *s2, char *s1_temp,
+						char *s2_temp);
 void				print_cmd(t_cmd *cmd);
 int					count_args(char **cmd_args, t_map *env);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
-int 				remove_null_node(t_cmd *cmd);
+int					remove_null_node(t_cmd *cmd);
 int					count_new_split(char **cmd_args);
 int					out_quotes(char *arg);
-void 				access_check(t_cmd *cmd, t_map *env, char *exec_path);
+void				access_check(t_cmd *cmd, t_map *env, char *exec_path);
 int					ft_lstsize(t_cmd *lst);
 int					expansion(t_cmd *cmd, t_map *env);
 void				pipeline(t_cmd *cmd, t_map *env);
 int					**alloc_pipe(int n_cmds);
-void				close_pipes(int	**fd_pipes, int	t_pipes);
+void				close_pipes(int **fd_pipes, int t_pipes);
 int					exec_functions(t_cmd *cmd, t_map *env, int child);
 int					remove_quotes(t_cmd *cmd);
 char				*set_expansion(char *str);
