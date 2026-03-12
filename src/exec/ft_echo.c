@@ -1,4 +1,6 @@
 #include "minishell.h"
+// #include <errno.h>
+
 
 int	is_flag(char **args)
 {
@@ -27,6 +29,7 @@ void	ft_echo(t_cmd *cmd, t_map *env)
 	i = is_flag(cmd->args);
 	if (!cmd->args[i])
 		return ;
+	// signal(SIGPIPE, SIG_IGN);
 	while (cmd->args[i + 1])
 	{
 		write(1, cmd->args[i], ft_strlen(cmd->args[i]));
@@ -37,4 +40,5 @@ void	ft_echo(t_cmd *cmd, t_map *env)
 	if (is_flag(cmd->args) == 1)
 		write(1, "\n", 1);
 	ex_code(env, "0");
+	// signal(SIGPIPE, SIG_DFL);
 }

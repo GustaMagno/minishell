@@ -57,10 +57,8 @@ char	**new_args(char **args)
 int	remove_quotes(t_cmd *cmd)
 {
 	t_cmd	*node;
-	int		i;
 
 	node = cmd;
-	i = 0;
 	while (node)
 	{
 		node->args = new_args(node->args);
