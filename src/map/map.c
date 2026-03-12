@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:51:50 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:51:50 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "map.h"
 
-t_map 		*new_map();
+t_map		*new_map(void);
 int			count_nodes(t_node	*head);
 void		free_node(t_node *node);
 t_node		*find_node(t_map_private *map, char *key);
@@ -18,8 +30,9 @@ char	**to_str(struct s_map_private *this)
 	if (!str)
 		return (NULL);
 	while (node)
-	{	
-		str[i++] = ft_mapstrjoin(ft_mapstrjoin(node->key, "=", 0), node->value, 0);
+	{
+		str[i++] = ft_mapstrjoin(ft_mapstrjoin(node->key, "=", 0),
+				node->value, 0);
 		node = node->next;
 	}
 	return (str);
@@ -77,8 +90,8 @@ char	*_get(struct s_map_private *this, char *key)
 
 void	__put(struct s_map_private *this, char *key, char *value)
 {
-	t_node *node;
-	t_node *temp;
+	t_node	*node;
+	t_node	*temp;
 
 	if (!key || !value)
 		return ;

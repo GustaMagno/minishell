@@ -11,10 +11,9 @@ t_map	*adress_env(t_map *env)
 	return (copy);
 }
 
-
 void	run(t_map *env)
 {
-	char *line;
+	char	*line;
 	t_cmd	*cmd;
 
 	while (1)
@@ -23,17 +22,16 @@ void	run(t_map *env)
 		signal(SIGQUIT, SIG_IGN);
 		line = readline("minishell: ");
 		if (!line)
-			break;
+			break ;
 		cmd = parsing(line, env);
-		if (!cmd) 
-			continue;
-		// print_cmd(cmd);
+		if (!cmd)
+			continue ;
 		exec(cmd, env);
 		free_structs(cmd);
 	}
 }
 
-int main(int argv, char **argc, char **envp)
+int	main(int argv, char **argc, char **envp)
 {
 	t_map	*env;
 
@@ -47,4 +45,3 @@ int main(int argv, char **argc, char **envp)
 	run(env);
 	env->destroy(env);
 }
-
