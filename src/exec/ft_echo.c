@@ -1,6 +1,5 @@
-#include "minishell.h"
-// #include <errno.h>
 
+#include "minishell.h"
 
 int	is_flag(char **args)
 {

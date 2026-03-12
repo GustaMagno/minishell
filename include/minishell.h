@@ -127,7 +127,7 @@ void				free_int_array(int **args, int n);
 unsigned long long	ft_atoull(const char *str);
 void				ex_code(t_map *env, char *str);
 void				run(t_map *env);
-void				handler_C(int signal);
+void				handler_c(int signal);
 void				set_child_sig(void);
 void				set_heredoc_sig(void);
 void				exec_child_process(t_cmd *tmp, t_ctx ctx, int i);

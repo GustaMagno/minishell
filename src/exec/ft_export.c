@@ -39,13 +39,13 @@ void	print_export(t_map *env)
 		j = 0;
 		write(1, "declare -x ", 12);
 		while (my_export[i][j] && my_export[i][j] != '=')
-				write(1, &my_export[i][j++], 1);
+			write(1, &my_export[i][j++], 1);
 		if (my_export[i][j + 1] == '\2' && write(1, "\n", 1))
 			continue ;
 		write(1, &my_export[i][j++], 1);
 		write(1, "\"", 1);
 		while (my_export[i][j])
-				write(1, &my_export[i][j++], 1);
+			write(1, &my_export[i][j++], 1);
 		write(1, "\"", 1);
 		write(1, "\n", 1);
 	}
@@ -66,7 +66,8 @@ int	export_str(char *str, t_map *env)
 	key = ft_substr(str, 0, i);
 	if (!key)
 		return (0);
-	if ((!ft_stralpha(key) || str[0] == '=') && write(2, "bash: export: not a valid identifier\n", 37))
+	if ((!ft_stralpha(key) || str[0] == '=') && 
+		write(2, "bash: export: not a valid identifier\n", 37))
 		return (free(key), ex_code(env, "ERROR"), 1);
 	value = ft_substr(str, i + 1, ft_strlen(str + i));
 	if (!value)

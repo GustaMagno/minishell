@@ -33,7 +33,7 @@ void	set_ign_sig(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	handler_C(int signal)
+void	handler_c(int signal)
 {
 	t_map	*env;
 

@@ -2,7 +2,7 @@
 
 static int	eof_quote(char *end)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (end[i])
@@ -23,7 +23,6 @@ char	*no_quote(char *end)
 	ssub = str_noquote(end);
 	return (ssub);
 }
-
 
 int	modify_line(char **str, int start, int end, t_map *env)
 {

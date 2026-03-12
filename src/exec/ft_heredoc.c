@@ -16,7 +16,8 @@ static char	*heredoc_loop(char *end, t_map *env)
 			free(line);
 			line = NULL;
 		}
-		if ((!buffer && write(1, "\n", 1)) || ft_strcmp(buffer, end_no_quotes) == 0)
+		if ((!buffer && write(1, "\n", 1))
+			|| ft_strcmp(buffer, end_no_quotes) == 0)
 			break ;
 		line = ft_strjoinfree(line, buffer, line, buffer);
 	}
@@ -46,8 +47,7 @@ int	heredoc(char *end, t_map *env)
 	close(fd);
 	fd = open(tmp, O_RDONLY);
 	unlink(tmp);
-	signal(SIGINT, handler_C);
+	signal(SIGINT, handler_c);
 	signal(SIGINT, SIG_IGN);
 	return (free(end), close(save_stdin), fd);
 }
-

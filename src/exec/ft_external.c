@@ -39,7 +39,7 @@ void	ft_external(t_cmd *cmd, t_map *env)
 	access_check(cmd, env, exec_path);
 }
 
-void access_check(t_cmd *cmd, t_map *env, char *exec_path)
+void	access_check(t_cmd *cmd, t_map *env, char *exec_path)
 {
 	if (exec_path == NULL)
 	{

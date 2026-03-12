@@ -19,7 +19,7 @@ void	run(t_map *env)
 
 	while (1)
 	{
-		signal(SIGINT, handler_C);
+		signal(SIGINT, handler_c);
 		signal(SIGQUIT, SIG_IGN);
 		line = readline("minishell: ");
 		if (!line)

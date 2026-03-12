@@ -53,7 +53,7 @@ char	*find_value(char *envp)
 		value[j] = envp[i];
 		i++;
 		j++;
- 	}
+	}
 	value[j] = '\0';
 	return (value);
 }
@@ -119,7 +119,7 @@ void	empty_env(t_map *env)
 	if (pwd)
 		env->put(env, ft_strdup("PWD"), pwd);
 	env->put(env, ft_strdup("SHLVL"), ft_strdup("1"));
-	env->put(env, ft_strdup("PATH"), 
+	env->put(env, ft_strdup("PATH"),
 		ft_strdup("/usr/sbin:/usr/bin:/sbin:/bin"));
 	ex_code(env, "0");
 }

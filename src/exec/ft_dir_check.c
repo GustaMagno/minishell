@@ -1,5 +1,5 @@
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	free_and_exit(t_map *env, t_cmd *cmd, int exit_status)
 {
@@ -10,7 +10,7 @@ void	free_and_exit(t_map *env, t_cmd *cmd, int exit_status)
 
 void	stat_check(char *path, t_cmd *cmd, t_map *env)
 {
-	struct stat path_stat;
+	struct stat	path_stat;
 
 	if (!path || stat(path, &path_stat) == -1)
 	{
