@@ -1,28 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_struct_cmd.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:17:28 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:17:28 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_split(char **args)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!args)
 		return ;
 	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
-}
-
-void	free_int_array(int **args, int n)
-{
-	int i;
-
-	i = 0;
-	if (!args)
-		return ;
-	while (i < n)
 	{
 		free(args[i]);
 		i++;
@@ -95,4 +92,3 @@ void	free_all(char **str, t_path **path, t_path *node)
 		free_split(str);
 	return ;
 }
-

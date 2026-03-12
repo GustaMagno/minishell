@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:21:10 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:21:10 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*ft_strjoin2(char *s1, char *s2, char *s1_temp)
@@ -27,6 +39,7 @@ char	*ft_strjoin2(char *s1, char *s2, char *s1_temp)
 	*str = '\0';
 	return (temp);
 }
+
 int	check_newline(char *str)
 {
 	int	i;
@@ -40,6 +53,7 @@ int	check_newline(char *str)
 	}
 	return (1);
 }
+
 void	clean_buffer(char *buffer, int check)
 {
 	int	i;
@@ -50,14 +64,14 @@ void	clean_buffer(char *buffer, int check)
 	while (buffer[i])
 	{
 		if (!check && buffer[i] == '\n')
-		{	
+		{
 			buffer[i++] = '\0';
-			break;
+			break ;
 		}
 		buffer[i++] = '\0';
 	}
 	while (buffer[i])
-	{	
+	{
 		buffer[j++] = buffer[i];
 		buffer[i++] = '\0';
 	}
@@ -69,13 +83,13 @@ char	*get_next_line(int fd)
 	static char	s[BUFFER_SIZE + 1];
 	char		*line;
 	int			size;
-	
+
 	line = NULL;
 	size = 1;
 	if (fd < 0 || fd >= FOPEN_MAX)
 		return (NULL);
 	while (size)
-	{	
+	{
 		if (*s == '\0')
 			size = read(fd, s, BUFFER_SIZE);
 		if (size < 0)

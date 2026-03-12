@@ -19,7 +19,7 @@ char	**to_str(struct s_map_private *this)
 		return (NULL);
 	while (node)
 	{	
-		str[i++] = ft_mapstrjoin(ft_mapstrjoin(node->key, "="), node->value);
+		str[i++] = ft_mapstrjoin(ft_mapstrjoin(node->key, "=", 0), node->value, 0);
 		node = node->next;
 	}
 	return (str);

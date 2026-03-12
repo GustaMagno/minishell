@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strisnum.c                                      :+:      :+:    :+:   */
+/*   ft_put_exitcode.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/12 17:20:46 by gustoliv          #+#    #+#             */
-/*   Updated: 2026/03/12 17:20:46 by gustoliv         ###   ########.fr       */
+/*   Created: 2026/03/12 17:16:59 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:16:59 by gustoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strisnum(char *str)
+void	ex_code(t_map *env, char *str)
 {
-	int	i;
-
-	if (!str)
-		return (0);
-	i = 0;
-	while ((str[i] > 8 && str[i] < 14) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
-		i++;
-	}
-	return (1);
+	env->put(env, ft_strdup("?"), ft_strdup(str));
 }

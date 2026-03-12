@@ -96,6 +96,6 @@ void	exec_2(t_cmd *cmd, t_map *env)
 	}
 	else if (pid > 0 && waitpid(pid, &status, 0) && set_end_status(status))
 		(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
-		close_heredoc_fds(cmd);
+	close_heredoc_fds(cmd);
 }
 

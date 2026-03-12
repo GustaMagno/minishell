@@ -60,7 +60,7 @@ size_t				ft_strlen(const char *str);
 int					ft_atoi(const char *str);
 char				*ft_itoa(int n);
 char				*ft_strjoin(char *s1, char *s2);
-char				*ft_mapstrjoin(char *s1, char *s2);
+char				*ft_mapstrjoin(char *s1, char *s2, int check);
 char				*ft_strdup(const char *s);
 t_cmd				*parsing_cmd(char *line);
 char				**final_split(char *line);

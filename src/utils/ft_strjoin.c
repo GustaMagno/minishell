@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:09:32 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:09:32 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "map.h"
 #include "minishell.h"
 
@@ -24,10 +36,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (temp);
 }
 
-char	*ft_mapstrjoin(char *s1, char *s2)
+char	*ft_mapstrjoin(char *s1, char *s2, int check)
 {
 	char	*str;
-	int 	check;
 	int		len_s1;
 	int		len_s2;
 	char	*temp_str;

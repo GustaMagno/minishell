@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_stralpha.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:23:09 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:23:09 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_stralpha(char *str)
 {
-	int i;
+	int	i;
 
 	if (!str)
 		return (0);
@@ -11,9 +23,11 @@ int	ft_stralpha(char *str)
 		return (0);
 	while (str[i])
 	{
-		if ((str[i] > 122 || str[i] < 65) && str[i] != '_' && !(str[i] >= '0' && str[i] <= '9'))
+		if ((str[i] > 122 || str[i] < 65) && str[i] != '_'
+			&& !(str[i] >= '0' && str[i] <= '9'))
 			return (0);
-		if (str[i] > 90 && str[i] < 97 && str[i] != '_' && !(str[i] >= '0' && str[i] <= '9'))
+		if (str[i] > 90 && str[i] < 97 && str[i] != '_'
+			&& !(str[i] >= '0' && str[i] <= '9'))
 			return (0);
 		i++;
 	}

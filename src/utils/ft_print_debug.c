@@ -1,40 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_print_debug.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/12 17:16:00 by gustoliv          #+#    #+#             */
-/*   Updated: 2026/03/12 17:16:01 by gustoliv         ###   ########.fr       */
+/*   Created: 2026/03/12 17:14:17 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:15:01 by gustoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_atoi(const char *str)
+void	print_args(char **args, int flag)
 {
-	unsigned int	i;
-	int				check;
-	int				nb;
+	int	i;
 
 	i = 0;
-	check = 0;
-	nb = 0;
-	while ((str[i] > 8 && str[i] < 14) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
+	while (args[i])
 	{
-		if (str[i] == '-')
-			check++;
-		i++;
+		if (flag)
+			printf("  CMD ");
+		else
+			printf("  REDIR ");
+		printf("	%s\n", args[i++]);
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+}
+
+void	print_cmd(t_cmd *cmd)
+{
+	t_cmd	*node;
+	t_redir	*rnode;
+
+	node = cmd;
+	while (node)
 	{
-		nb = (nb * 10) + (str[i] - 48);
-		i++;
+		rnode = node->redir;
+		printf("NODE :\n");
+		print_args(node->args, 1);
+		while (rnode)
+		{
+			print_args(rnode->args, 0);
+			rnode = rnode->next;
+		}
+		printf("\n");
+		node = node->next;
 	}
-	if (check == 1)
-		nb *= -1;
-	return (nb);
 }
