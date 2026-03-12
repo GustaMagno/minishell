@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:33:26 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:33:26 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	order_export(char **my_export)
@@ -66,8 +78,8 @@ int	export_str(char *str, t_map *env)
 	key = ft_substr(str, 0, i);
 	if (!key)
 		return (0);
-	if ((!ft_stralpha(key) || str[0] == '=') && 
-		write(2, "bash: export: not a valid identifier\n", 37))
+	if ((!ft_stralpha(key) || str[0] == '=')
+		&& write(2, "bash: export: not a valid identifier\n", 37))
 		return (free(key), ex_code(env, "ERROR"), 1);
 	value = ft_substr(str, i + 1, ft_strlen(str + i));
 	if (!value)

@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 void	exec_external(t_cmd *cmd, t_map *env, char *exec_path)

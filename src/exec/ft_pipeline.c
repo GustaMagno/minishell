@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 void	pipeline(t_cmd *cmd, t_map *env)
@@ -51,6 +50,7 @@ void	exec_child_process(t_cmd *tmp, t_ctx ctx, int i)
 		free_and_exit(ctx.env, ctx.cmd, 127);
 	}
 }
+
 int	**alloc_pipe(int n_cmds)
 {
 	int	**pipes;
@@ -70,7 +70,7 @@ int	**alloc_pipe(int n_cmds)
 	return (pipes);
 }
 
-void	free_pipes(int **pipes, int	len)
+void	free_pipes(int **pipes, int len)
 {
 	int	i;
 

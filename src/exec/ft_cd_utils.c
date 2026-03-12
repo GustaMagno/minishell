@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 void	too_many_arguments(t_map *env, char *cd)
@@ -8,6 +7,7 @@ void	too_many_arguments(t_map *env, char *cd)
 	free(cd);
 	return ;
 }
+
 void	is_not_directory(t_map *env, char *cd)
 {
 	write(2, "minishell: cd: ", 15);

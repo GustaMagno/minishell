@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustoliv <gustoliv@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 17:40:51 by gustoliv          #+#    #+#             */
+/*   Updated: 2026/03/12 17:40:51 by gustoliv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	exceed_limits(char	*str)
@@ -13,8 +25,8 @@ int	exceed_limits(char	*str)
 	if (ft_strlen(str) > 19)
 		return (1);
 	nb = ft_atoull(str);
-	if (negative && nb > 9223372036854775807 && 
-		ft_strcmp("9223372036854775808", str))
+	if (negative && nb > 9223372036854775807
+		&& ft_strcmp("9223372036854775808", str))
 		return (1);
 	else if (!negative && nb > 9223372036854775807)
 		return (1);
@@ -40,8 +52,8 @@ void	ft_exit(t_map *env, t_cmd *cmd, int child)
 	{
 		status_and_end(env, cmd, 0, "");
 	}
-	if (!ft_strisnum(cmd->args[1]) || (ft_strisnum(cmd->args[1]) && 
-		exceed_limits(cmd->args[1])))
+	if (!ft_strisnum(cmd->args[1]) || (ft_strisnum(cmd->args[1])
+			&& exceed_limits(cmd->args[1])))
 	{
 		status_and_end(env, cmd, 2, "bash: exit: numeric argument required\n");
 	}

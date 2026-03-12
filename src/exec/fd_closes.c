@@ -1,7 +1,6 @@
-
 #include "minishell.h"
 
-void	close_pipes(int	**fd_pipes, int	t_pipes)
+void	close_pipes(int **fd_pipes, int t_pipes)
 {
 	int	i;
 

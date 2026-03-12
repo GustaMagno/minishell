@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static void	cd_error(t_map *env, char *tmp, char *cd)

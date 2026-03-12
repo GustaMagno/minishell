@@ -47,7 +47,7 @@ static int	is_builtin(t_cmd *cmd)
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
 		return (1);
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-        return (1);
+		return (1);
 	return (0);
 }
 
@@ -98,4 +98,3 @@ void	exec_2(t_cmd *cmd, t_map *env)
 		(WTERMSIG(status) == SIGINT) && (write(1, "\n", 1));
 	close_heredoc_fds(cmd);
 }
-

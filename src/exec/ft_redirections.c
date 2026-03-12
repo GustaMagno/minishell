@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	stdin_1(char *input)
@@ -42,9 +41,8 @@ void	exec_heredoc(t_cmd *cmd, t_map *env)
 	t_cmd	*tmp;
 	t_redir	*redir;
 
-	
 	tmp = cmd;
-	while(tmp)
+	while (tmp)
 	{
 		redir = tmp->redir;
 		while (redir)

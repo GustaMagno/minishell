@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static int	open_tmp(char *path)
