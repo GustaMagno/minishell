@@ -49,6 +49,9 @@ void	print_export(t_map *env)
 	while (my_export[++i])
 	{
 		j = 0;
+		if ((my_export[i][0] == '_' || my_export[i][0] == '?')
+			&& my_export[i][1] == '=')
+			continue ;
 		write(1, "declare -x ", 12);
 		while (my_export[i][j] && my_export[i][j] != '=')
 			write(1, &my_export[i][j++], 1);
@@ -58,8 +61,7 @@ void	print_export(t_map *env)
 		write(1, "\"", 1);
 		while (my_export[i][j])
 			write(1, &my_export[i][j++], 1);
-		write(1, "\"", 1);
-		write(1, "\n", 1);
+		write(1, "\"\n", 2);
 	}
 	free_split(my_export);
 }
