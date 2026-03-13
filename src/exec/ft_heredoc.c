@@ -50,7 +50,7 @@ int	heredoc(char *end, t_map *env)
 	save_stdin = dup(STDIN_FILENO);
 	fd = create_temp(tmp, sizeof(tmp));
 	if (fd == -1)
-		return (-1);
+		return (close(save_stdin), free(end), -1);
 	set_heredoc_sig();
 	line = heredoc_loop(end, env);
 	if (!g_signal && write(fd, line, ft_strlen(line)))

@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:52:33 by matmagal          #+#    #+#             */
-/*   Updated: 2026/03/13 15:52:34 by matmagal         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:02:26 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,15 @@ void	init_pipes(int **fd_pipes, int cmd_len)
 	}
 }
 
-void	init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd)
+int	init_ctx(t_ctx *ctx, t_map *env, t_cmd *cmd)
 {
 	ctx->cmd = cmd;
 	ctx->cmd_len = ft_lstsize(cmd);
 	ctx->env = env;
 	ctx->fd_pipes = alloc_pipe(ctx->cmd_len);
+	if (!ctx->fd_pipes)
+		return (0);
+	return (1);
 }
 
 int	exec_functions(t_cmd *cmd, t_map *env, int child)

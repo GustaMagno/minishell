@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:53:03 by matmagal          #+#    #+#             */
-/*   Updated: 2026/03/13 15:53:04 by matmagal         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:04:54 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ void	pipeline(t_cmd *cmd, t_map *env)
 	t_ctx	ctx;
 
 	tmp = cmd;
-	i = 0;
+	i = -1;
 	last_pid = -1;
-	init_ctx(&ctx, env, cmd);
+	if (!init_ctx(&ctx, env, cmd))
+		return ;
 	init_pipes(ctx.fd_pipes, ctx.cmd_len);
-	while (i < ctx.cmd_len)
+	while (++i < ctx.cmd_len)
 	{
 		pid = fork();
 		if (pid == 0)
@@ -34,7 +35,6 @@ void	pipeline(t_cmd *cmd, t_map *env)
 			last_pid = pid;
 		close_parent_pipes(ctx.fd_pipes, i);
 		tmp = tmp->next;
-		i++;
 	}
 	wait_pipeline(ctx.cmd_len, last_pid);
 	free_pipes(ctx.fd_pipes, ctx.cmd_len - 1);

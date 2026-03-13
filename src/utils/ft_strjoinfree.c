@@ -27,7 +27,7 @@ char	*ft_strjoinfree(char *s1, char *s2, char *s1_temp, char *s2_temp)
 		j++;
 	str = malloc((i + j + 1 + (s2[j] == '\n')) * sizeof(char));
 	if (!str)
-		return (NULL);
+		return (free(s1_temp), free(s2_temp), NULL);
 	temp = str;
 	while (s1 && *s1)
 		*str++ = *s1++;

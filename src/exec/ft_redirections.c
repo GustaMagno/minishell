@@ -6,7 +6,7 @@
 /*   By: matmagal <matmagal@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 15:53:08 by matmagal          #+#    #+#             */
-/*   Updated: 2026/03/13 15:53:09 by matmagal         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:14:06 by matmagal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ void	exec_heredoc(t_cmd *cmd, t_map *env)
 		{
 			g_signal = 0;
 			if (ft_strcmp(redir->args[0], "<<") == 0 && redir->fd == -1)
+			{
 				redir->fd = heredoc(ft_strjoin(redir->args[1], "\n"), env);
+				if (redir->fd == -1)
+					return ;
+			}
 			redir = redir->next;
 		}
 		tmp = tmp->next;
