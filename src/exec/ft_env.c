@@ -65,11 +65,7 @@ void	create_env(t_map *env, char **envp)
 	char	*shlvl_value;
 
 	i = -1;
-	if (!envp || !envp[0])
-	{
-		empty_env(env);
-		return ;
-	}
+	empty_env(env);
 	while (envp[++i])
 		env->put(env, find_key(envp[i]), find_value(envp[i]));
 	shlvl_value = env->get(env, "SHLVL");
