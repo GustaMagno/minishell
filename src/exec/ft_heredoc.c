@@ -20,16 +20,15 @@ static char	*heredoc_loop(char *end, t_map *env)
 
 	end_no_quotes = no_quote(end);
 	line = NULL;
-	while (write(1, "> ", 2))
+	while (1)
 	{
-		buffer = get_next_line(STDIN_FILENO);
-		if (!buffer && g_signal == SIGINT)
+		buffer = readline("> ");
+		if (!buffer && g_signal == SIGINT && write(1, "\n", 1))
 		{
 			free(line);
 			line = NULL;
 		}
-		if ((!buffer && write(1, "\n", 1))
-			|| ft_strcmp(buffer, end_no_quotes) == 0)
+		if (!buffer || ft_strcmp(buffer, end_no_quotes) == 0)
 			break ;
 		line = ft_strjoinfree(line, buffer, line, buffer);
 	}

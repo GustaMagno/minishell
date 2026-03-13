@@ -23,9 +23,9 @@ char	*ft_strjoinfree(char *s1, char *s2, char *s1_temp, char *s2_temp)
 	j = 0;
 	while (s1 && s1[i])
 		i++;
-	while (s2[j] != '\n' && s2[j])
+	while (s2[j] && s2[j])
 		j++;
-	str = malloc((i + j + 1 + (s2[j] == '\n')) * sizeof(char));
+	str = malloc((i + j + 2) * sizeof(char));
 	if (!str)
 		return (free(s1_temp), free(s2_temp), NULL);
 	temp = str;
@@ -33,8 +33,7 @@ char	*ft_strjoinfree(char *s1, char *s2, char *s1_temp, char *s2_temp)
 		*str++ = *s1++;
 	while (*s2 && *s2 != '\n')
 		*str++ = *s2++;
-	if (*s2 == '\n')
-		*str++ = '\n';
+	*str++ = '\n';
 	free(s1_temp);
 	*str = '\0';
 	return (free(s2_temp), temp);
