@@ -117,7 +117,5 @@ int	expansion(t_cmd *cmd, t_map *env)
 			return (0);
 		node = node->next;
 	}
-	if (!remove_null_node(cmd))
-		return (0);
 	return (1);
 }

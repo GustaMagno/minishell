@@ -34,7 +34,10 @@ void	run(t_map *env)
 		signal(SIGQUIT, SIG_IGN);
 		line = readline("minishell: ");
 		if (!line)
+		{
+			printf("exit\n");
 			break ;
+		}
 		cmd = parsing(line, env);
 		if (!cmd)
 			continue ;
